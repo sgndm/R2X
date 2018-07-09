@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+// import routes
+import { Router } from '@angular/router';
+// import api services
+import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
 @Component({
     selector: 'app-product-list',
@@ -7,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductListComponent implements OnInit {
 
+    public access_token: any
+
     rows = [];
     columns = [];
     temp = [];
@@ -14,24 +20,38 @@ export class ProductListComponent implements OnInit {
     category_list: any;
     select_category: any;
 
-    constructor() { }
+    constructor(
+        public router: Router,
+        private apiServices: ApiServicesService
+    ) {
+        this.access_token = localStorage.getItem('access_token')
+    }
 
     ngOnInit() {
 
         this.select_category = "";
 
-        this.category_list = ['Food', 'Drinks', 'Cloths'];
+        // check if user is logged in
+        if(this.access_token) {
+            alert(this.access_token);
+            this.category_list = ['Food', 'Drinks', 'Cloths'];
 
-        this.rows = [
-            { index: 1, product_id: 1, name: 'Coconut', category: 'Food', price: 'Rs.75.00' },
-            { index: 1, product_id: 1, name: 'Bread', category: 'Food', price: 'Rs.75.00' },
-            { index: 1, product_id: 1, name: 'Ice-cream', category: 'Desert', price: 'Rs.75.00' },
-            { index: 1, product_id: 1, name: 'XXX', category: 'xxx', price: 'Rs.75.00' },
-        ];
+            this.rows = [
+                { index: 1, product_id: 1, name: 'Coconut', category: 'Food', price: 'Rs.75.00' },
+                { index: 1, product_id: 1, name: 'Bread', category: 'Food', price: 'Rs.75.00' },
+                { index: 1, product_id: 1, name: 'Ice-cream', category: 'Desert', price: 'Rs.75.00' },
+                { index: 1, product_id: 1, name: 'XXX', category: 'xxx', price: 'Rs.75.00' },
+            ];
+    
+            this.columns = [];
+    
+            this.temp = this.rows;
+        } 
+        else {
+            this.apiServices.logout();
+        }
+
         
-        this.columns = [];
-
-        this.temp = this.rows;
     }
 
     // filter 

@@ -7,139 +7,131 @@ import { Router } from '@angular/router';
 import { ApiServicesService } from '../../services/api-services/api-services.service';
 
 @Component({
-	selector: 'app-sign-in',
-	templateUrl: './sign-in.component.html',
-	styleUrls: ['./sign-in.component.css']
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
 
-	myForm: FormGroup;
+    public access_token = '';
 
-	username: FormControl;
-	password: FormControl;
+    myForm: FormGroup;
 
-	constructor(
-		public router: Router,
-		private apiServices: ApiServicesService
-	) { }
+    username: FormControl;
+    password: FormControl;
 
-	ngOnInit() {
+    constructor(
+        public router: Router,
+        private apiServices: ApiServicesService
+    ) { 
+        this.access_token = localStorage.getItem('access_token')
+    }
 
-		this.createFormControls();
-		this.createForm();
+    ngOnInit() {
 
-		// check if user has already logged in
+        this.createFormControls();
+        this.createForm();
 
-		// if (this.apiServices.access_token != '') {
-		// 	// if access token is not empty
-		// 	// check user
-		// 	this.apiServices.checkLogin().subscribe(
-		// 		res => {
-		// 			// if access token is valid
-		// 			// go to dashboard
-		// 			console.log(res);
-		// 			this.goToDashboard();
-		// 		},
-		// 		err => {
-		// 			// if access token is not valid
-		// 			// clea local storage
-		// 			this.apiServices.clearLocalStorage();
-		// 			console.log(err);
+        // check if token is set 
+        if(this.access_token) {
+            
+            // get user details
+            this.apiServices.checkLogin().subscribe(
+                (res: any) => {
+                    console.log(res);
+                    // if user logged in 
 
-		// 		}
-		// 	)
-		// }
-	}
+                    // go to dashboard
+                    this.goToDashboard();
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }
+        else {
+            this.apiServices.logout();
+        }
+    }
 
-	ngAfterViewInit() {
-		$(function () {
-			$(".preloader").fadeOut();
-		});
-		// $(function() {
-		//     (<any>$('[data-toggle="tooltip"]')).tooltip()
-		// });
-		// $('#to-recover').on("click", function() {
-		//     $("#loginform").slideUp();
-		//     $("#recoverform").fadeIn();
-		// });
-	}
+    ngAfterViewInit() {
+        $(function () {
+            $(".preloader").fadeOut();
+        });
+    }
 
-	createFormControls() {
-		this.username = new FormControl('', [Validators.required, Validators.minLength(1)]);
-		this.password = new FormControl('', [Validators.required, Validators.minLength(1)]);
-	}
+    //create form controls 
+    createFormControls() {
+        this.username = new FormControl('', [Validators.required, Validators.minLength(1)]);
+        this.password = new FormControl('', [Validators.required, Validators.minLength(1)]);
+    }
 
-	createForm() {
-		this.myForm = new FormGroup({
-			username: this.username,
-			password: this.password
-		});
-	}
+    // create form 
+    createForm() {
+        this.myForm = new FormGroup({
+            username: this.username,
+            password: this.password
+        });
+    }
 
-	validateAllFormFields(formGroup: FormGroup) {
+    // validate login form
+    validateAllFormFields(formGroup: FormGroup) {
 
-		Object.keys(formGroup.controls).forEach(field => {
+        Object.keys(formGroup.controls).forEach(field => {
 
-			const control = formGroup.get(field);
+            const control = formGroup.get(field);
 
-			if (control instanceof FormControl) {
-				control.markAsTouched({ onlySelf: true });
-			}
-			else if (control instanceof FormGroup) {
-				this.validateAllFormFields(control);
-			}
+            if (control instanceof FormControl) {
+                control.markAsTouched({ onlySelf: true });
+            }
+            else if (control instanceof FormGroup) {
+                this.validateAllFormFields(control);
+            }
 
-		});
+        });
 
-	}
+    }
 
-	onLogin() {
+    // login 
+    onLogin() {
 
-		if (this.myForm.valid) {
-			//this.goToDashboard();
-			const data = {
-				u: this.myForm.value.username,
-				p: this.myForm.value.password
-			};
+        if (this.myForm.valid) {
+            //this.goToDashboard();
+            const data = {
+                u: this.myForm.value.username,
+                p: this.myForm.value.password
+            };
 
-			// // call the login end point
-			// this.apiServices.login(data).subscribe(
-			// 	(res: Response) => {
-			// 		// if login success
-			// 		console.log(res);
-			// 		let get_access_token = res.headers.get('X-AUTH-TOKEN');
+            // call login api
+            this.apiServices.login(data).subscribe(
+                (res: any) => {
+                    console.log(res);
 
-			// 		// store token in local storage 
-			// 		this.apiServices.saveToLocalStorage(get_access_token);
+                    // get token
+                    let token = res.access_token;
 
-			// 		// get user details 
-			// 		this.getDetails(get_access_token);
+                    // save to local storage
+                    this.apiServices.saveToLocalStorage(token);
 
-			// 	},
+                    this.goToDashboard();
+                },
+                err => {
+                    console.log(err);
+                }
+            )
 
-			// 	err => {
-			// 		// if login has failed
-			// 		console.log(err);
-			// 		if (err.status == 403) {
-			// 			this.apiServices.altErr('Username or password is incorrect', '');
-			// 		}
-			// 		else if (err.status == 500) {
-			// 			this.apiServices.altErr('Server Error', this.apiServices.reload());
-			// 		}
+            
 
-			// 	}
-			// )
+            // this.goToDashboard();
+        }
+        else {
+            this.validateAllFormFields(this.myForm);
+        }
+    }
 
-			this.goToDashboard();
-		}
-		else {
-			this.validateAllFormFields(this.myForm);
-		}
-	}
-
-	// redirect to dashboard
-	goToDashboard() {
-		this.router.navigate(['/pages']);
-	}
+    // redirect to dashboard
+    goToDashboard() {
+        this.router.navigate(['/pages']);
+    }
 
 }
