@@ -1,0 +1,70 @@
+<div class="page-content">
+
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8">
+            <h2 class=""> Categories </h2>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <a [routerLink]="['/pages/admin/categories/create']" class="btn btn-submit pull-right">
+                <i class="fa fa-plus-circle"></i>
+                Create Category
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row justify-content-end">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group row justify-content-center">
+                <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
+                <input type='text' placeholder='Type category name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
+            </div>
+        </div>
+    </div>
+
+    <ngx-datatable class="material" [headerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [footerHeight]="50" [count]="true"
+        [limit]="10" [rows]="rows">
+
+        <ngx-datatable-column name="index" [width]="2">
+            <ng-template ngx-datatable-header-template>
+                <span>#</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.index }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="name">
+            <ng-template ngx-datatable-header-template>
+                <span>Category Name</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.name }}
+
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="image">
+            <ng-template ngx-datatable-header-template>
+                <span>Image</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.image }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="action">
+            <ng-template ngx-datatable-header-template>
+                <span>Action</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <a class="cus-btn-1 btn btn-sm btn-warning" [routerLink]="['/pages/admin/categories/edit/category',row.category_id]">
+                    Edit
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+
+    </ngx-datatable>
+
+
+</div>

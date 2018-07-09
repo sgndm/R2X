@@ -1,0 +1,100 @@
+<div class="page-content">
+
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8">
+            <h2 class=""> Services </h2>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <a [routerLink]="['/pages/admin/services/create']" class="btn btn-submit pull-right" >
+                <i class="fa fa-plus-circle"></i>
+                Create Service
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group row justify-content-center">
+                <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Categories</label>
+                <select name="" id="" (change)="onChangeCategory($event.target.value)" class="form-control custom-select col-sm-12 col-md-8 col-lg-8 " [(ngModel)]="select_category" >
+                    <option value="">Select a Category</option>
+                    <option value="{{ category }}" *ngFor="let category of category_list">{{ category }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group row justify-content-center">
+                <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
+                <input type='text' placeholder='Type Customer name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
+            </div>
+        </div>
+    </div>
+
+    <ngx-datatable class="material" [headerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [footerHeight]="50" [count]="true"
+        [limit]="10" [rows]="rows">
+
+        <ngx-datatable-column name="index" [width]="10" >
+            <ng-template ngx-datatable-header-template>
+                <span>#</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.index }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="name">
+            <ng-template ngx-datatable-header-template>
+                <span>Service Name</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.name }}
+
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="category">
+            <ng-template ngx-datatable-header-template>
+                <span>Service Category</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.category }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="price">
+            <ng-template ngx-datatable-header-template>
+                <span>Price</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.price }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="action">
+            <ng-template ngx-datatable-header-template>
+                <span>Action</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <a class="cus-btn-1 btn btn-sm btn-warning" [routerLink]="['/pages/admin/services/edit/service',row.service_id]">
+                    Edit
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="">
+            <ng-template ngx-datatable-header-template>
+                <span>view</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <a class="cus-btn-1 btn btn-sm btn-primary" [routerLink]="['/pages/admin/services/view/service',row.service_id]">
+                    View
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+
+    </ngx-datatable>
+
+
+</div>

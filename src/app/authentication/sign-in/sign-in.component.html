@@ -1,0 +1,63 @@
+<div class="login-register" >
+
+	<div class="login-box card">
+		<div class="card-body">
+
+			<form novalidate class="form-horizontal form-material" [formGroup]="myForm" (ngSubmit)="onLogin()">
+				<br>
+				<h2 class="text-center">R2X</h2>
+				<h3 class="text-center">Sign In</h3>
+
+				<div class="form-group " [ngClass]="{
+                  'has-danger': username.invalid && (username.dirty || username.touched),
+                  'has-success': username.valid && (username.dirty || username.touched)
+                  }">
+
+					<div class="col-xs-12">
+
+						<input class="form-control" type="text" required="" placeholder="Username" formControlName="username" required>
+						<div class="form-control-feedback" *ngIf="username.errors && (username.dirty || username.touched)">
+							<p *ngIf="username.errors.required">Username is required</p>
+						</div>
+					</div>
+
+
+				</div>
+
+				<div class="form-group" [ngClass]="{
+                  'has-danger': password.invalid && (password.dirty || password.touched),
+                  'has-success': password.valid && (password.dirty || password.touched)
+                  }">
+
+					<div class="col-xs-12">
+
+						<input class="form-control" type="password" required="" placeholder="Password" formControlName="password" required>
+
+						<div class="form-control-feedback" *ngIf="password.errors && (password.dirty || password.touched)">
+							<p *ngIf="password.errors.required">Password is required</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group text-center m-t-20">
+					<div class="col-xs-12">
+						<input type="submit" class="btn btn-submit btn-block text-uppercase waves-effect waves-light" value="Sign In" />
+
+					</div>
+				</div>
+
+			</form>
+
+			<!-- <div class="form-group m-b-0">
+              <div class="col-sm-12 text-center">
+                  <div>Don't have an account?
+                      <a class="text-info m-l-5" [routerLink]="['/sign-up']">
+                          <b>Sign Up</b>
+                      </a>
+                  </div>
+              </div>
+          </div> -->
+
+		</div>
+	</div>
+</div>

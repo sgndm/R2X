@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+/* datatables */
+@import '~@swimlane/ngx-datatable/release/index.css';
+@import '~@swimlane/ngx-datatable/release/themes/material.css';
+@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+
+/* scrollbar */
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
+@font-face {
+    font-family: 'Roboto-regular';
+    src: url(assets/fonts/Roboto-Regular.ttf);
+}
+
+body{
+    font-family: 'Roboto-regular';
+}
+
+.ps .ps__scrollbar-y-rail {
+    left: 3px;
+    right: auto;
+}
+
+.page-content {
+    background-color: #fff;
+    padding: 15px 20px 40px 20px;
+}
+
+
+/* | overwrite | */
+.btn {
+    margin: 2px;
+}
+
+.btn-submit, .btn-submit:hover, .btn-submit:active, .btn-submit:visited {
+    background-color: #38a623;
+    border-color:  #38a623;
+    color: #fff;
+}
+
+.btn-cancel, .btn-cancel:hover, .btn-cancel:active, .btn-cancel:visited {
+    background-color: #ea3f3f;
+    border-color:  #ea3f3f;
+    color: #fff;
+}
+
