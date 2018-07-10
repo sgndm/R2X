@@ -9,7 +9,7 @@
     </div>
     <hr>
 
-    <form novalidate [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <form novalidate [formGroup]="myForm" (ngSubmit)="onCreateCategory()">
 
         <div class="row">
             
@@ -29,7 +29,13 @@
                         'has-success': categoryImage.valid && (categoryImage.dirty || categoryImage.touched)
                         }">
                 <label>Image</label>
-                <input type="file" class="form-control" formControlName="categoryImage" required>
+                <div class="upload-preview-container " *ngIf="is_image_set" >
+                        <div class="row justify-content-center">
+                                <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
+                        </div>
+                        
+                    </div>
+                <input type="file" class="form-control" formControlName="categoryImage" required (change)="setImage($event)">
                 <div class="form-control-feedback" *ngIf="categoryImage.errors && (categoryImage.dirty || categoryImage.touched)">
                     <p *ngIf="categoryImage.errors.required">Category Image is required</p>
                 </div>

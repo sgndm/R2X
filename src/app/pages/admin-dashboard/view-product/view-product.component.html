@@ -14,7 +14,7 @@
                 <label>Category</label>
                 <select class="form-control custom-select" [(ngModel)]="productCategory"  readonly>
                     <option value="">Please select a category</option>
-                    <option *ngFor="let category of category_list" [value]="category">{{category}}
+                    <option *ngFor="let category of category_list" [value]="category.id">{{category.name}}
                     </option>
                 </select>
             </div>

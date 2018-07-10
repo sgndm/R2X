@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 
 const httpOptions = {}
 
-const SERVER_URL = 'http://192.168.2.131:8090/api/';
+// const SERVER_URL = 'http://192.168.2.140:8090/api/';
+const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com/api/';
 
 @Injectable()
 export class ApiServicesService {
@@ -39,9 +40,9 @@ export class ApiServicesService {
         this.router.navigate(['/sign-in']);
     }
 
-    // check logged in users
-    checkLogin() {
-        const url = SERVER_URL + '/admin/me';
+    // get user details 
+    getUserDetails() {
+        const url = SERVER_URL + 'admin/me';
         return this.http.get(url);
     }
 
@@ -61,11 +62,175 @@ export class ApiServicesService {
     // admin panel 
     // products & services 
 
+    // get images from s3 bucket
+    getImageUrlS3(data){
+        const url = SERVER_URL + 'admin/image';
+
+        return this.http.get(url, { headers: { }, params: { image_name: data }, responseType: 'text'});
+    }
+
     // categories 
     // get 
     getCategoriesAll() {
-        const url = SERVER_URL + '/categories';
+        const url = SERVER_URL + 'categories';
         return this.http.get(url);
+    }
+
+    // get details 
+    getCategoryById(data) {
+        const url = SERVER_URL + 'admin/category';
+        return this.http.get(url, { params: { id: data }});
+    }
+
+    // create 
+    createCategory(data){
+        const formData: FormData = new FormData();
+        formData.append('data', JSON.stringify(data.info));
+        formData.append('image', data.imageUrl);
+
+        const url = SERVER_URL + 'admin/category';
+        return this.http.post(url, formData)
+    }
+
+    // edit 
+    // name
+    updateCategoryName(data){
+        let set_data = {
+            "name": data.categoryName,
+            "categoryId": data.categoryId
+        }
+
+        const url = SERVER_URL + 'admin/category/update';
+        return this.http.post(url, set_data)
+    }
+
+    // image 
+    updateCategoryImage(data){
+        const formData: FormData = new FormData();
+        formData.append('image', data.imageUrl);
+        formData.append('id', data.categoryId);
+
+        const url = SERVER_URL + 'admin/category/image';
+        return this.http.post(url, formData)
+    }
+
+    // delete category
+    deleteCategory(data) {
+        let set_data = {"id" : data}
+        const url = SERVER_URL + 'admin/category/delete';
+        return this.http.post(url, set_data)
+    }
+
+    // products 
+    // get 
+    getAllProducts() {
+        const url = SERVER_URL + 'admin/products/all';
+        return this.http.get(url);
+    }
+
+    // create 
+    createProduct(data) {
+        const formData: FormData = new FormData();
+        formData.append('data', JSON.stringify(data.info));
+        formData.append('image', data.imageUrl);
+
+        const url = SERVER_URL + 'admin/product';
+        return this.http.post(url, formData)
+    }
+
+    // update product
+    updateProductDetails(data){
+
+        let set_data = {
+            "name": data.name, 
+            "description": data.description, 
+            "estimatedPrice": data.estimatedPrice, 
+            "categoryId": data.categoryId, 
+            "paymentUnit": data.paymentUnit, 
+            "isProduct": 1, 
+            "productId": data.productId
+        }
+        
+        const url = SERVER_URL + 'admin/product/update';
+        return this.http.post(url, set_data)
+    }
+
+    // update image 
+    updateProductImage(data){
+        const formData: FormData = new FormData();
+        formData.append('image', data.imageUrl);
+        formData.append('id', data.productId);
+
+        const url = SERVER_URL + 'admin/product/image';
+        return this.http.post(url, formData)
+    }
+
+    // delete product 
+    deleteProduct(data) {
+        let set_data = {"id" : data}
+        const url = SERVER_URL + 'admin/product/delete';
+        return this.http.post(url, set_data)
+    }
+
+    // enable product 
+    enableProduct(data){
+        let set_data = {"productId" : data.productId, "recordStatus": data.recordStatus}
+        const url = SERVER_URL + 'admin/product/enable';
+        return this.http.post(url, set_data)
+    }
+
+
+    // services 
+    // get 
+    // same as products
+
+    // create 
+    createService(data) {
+        const formData: FormData = new FormData();
+        formData.append('data', JSON.stringify(data.info));
+        formData.append('image', data.imageUrl);
+
+        const url = SERVER_URL + 'admin/service';
+        return this.http.post(url, formData)
+    }
+
+    // update service 
+    updateServiceDetails(data) {
+        let set_data = {
+            "name": data.name, 
+            "description": data.description, 
+            "estimatedPrice": data.estimatedPrice, 
+            "categoryId": data.categoryId, 
+            "paymentUnit": data.paymentUnit, 
+            "isProduct": data.isProduct, 
+            "productId": data.productId
+        }
+        
+        const url = SERVER_URL + 'admin/service/update';
+        return this.http.post(url, set_data)
+    }
+
+    // update image 
+    updateServiceImage(data){
+        const formData: FormData = new FormData();
+        formData.append('image', data.imageUrl);
+        formData.append('id', data.productId);
+
+        const url = SERVER_URL + 'admin/service/image';
+        return this.http.post(url, formData)
+    }
+    // delete product 
+    deleteService(data) {
+        let set_data = {"id" : data}
+        const url = SERVER_URL + 'admin/service/delete';
+        return this.http.post(url, set_data)
+    }
+
+
+    // get product by id
+    getProductById(data) {
+        const url = SERVER_URL + 'product';
+        return this.http.get(url, { params: { productId: data }});
     }
 
 

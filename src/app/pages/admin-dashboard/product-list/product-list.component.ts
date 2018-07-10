@@ -11,7 +11,7 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 })
 export class ProductListComponent implements OnInit {
 
-    public access_token: any
+    public access_token = '';
 
     rows = [];
     columns = [];
@@ -29,29 +29,83 @@ export class ProductListComponent implements OnInit {
 
     ngOnInit() {
 
+        // this.apiServices.getImageUrlS3('data').subscribe(
+        //     (res: any) => {console.log(res)},
+        //     err => {console.log(err)}
+        // )
+
         this.select_category = "";
+        this.columns = [];
 
         // check if user is logged in
-        if(this.access_token) {
-            alert(this.access_token);
-            this.category_list = ['Food', 'Drinks', 'Cloths'];
+        if (this.access_token) {
 
-            this.rows = [
-                { index: 1, product_id: 1, name: 'Coconut', category: 'Food', price: 'Rs.75.00' },
-                { index: 1, product_id: 1, name: 'Bread', category: 'Food', price: 'Rs.75.00' },
-                { index: 1, product_id: 1, name: 'Ice-cream', category: 'Desert', price: 'Rs.75.00' },
-                { index: 1, product_id: 1, name: 'XXX', category: 'xxx', price: 'Rs.75.00' },
-            ];
-    
-            this.columns = [];
-    
-            this.temp = this.rows;
-        } 
+            // user details 
+            this.apiServices.getUserDetails().subscribe(
+                (res: any) => {
+                    console.log(res);
+                    this.getProducts();
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
         else {
             this.apiServices.logout();
         }
 
-        
+
+    }
+
+    // get products
+    getProducts() {
+        this.apiServices.getAllProducts().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let temp_products = [];
+                    let x = 0;
+                    for (let product of res.data) {
+
+                        
+                        if (product.product) {
+                            x += 1;
+
+                            let t_prod = { index: x, product_id: product.id, name: product.name, image: '', category: product.categoryName, price: product.price, recordStatus: product.recordStatus }
+
+
+                            let imgName = product.imageUrl;
+                            let imagePath = '';
+                            // get image url 
+                            this.apiServices.getImageUrlS3(imgName).subscribe(
+                                (res: any) => {
+                                    // console.log(res);
+                                    imagePath = 'data:image/jpeg;base64,' + res;
+                                    t_prod.image = imagePath;
+                                },
+                                err => {
+                                    console.log('Error\n');
+                                    console.log(err);
+                                }
+                            )
+
+                            temp_products.push(t_prod);
+                        }
+
+
+                    }
+
+                    this.rows = temp_products;
+                    this.temp = this.rows;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
     }
 
     // filter 
@@ -110,6 +164,44 @@ export class ProductListComponent implements OnInit {
             // update the rows
             this.rows = temp_data;
         }
+
+    }
+
+    deleteProduct(product_id) {
+        this.apiServices.deleteProduct(product_id).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success" && res.data == "product_removed") {
+                    alert("deleted");
+                    location.reload();
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    activateProduct(product_id) {
+
+        const data = {
+            productId: product_id,
+            recordStatus: 1
+        }
+
+        this.apiServices.enableProduct(data).subscribe(
+            (res: any) => {
+                console.log(res);
+                if (res.status == "success" && res.data == "product_enabled") {
+                    alert("enabled");
+                    location.reload();
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
 
     }
 

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
-
 // import routes
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
+
 
 @Component({
     selector: 'app-edit-category',
@@ -13,19 +13,68 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 })
 export class EditCategoryComponent implements OnInit {
 
+    public access_token = '';
+
     myForm: FormGroup;
+    myForm2: FormGroup;
 
     categoryName: FormControl;
     categoryImage: FormControl;
 
+    selected_file: File = null;
+
+    is_image_set: boolean;
+    is_current_image: boolean;
+    imagePreviewPath: any;
+    currentImagePath: any;
+
+    category_id;
+    category_name;
+
+
     constructor(
-        public router: Router,
-        private apiServices: ApiServicesService
-    ) { }
+		private activeRoute: ActivatedRoute,
+		public router: Router,
+		private apiServices: ApiServicesService,
+	) {
+		this.activeRoute.params.subscribe(
+			params => {
+				this.category_id = params.id;
+				console.log(params);
+			}
+
+		);
+
+		this.access_token = localStorage.getItem('access_token')
+
+	}
 
     ngOnInit() {
+
+        this.category_name = "service name";
+        this.is_image_set = false;
+
+        // check if user is logged in
+        if (this.access_token) {
+
+            // user details 
+            this.apiServices.getUserDetails().subscribe(
+                (res: any) => {
+                    this.getCategoryDetails(this.category_id);
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
+        else {
+            this.apiServices.logout();
+        }
+
         this.createFormControls();
         this.createForm();
+        this.createForm2();
     }
 
     createFormControls() {
@@ -37,10 +86,16 @@ export class EditCategoryComponent implements OnInit {
 
     createForm() {
         this.myForm = new FormGroup({
-            categoryName: this.categoryName,
+            categoryName: this.categoryName
+        });
+    }
+
+    createForm2() {
+        this.myForm2 = new FormGroup({
             categoryImage: this.categoryImage
         });
     }
+
 
     validateAllFormFields(formGroup: FormGroup) {
 
@@ -59,9 +114,82 @@ export class EditCategoryComponent implements OnInit {
 
     }
 
-    onSubmit() {
-        if (this.myForm.valid) {
+    getCategoryDetails(category_id){
+        this.apiServices.getCategoryById(category_id).subscribe(
+            (res: any) => {
+                console.log(res);
+                if(res.status == "success") {
+                    this.myForm.setValue({
+                        categoryName: res.data.categoryName
+                    })
+                }
+            },
+            err => {console.log(err)}
+        )
+    }
 
+    // get selected file 
+    setImage(event) {
+        this.is_image_set = true;
+
+        this.selected_file = event.target.files[0];
+
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+            this.imagePreviewPath = event.target.result;
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
+    }
+
+
+    onUpdateImage() {
+        if (this.myForm2.valid) {
+            const data = {
+                imageUrl: this.selected_file,
+                categoryId: this.category_id
+            }
+
+            this.apiServices.updateCategoryImage(data).subscribe(
+                (res: any) => {
+                    console.log(res);
+
+                    if(res.status == "success" && res.data == "category_image_updated") {
+                        alert("updated");
+                        location.reload();
+                    }
+                },
+                err =>{
+                    console.log(err);
+                }
+            )
+        }
+        else {
+            this.validateAllFormFields(this.myForm2);
+        }
+    }
+
+    onUpdateName() {
+        if (this.myForm.valid) {
+            const data = {
+                categoryId: this.category_id,
+                categoryName: this.myForm.value.categoryName
+            }
+
+            this.apiServices.updateCategoryName(data).subscribe(
+                (res: any) => {
+                    console.log(res)
+
+                    if(res.status == "success" && res.data == "category_updated") {
+                        alert("updated");
+                        location.reload();
+                    }
+                },
+                err => {
+                    console.log(err)
+                }
+            )
         }
         else {
             this.validateAllFormFields(this.myForm);
@@ -70,6 +198,5 @@ export class EditCategoryComponent implements OnInit {
 
     onCancelEdit() {
         this.myForm.reset();
-        this.router.navigate(['/pages/admin/categories/']);
     }
 }

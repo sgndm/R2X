@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
-
 // import routes
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
@@ -13,7 +12,10 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 })
 export class EditServiceComponent implements OnInit {
 
+    public access_token = '';
+
     myForm: FormGroup;
+    myForm2: FormGroup;
 
     category_list: any[];
 
@@ -22,28 +24,106 @@ export class EditServiceComponent implements OnInit {
     productPrice: FormControl;
     productImage: FormControl;
     productCategory: FormControl;
-
-
-    firstName: FormControl;
-    lastName: FormControl;
-    email: FormControl;
-    password: FormControl;
-    language: FormControl;
     paymentMethod: FormControl;
 
     service_name: any;
 
+    selected_file: File = null;
+
+    is_image_set: boolean;
+    is_current_image: boolean;
+    imagePreviewPath: any;
+    currentImagePath: any;
+
+    service_id: any;
+
     constructor(
-        public router: Router,
-        private apiServices: ApiServicesService
-    ) { }
+		private activeRoute: ActivatedRoute,
+		public router: Router,
+		private apiServices: ApiServicesService,
+	) {
+		this.activeRoute.params.subscribe(
+			params => {
+				this.service_id = params.id;
+				console.log(params);
+			}
+
+		);
+
+		this.access_token = localStorage.getItem('access_token')
+
+	}
 
     ngOnInit() {
-        this.service_name = "service name";
 
-        this.category_list = ['Food', 'Drinks', 'Cloths'];
+        this.is_image_set = false;
+        this.is_current_image = false;
+
+        // check if user is logged in
+        if (this.access_token) {
+
+            // user details 
+            this.apiServices.getUserDetails().subscribe(
+                (res: any) => {
+
+                    // get categories 
+                    this.getCategories();
+
+                    // get details 
+                    this.getProductDetailsById(this.service_id);
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
+        else {
+            this.apiServices.logout();
+        }
+
         this.createFormControls();
         this.createForm();
+        this.createForm2();
+    }
+
+    // get categories 
+    getCategories() {
+        this.apiServices.getCategoriesAll().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    this.category_list = res.data;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    // get product details 
+    getProductDetailsById(product_id){
+        this.apiServices.getProductById(product_id).subscribe(
+            (res: any) => {
+                console.log(res);
+                if (res.status == "success") {
+                    
+                    this.service_name = res.data.name;
+                    this.myForm.setValue({
+                        productName: res.data.name,
+                        productCategory: res.data.categoryId,
+                        productDescription: res.data.description,
+                        productPrice: res.data.estimatedPrice,
+                        paymentMethod: res.data.paymentUnit
+                    });
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
     }
 
     createFormControls() {
@@ -63,8 +143,13 @@ export class EditServiceComponent implements OnInit {
             productName: this.productName,
             productDescription: this.productDescription,
             productPrice: this.productPrice,
-            productImage: this.productImage,
             paymentMethod: this.paymentMethod
+        });
+    }
+
+    createForm2() {
+        this.myForm2 = new FormGroup({
+            productImage: this.productImage
         });
     }
 
@@ -85,8 +170,32 @@ export class EditServiceComponent implements OnInit {
 
     }
 
-    onSubmit() {
+    onUpdateDetails() {
         if (this.myForm.valid) {
+
+            const data = {
+                name: this.myForm.value.productName,
+                description: this.myForm.value.productDescription,
+                estimatedPrice: this.myForm.value.productPrice,
+                categoryId: this.myForm.value.productCategory,
+                paymentUnit: this.myForm.value.paymentMethod,
+                isProduct: false,
+                productId: this.service_id
+            }
+
+            this.apiServices.updateServiceDetails(data).subscribe(
+                (res:any) => {
+                    console.log(res);
+                    if(res.status == "success" && res.data == "product_updated"){
+                        alert('updated');
+                        location.reload();
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
 
         }
         else {
@@ -94,9 +203,52 @@ export class EditServiceComponent implements OnInit {
         }
     }
 
+     // get selected file 
+     setImage(event) {
+        this.is_image_set = true;
+
+        this.selected_file = event.target.files[0];
+
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+            this.imagePreviewPath = event.target.result;
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
+    }
+
+    onUpdateImage() {
+        if (this.myForm2.valid) {
+            const data = {
+                imageUrl: this.selected_file,
+                productId: this.service_id
+            }
+
+            this.apiServices.updateServiceImage(data).subscribe(
+                (res:any) => {
+                    console.log(res);
+                    if(res.status == "success" && res.data == "product_image_updated") {
+                        alert("updated");
+                        location.reload();
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }
+        else {
+            this.validateAllFormFields(this.myForm2);
+        }
+    }
+
     onCancelEdit() {
         this.myForm.reset();
-        this.router.navigate(['/pages/admin/services/']);
+    }
+
+    onCancelEdit2() {
+        this.myForm2.reset();
     }
 
 }

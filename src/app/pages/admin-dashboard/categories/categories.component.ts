@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+// import routes
+import { Router } from '@angular/router';
+// import api services
+import { ApiServicesService } from '../../../services/api-services/api-services.service';
+
 
 @Component({
     selector: 'app-categories',
@@ -7,25 +12,81 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CategoriesComponent implements OnInit {
 
+    public access_token = '';
+
     rows = [];
     columns = [];
     temp = [];
 
-    constructor() { }
+    public category_list: any;
+
+    constructor(
+        public router: Router,
+        private apiServices: ApiServicesService
+    ) {
+        this.access_token = localStorage.getItem('access_token')
+    }
 
     ngOnInit() {
-        this.rows = [
-            { index: 1, category_id: 1, name: 'Coconut', image: 'image' },
-        ];
-        this.columns = [
-            { name: 'index' },
-            { name: 'category_id' },
-            { name: 'name' },
-            { name: 'image' },
-        ];
 
-        this.temp = this.rows;
+
+        // check if user is logged in
+        if (this.access_token) {
+
+            // user details 
+            this.apiServices.getUserDetails().subscribe(
+                (res: any) => {
+
+                    this.columns = [
+                        { name: 'index' },
+                        { name: 'category_id' },
+                        { name: 'name' },
+                        { name: 'image' },
+                    ];
+                    
+                    // get categories 
+                    this.getCategories();
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
+        else {
+            this.apiServices.logout();
+        }
+
     }
+
+
+    // get categories 
+    getCategories(){
+        this.apiServices.getCategoriesAll().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                let temp_cat = [];
+
+                if(res.status == "success"){
+                    let categories = res.data;
+
+                    for(let x = 0; x < categories.length; x++ ) {
+                        let t_cat = {index: x+1 , category_id: categories[x].id, name: categories[x].name, image: categories[x].imageUrl, recordStatus: categories[x].recordStatus }
+
+                        temp_cat.push(t_cat);
+                    }
+
+                    this.rows = temp_cat;
+                    this.temp = this.rows;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
 
     // filter 
     // by product name

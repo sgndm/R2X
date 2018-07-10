@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
-
 // import routes
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
+
 
 @Component({
     selector: 'app-edit-product',
@@ -13,7 +13,10 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 })
 export class EditProductComponent implements OnInit {
 
+    public access_token = '';
+
     myForm: FormGroup;
+    myForm2: FormGroup;
 
     category_list: any[];
 
@@ -22,27 +25,179 @@ export class EditProductComponent implements OnInit {
     productPrice: FormControl;
     productImage: FormControl;
     productCategory: FormControl;
-
-
-    firstName: FormControl;
-    lastName: FormControl;
-    email: FormControl;
-    password: FormControl;
-    language: FormControl;
+    paymentMethod: FormControl;
 
     product_name: any;
 
+    selected_file: File = null;
+
+    is_image_set: boolean;
+    is_current_image: boolean;
+    imagePreviewPath: any;
+    currentImagePath: any;
+
+    product_id: any;
+
     constructor(
-        public router: Router,
-        private apiServices: ApiServicesService
-    ) { }
+		private activeRoute: ActivatedRoute,
+		public router: Router,
+		private apiServices: ApiServicesService,
+	) {
+		this.activeRoute.params.subscribe(
+			params => {
+				this.product_id = params.id;
+				console.log(params);
+			}
+
+		);
+
+		this.access_token = localStorage.getItem('access_token')
+
+	}
+
 
 
     ngOnInit() {
-        this.product_name = "product name";
-        this.category_list = ['Food', 'Drinks', 'Cloths'];
+
+        this.product_name = "service name";
+        this.is_image_set = false;
+
+        // check if user is logged in
+        if (this.access_token) {
+
+            // user details 
+            this.apiServices.getUserDetails().subscribe(
+                (res: any) => {
+
+                    // get categories 
+                    this.getCategories();
+
+                    // get details 
+                    this.getProductDetailsById(this.product_id);
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
+        else {
+            this.apiServices.logout();
+        }
+
         this.createFormControls();
         this.createForm();
+        this.createForm2();
+    }
+
+    // get categories 
+    getCategories() {
+        this.apiServices.getCategoriesAll().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    this.category_list = res.data;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    // get product details 
+    getProductDetailsById(product_id){
+        this.apiServices.getProductById(product_id).subscribe(
+            (res: any) => {
+                console.log(res);
+                if (res.status == "success") {
+                    
+                    this.product_name = res.data.name;
+                    this.myForm.setValue({
+                        productName: res.data.name,
+                        productCategory: res.data.categoryId,
+                        productDescription: res.data.description,
+                        productPrice: res.data.estimatedPrice
+                    });
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+    
+    onUpdateProduct() {
+        if (this.myForm.valid) {
+
+            const data = {
+                name: this.myForm.value.productName,
+                description: this.myForm.value.productDescription,
+                estimatedPrice: this.myForm.value.productPrice,
+                categoryId: this.myForm.value.productCategory,
+                paymentUnit: 1,
+                isProduct: true,
+                productId: this.product_id
+            }
+
+            this.apiServices.updateProductDetails(data).subscribe(
+                (res:any) => {
+                    console.log(res);
+                    if(res.status == "success" && res.data == "product_updated"){
+                        alert('updated');
+                        location.reload();
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+
+        }
+        else {
+            this.validateAllFormFields(this.myForm);
+        }
+    }
+
+    onUpdateImage() { 
+        if (this.myForm2.valid) {
+            const data = {
+                imageUrl: this.selected_file,
+                productId: this.product_id
+            }
+
+            this.apiServices.updateProductImage(data).subscribe(
+                (res:any) => {
+                    console.log(res);
+                    if(res.status == "success" && res.data == "product_image_updated") {
+                        alert("updated");
+                        location.reload();
+                    }
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }
+        else {
+            this.validateAllFormFields(this.myForm2);
+        }
+    }
+
+     // get selected file 
+     setImage(event) {
+        this.is_image_set = true;
+
+        this.selected_file = event.target.files[0];
+
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+            this.imagePreviewPath = event.target.result;
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+
     }
 
     createFormControls() {
@@ -60,7 +215,12 @@ export class EditProductComponent implements OnInit {
             productCategory: this.productCategory,
             productName: this.productName,
             productDescription: this.productDescription,
-            productPrice: this.productPrice,
+            productPrice: this.productPrice
+        });
+    }
+
+    createForm2() {
+        this.myForm2 = new FormGroup({
             productImage: this.productImage
         });
     }
@@ -82,18 +242,11 @@ export class EditProductComponent implements OnInit {
 
     }
 
-    onSubmit() {
-        if (this.myForm.valid) {
-
-        }
-        else {
-            this.validateAllFormFields(this.myForm);
-        }
-    }
-
     onCancelEdit() {
         this.myForm.reset();
-        this.router.navigate(['/pages/admin/products/']);
     }
 
+    onCancelEdit2() {
+        this.myForm2.reset();
+    }
 }

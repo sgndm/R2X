@@ -34,7 +34,7 @@
     <ngx-datatable class="material" [headerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [footerHeight]="50" [count]="true"
         [limit]="10" [rows]="rows">
 
-        <ngx-datatable-column name="index" [width]="10" >
+        <ngx-datatable-column name="index">
             <ng-template ngx-datatable-header-template>
                 <span>#</span>
             </ng-template>
@@ -50,6 +50,15 @@
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
                 {{ row.name }}
 
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="image">
+            <ng-template ngx-datatable-header-template>
+                <span>Image</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <img src="{{ row.image }}" alt="" class="image-thumbnail-cus">
             </ng-template>
         </ngx-datatable-column>
 
@@ -70,9 +79,9 @@
                 {{ row.price }}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="action">
+        <ngx-datatable-column name="edit">
             <ng-template ngx-datatable-header-template>
-                <span>Action</span>
+                <span>Edit</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
                 <a class="cus-btn-1 btn btn-sm btn-warning" [routerLink]="['/pages/admin/products/edit/product',row.product_id]">
@@ -80,6 +89,16 @@
                 </a>
             </ng-template>
         </ngx-datatable-column>
+
+        <ngx-datatable-column name="delete">
+                <ng-template ngx-datatable-header-template>
+                    <span>Delete</span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="deleteProduct(row.product_id)" *ngIf="row.recordStatus == 1" >Delete</button>
+                    <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="activateProduct(row.product_id)" *ngIf="row.recordStatus == 0" >Activate</button>
+                </ng-template>
+            </ngx-datatable-column>
 
         <ngx-datatable-column name="">
             <ng-template ngx-datatable-header-template>
