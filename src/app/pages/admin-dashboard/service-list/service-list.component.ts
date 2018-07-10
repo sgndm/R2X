@@ -66,24 +66,25 @@ export class ServiceListComponent implements OnInit {
                     let temp_products = [];
                     let x = 0;
                     for (let product of res.data) {
-                        
-                        let imgName = product.imageUrl;
-                        let imagePath = '';
-                        // get image url 
-                        // this.apiServices.getImageUrlS3(imgName).subscribe(
-                        //     (res: any) => {
-                        //         console.log(res);
-                        //         imagePath = res;
-                        //     },
-                        //     err => {
-                        //         console.log('Error\n');
-                        //         console.log(err);
-                        //     }
-                        // )
 
-                        if(!(product.product)) {
+
+
+                        if (!(product.product)) {
                             x += 1;
-                            let t_prod = { index: x, service_id: product.id, name: product.name, image: imagePath, category: product.categoryName, price: product.price, recordStatus: product.recordStatus }
+                            let t_prod = { index: x, service_id: product.id, name: product.name, image: '', category: product.categoryName, price: product.price, recordStatus: product.recordStatus }
+
+                            let imgName = product.imageUrl;
+                            let imagePath = '';
+                            // get image url 
+                            this.apiServices.getImageUrlS3(imgName).subscribe(
+                                (res: any) => {
+                                    t_prod.image = 'data:image/jpeg;base64,' + res;
+                                },
+                                err => {
+                                    console.log('Error\n');
+                                    console.log(err);
+                                }
+                            )
 
                             temp_products.push(t_prod);
                         }
@@ -165,7 +166,7 @@ export class ServiceListComponent implements OnInit {
             (res: any) => {
                 console.log(res);
 
-                if(res.status == "success" && res.data == "product_removed") {
+                if (res.status == "success" && res.data == "product_removed") {
                     alert("deleted");
                     location.reload();
                 }
@@ -184,9 +185,9 @@ export class ServiceListComponent implements OnInit {
         }
 
         this.apiServices.enableProduct(data).subscribe(
-            (res:any) => {
+            (res: any) => {
                 console.log(res);
-                if(res.status == "success" && res.data == "product_enabled") {
+                if (res.status == "success" && res.data == "product_enabled") {
                     alert("enabled");
                     location.reload();
                 }

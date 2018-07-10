@@ -107,7 +107,21 @@ export class ViewProductComponent implements OnInit {
                     this.productName = res.data.name;
                     this.productCategory = res.data.categoryId;
                     this.productDescription = res.data.description;
-                   this.productPrice = res.data.estimatedPrice;
+                    this.productPrice = res.data.estimatedPrice;
+
+                    let imgName = res.data.imageUrl;
+                    // get image url 
+                    this.apiServices.getImageUrlS3(imgName).subscribe(
+                        (res: any) => {
+                            // console.log(res);
+                            this.is_current_image = true;
+                            this.currentImagePath = 'data:image/jpeg;base64,' + res;
+                        },
+                        err => {
+                            console.log('Error\n');
+                            console.log(err);
+                        }
+                    )
                 }
             },
             err => {
@@ -115,6 +129,6 @@ export class ViewProductComponent implements OnInit {
             }
         )
     }
-    
+
 
 }

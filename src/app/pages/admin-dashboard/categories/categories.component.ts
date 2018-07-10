@@ -43,7 +43,7 @@ export class CategoriesComponent implements OnInit {
                         { name: 'name' },
                         { name: 'image' },
                     ];
-                    
+
                     // get categories 
                     this.getCategories();
                 },
@@ -61,18 +61,33 @@ export class CategoriesComponent implements OnInit {
 
 
     // get categories 
-    getCategories(){
+    getCategories() {
         this.apiServices.getCategoriesAll().subscribe(
             (res: any) => {
                 console.log(res);
 
                 let temp_cat = [];
 
-                if(res.status == "success"){
+                if (res.status == "success") {
                     let categories = res.data;
 
-                    for(let x = 0; x < categories.length; x++ ) {
-                        let t_cat = {index: x+1 , category_id: categories[x].id, name: categories[x].name, image: categories[x].imageUrl, recordStatus: categories[x].recordStatus }
+                    for (let x = 0; x < categories.length; x++) {
+
+                        let t_cat = { index: x + 1, category_id: categories[x].id, name: categories[x].name, image: '', recordStatus: categories[x].recordStatus }
+
+                        let imgName = categories[x].imageUrl;
+
+                        // get image url 
+                        this.apiServices.getImageUrlS3(imgName).subscribe(
+                            (res: any) => {
+                                // console.log(res);
+                                t_cat.image = 'data:image/jpeg;base64,' + res;
+                            },
+                            err => {
+                                console.log('Error\n');
+                                console.log(err);
+                            }
+                        )
 
                         temp_cat.push(t_cat);
                     }

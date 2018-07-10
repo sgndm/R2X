@@ -39,21 +39,21 @@ export class EditProductComponent implements OnInit {
     product_id: any;
 
     constructor(
-		private activeRoute: ActivatedRoute,
-		public router: Router,
-		private apiServices: ApiServicesService,
-	) {
-		this.activeRoute.params.subscribe(
-			params => {
-				this.product_id = params.id;
-				console.log(params);
-			}
+        private activeRoute: ActivatedRoute,
+        public router: Router,
+        private apiServices: ApiServicesService,
+    ) {
+        this.activeRoute.params.subscribe(
+            params => {
+                this.product_id = params.id;
+                console.log(params);
+            }
 
-		);
+        );
 
-		this.access_token = localStorage.getItem('access_token')
+        this.access_token = localStorage.getItem('access_token')
 
-	}
+    }
 
 
 
@@ -107,12 +107,12 @@ export class EditProductComponent implements OnInit {
     }
 
     // get product details 
-    getProductDetailsById(product_id){
+    getProductDetailsById(product_id) {
         this.apiServices.getProductById(product_id).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success") {
-                    
+
                     this.product_name = res.data.name;
                     this.myForm.setValue({
                         productName: res.data.name,
@@ -120,6 +120,20 @@ export class EditProductComponent implements OnInit {
                         productDescription: res.data.description,
                         productPrice: res.data.estimatedPrice
                     });
+
+                    let imgName = res.data.imageUrl;
+                    // get image url 
+                    this.apiServices.getImageUrlS3(imgName).subscribe(
+                        (res: any) => {
+                            // console.log(res);
+                            this.is_current_image = true;
+                            this.currentImagePath = 'data:image/jpeg;base64,' + res;
+                        },
+                        err => {
+                            console.log('Error\n');
+                            console.log(err);
+                        }
+                    )
                 }
             },
             err => {
@@ -127,7 +141,7 @@ export class EditProductComponent implements OnInit {
             }
         )
     }
-    
+
     onUpdateProduct() {
         if (this.myForm.valid) {
 
@@ -142,9 +156,9 @@ export class EditProductComponent implements OnInit {
             }
 
             this.apiServices.updateProductDetails(data).subscribe(
-                (res:any) => {
+                (res: any) => {
                     console.log(res);
-                    if(res.status == "success" && res.data == "product_updated"){
+                    if (res.status == "success" && res.data == "product_updated") {
                         alert('updated');
                         location.reload();
                     }
@@ -160,7 +174,7 @@ export class EditProductComponent implements OnInit {
         }
     }
 
-    onUpdateImage() { 
+    onUpdateImage() {
         if (this.myForm2.valid) {
             const data = {
                 imageUrl: this.selected_file,
@@ -168,9 +182,9 @@ export class EditProductComponent implements OnInit {
             }
 
             this.apiServices.updateProductImage(data).subscribe(
-                (res:any) => {
+                (res: any) => {
                     console.log(res);
-                    if(res.status == "success" && res.data == "product_image_updated") {
+                    if (res.status == "success" && res.data == "product_image_updated") {
                         alert("updated");
                         location.reload();
                     }
@@ -185,8 +199,8 @@ export class EditProductComponent implements OnInit {
         }
     }
 
-     // get selected file 
-     setImage(event) {
+    // get selected file 
+    setImage(event) {
         this.is_image_set = true;
 
         this.selected_file = event.target.files[0];

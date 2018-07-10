@@ -122,6 +122,20 @@ export class EditCategoryComponent implements OnInit {
                     this.myForm.setValue({
                         categoryName: res.data.categoryName
                     })
+
+                    let imgName = res.data.categoryImgUrl;
+                    // get image url 
+                    this.apiServices.getImageUrlS3(imgName).subscribe(
+                        (res: any) => {
+                            // console.log(res);
+                            this.is_current_image = true;
+                            this.currentImagePath = 'data:image/jpeg;base64,' + res;
+                        },
+                        err => {
+                            console.log('Error\n');
+                            console.log(err);
+                        }
+                    )
                 }
             },
             err => {console.log(err)}

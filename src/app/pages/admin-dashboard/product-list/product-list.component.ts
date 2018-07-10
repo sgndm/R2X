@@ -29,11 +29,6 @@ export class ProductListComponent implements OnInit {
 
     ngOnInit() {
 
-        // this.apiServices.getImageUrlS3('data').subscribe(
-        //     (res: any) => {console.log(res)},
-        //     err => {console.log(err)}
-        // )
-
         this.select_category = "";
         this.columns = [];
 
