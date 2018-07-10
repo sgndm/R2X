@@ -102,6 +102,21 @@ export class CategoriesComponent implements OnInit {
         )
     }
 
+    deleteCategory(category_id){
+        this.apiServices.deleteCategory(category_id).subscribe(
+            (res: any) => {
+                console.log(res);
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    activateCategory(category_id){
+
+    }
+
 
     // filter 
     // by product name

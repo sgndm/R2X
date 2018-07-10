@@ -40,6 +40,7 @@ export class ProductListComponent implements OnInit {
                 (res: any) => {
                     console.log(res);
                     this.getProducts();
+                    this.getCategories();
                 },
                 err => {
                     console.log(err);
@@ -52,6 +53,22 @@ export class ProductListComponent implements OnInit {
         }
 
 
+    }
+
+    // get categories 
+    getCategories() {
+        this.apiServices.getCategoriesAll().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    this.category_list = res.data;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
     }
 
     // get products
