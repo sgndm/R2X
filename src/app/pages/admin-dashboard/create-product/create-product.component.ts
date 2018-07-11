@@ -25,13 +25,7 @@ export class CreateProductComponent implements OnInit {
     productPrice: FormControl;
     productImage: FormControl;
     productCategory: FormControl;
-
-
-    firstName: FormControl;
-    lastName: FormControl;
-    email: FormControl;
-    password: FormControl;
-    language: FormControl;
+    paymentMethod: FormControl;
 
     selected_file: File = null;
 
@@ -100,7 +94,7 @@ export class CreateProductComponent implements OnInit {
                 description: this.myForm.value.productDescription,
                 estimatedPrice: this.myForm.value.productPrice,
                 categoryId: this.myForm.value.productCategory,
-                paymentUnit: 1,
+                paymentUnit: this.myForm.value.paymentMethod,
                 isProduct: true
             }
 
@@ -149,11 +143,12 @@ export class CreateProductComponent implements OnInit {
     // create form and validations 
     createFormControls() {
 
-        this.productCategory = new FormControl('');
+        this.productCategory = new FormControl(0);
         this.productName = new FormControl('', [Validators.required, Validators.minLength(1)]);
         this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
         this.productImage = new FormControl('', [Validators.required]);
+        this.paymentMethod = new FormControl(0);
 
     }
 
@@ -163,7 +158,8 @@ export class CreateProductComponent implements OnInit {
             productName: this.productName,
             productDescription: this.productDescription,
             productPrice: this.productPrice,
-            productImage: this.productImage
+            productImage: this.productImage,
+            paymentMethod: this.paymentMethod
         });
     }
 
@@ -189,11 +185,12 @@ export class CreateProductComponent implements OnInit {
         this.is_image_set = false;
 
         this.myForm.setValue({
-            productCategory: '',
+            productCategory: 0,
             productName: '',
             productDescription: '',
             productPrice: 0,
-            productImage: ''
+            productImage: '',
+            paymentMethod: 0
         });
     }
 

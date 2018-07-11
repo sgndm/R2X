@@ -118,7 +118,8 @@ export class EditProductComponent implements OnInit {
                         productName: res.data.name,
                         productCategory: res.data.categoryId,
                         productDescription: res.data.description,
-                        productPrice: res.data.estimatedPrice
+                        productPrice: res.data.estimatedPrice,
+                        paymentMethod: res.data.paymentUnit
                     });
 
                     let imgName = res.data.imageUrl;
@@ -150,7 +151,7 @@ export class EditProductComponent implements OnInit {
                 description: this.myForm.value.productDescription,
                 estimatedPrice: this.myForm.value.productPrice,
                 categoryId: this.myForm.value.productCategory,
-                paymentUnit: 1,
+                paymentUnit: this.myForm.value.paymentMethod,
                 isProduct: true,
                 productId: this.product_id
             }
@@ -216,7 +217,8 @@ export class EditProductComponent implements OnInit {
 
     createFormControls() {
 
-        this.productCategory = new FormControl('');
+        this.productCategory = new FormControl(0);
+        this.paymentMethod = new FormControl(0);
         this.productName = new FormControl('', [Validators.required, Validators.minLength(1)]);
         this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
@@ -229,7 +231,8 @@ export class EditProductComponent implements OnInit {
             productCategory: this.productCategory,
             productName: this.productName,
             productDescription: this.productDescription,
-            productPrice: this.productPrice
+            productPrice: this.productPrice,
+            paymentMethod: this.paymentMethod
         });
     }
 

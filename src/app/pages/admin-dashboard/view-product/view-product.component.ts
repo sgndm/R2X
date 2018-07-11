@@ -108,6 +108,7 @@ export class ViewProductComponent implements OnInit {
                     this.productCategory = res.data.categoryId;
                     this.productDescription = res.data.description;
                     this.productPrice = res.data.estimatedPrice;
+                    this.paymentMethod = res.data.paymentUnit;
 
                     let imgName = res.data.imageUrl;
                     // get image url 
