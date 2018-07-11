@@ -144,8 +144,8 @@ export class EditServiceComponent implements OnInit {
 
         this.productCategory = new FormControl('');
         this.paymentMethod = new FormControl('');
-        this.productName = new FormControl('', [Validators.required, Validators.minLength(1)]);
-        this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1)]);
+        this.productName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
+        this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
         this.productImage = new FormControl('', [Validators.required]);
 

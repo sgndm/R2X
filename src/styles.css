@@ -61,3 +61,14 @@ body{
     margin-bottom: 8px;
     overflow: hidden;
 }
+
+.form-control-feedback{
+    width: 100%;
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 1px;
+    border-radius: 4px;
+    margin-top: 2px; 
+    text-align: center;
+
+}

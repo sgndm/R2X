@@ -79,7 +79,7 @@ export class EditCategoryComponent implements OnInit {
 
     createFormControls() {
 
-        this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1)]);
+        this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
         this.categoryImage = new FormControl('', [Validators.required]);
 
     }

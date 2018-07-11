@@ -33,7 +33,10 @@
                     <label>Name</label>
                     <input type="text" class="form-control" formControlName="productName" required>
                     <div class="form-control-feedback" *ngIf="productName.errors && (productName.dirty || productName.touched)">
-                        <p *ngIf="productName.errors.required">Product Name is required</p>
+                        <p *ngIf="productName.errors.required">Service Name is required</p>
+                        <p *ngIf="productName.errors?.maxlength">
+                            Service Name is too long
+                        </p>
                     </div>
                 </div>
 
@@ -44,7 +47,10 @@
                     <label>Description</label>
                     <textarea class="form-control" formControlName="productDescription" required></textarea>
                     <div class="form-control-feedback" *ngIf="productDescription.errors && (productDescription.dirty || productDescription.touched)">
-                        <p *ngIf="productDescription.errors.required">Product Description is required</p>
+                        <p *ngIf="productDescription.errors.required">Service Description is required</p>
+                        <p *ngIf="productDescription.errors?.maxlength">
+                            Service Description is too long
+                        </p>
                     </div>
                 </div>
             </div>
@@ -77,12 +83,12 @@
                     'has-success': productImage.valid && (productImage.dirty || productImage.touched)
                     }">
                     <label>Image</label>
-                    <div class="upload-preview-container " *ngIf="is_image_set" >
-                            <div class="row justify-content-center">
-                                    <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
-                            </div>
-                            
+                    <div class="upload-preview-container " *ngIf="is_image_set">
+                        <div class="row justify-content-center">
+                            <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
                         </div>
+
+                    </div>
                     <input type="file" class="form-control" formControlName="productImage" required (change)="setImage($event)">
                     <div class="form-control-feedback" *ngIf="productImage.errors && (productImage.dirty || productImage.touched)">
                         <p *ngIf="productImage.errors.required">Image is required</p>
@@ -93,8 +99,8 @@
 
         </div>
         <div class="row justify-content-center">
-            <button type="submit" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
-            <button type="reset" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5" (click)="resetForm()">Cancel</button>
+            <button type="submit" [disabled]="!myForm.valid" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
+            <button type="button" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5" (click)="resetForm()">Cancel</button>
         </div>
 
 

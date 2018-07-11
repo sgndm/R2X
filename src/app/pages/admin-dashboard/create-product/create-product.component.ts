@@ -144,8 +144,8 @@ export class CreateProductComponent implements OnInit {
     createFormControls() {
 
         this.productCategory = new FormControl(0);
-        this.productName = new FormControl('', [Validators.required, Validators.minLength(1)]);
-        this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1)]);
+        this.productName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
+        this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
         this.productImage = new FormControl('', [Validators.required]);
         this.paymentMethod = new FormControl(0);
