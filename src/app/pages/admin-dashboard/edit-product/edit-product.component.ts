@@ -262,5 +262,6 @@ export class EditProductComponent implements OnInit {
 
     onCancelEdit2() {
         this.myForm2.reset();
+        this.is_image_set = false;
     }
 }

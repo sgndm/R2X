@@ -213,4 +213,9 @@ export class EditCategoryComponent implements OnInit {
     onCancelEdit() {
         this.myForm.reset();
     }
+
+    onCancelEdit2() {
+        this.myForm2.reset();
+        this.is_image_set = false;
+    }
 }
