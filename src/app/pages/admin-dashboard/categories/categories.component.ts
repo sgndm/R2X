@@ -106,6 +106,10 @@ export class CategoriesComponent implements OnInit {
         this.apiServices.deleteCategory(category_id).subscribe(
             (res: any) => {
                 console.log(res);
+                if(res.status == "success" && res.data == "category_removed") {
+                    alert('Removed');
+                    location.reload();
+                }
             },
             err => {
                 console.log(err);
@@ -114,6 +118,25 @@ export class CategoriesComponent implements OnInit {
     }
 
     activateCategory(category_id){
+        alert(category_id);
+        const data = {
+            categoryId: category_id,
+            recordStatus: 1
+        }
+
+        this.apiServices.enableCategory(data).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if(res.status == "success" && res.data == "category_enabled"){
+                    alert("enabled");
+                    location.reload();
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
 
     }
 

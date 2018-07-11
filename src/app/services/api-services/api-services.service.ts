@@ -121,6 +121,13 @@ export class ApiServicesService {
         return this.http.post(url, set_data)
     }
 
+    // enable category 
+    enableCategory(data){
+        let set_data = {"categoryId" : data.categoryId, "recordStatus": data.recordStatus}
+        const url = SERVER_URL + 'admin/category/enable';
+        return this.http.post(url, set_data)
+    }
+
     // products 
     // get 
     getAllProducts() {
