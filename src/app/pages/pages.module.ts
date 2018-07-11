@@ -23,6 +23,10 @@ import { CategoriesComponent } from './admin-dashboard/categories/categories.com
 import { CreateCategoryComponent } from './admin-dashboard/create-category/create-category.component';
 import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-category.component';
 
+// users
+import { SellerListComponent } from './admin-dashboard/seller-list/seller-list.component';
+import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.component';
+
 
 
 @NgModule({
@@ -44,7 +48,9 @@ import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-cate
     ViewServiceComponent,
     CategoriesComponent,
     CreateCategoryComponent,
-    EditCategoryComponent
+    EditCategoryComponent,
+    SellerListComponent,
+    SellerViewComponent
   ]
 })
 export class PagesModule { }
