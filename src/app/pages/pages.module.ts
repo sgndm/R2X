@@ -27,6 +27,8 @@ import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-cate
 import { SellerListComponent } from './admin-dashboard/seller-list/seller-list.component';
 import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.component';
 import { ServerDownComponent } from './error/server-down/server-down.component';
+
+// dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
 
 

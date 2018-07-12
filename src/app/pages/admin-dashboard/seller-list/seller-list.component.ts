@@ -172,13 +172,7 @@ export class SellerListComponent implements OnInit {
             showCancelButton: true,
             confirmButtonText: 'Submit',
             showLoaderOnConfirm: true,
-            allowOutsideClick: false,
-            preConfirm:error => {
-                swal.showValidationError(
-                  `Request failed: ${error}`
-                )
-              
-          }
+            allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
                 this.blockSeller(seller_id, result.value);

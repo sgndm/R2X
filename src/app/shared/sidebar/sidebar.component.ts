@@ -65,7 +65,7 @@ export class SidebarComponent implements OnInit {
   //       console.log(res);
   //       $('#user_name').html(res['data']['phoneNumber']);
   //       // get nav items from server
-        let getsideNavItems = [ 'Admin Dashboard', 'Categories', 'Products & Services', 'Users'];
+        let getsideNavItems = [ 'Admin Dashboard', 'Dashboard','Users', 'Products & Services', 'Categories' ];
   //
   //       //console.log(typeof(tempArray));
         for (let x in this.tempSideNavItems) {

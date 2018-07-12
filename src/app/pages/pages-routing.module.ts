@@ -20,6 +20,9 @@ import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-cate
 import { SellerListComponent } from './admin-dashboard/seller-list/seller-list.component';
 import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.component';
 
+// dashboard
+import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+
 const routes: Routes = [
     // admin 
     // products & services
@@ -41,6 +44,9 @@ const routes: Routes = [
     // sellers 
     { path: 'admin/users/sellers', component: SellerListComponent },
     { path: 'admin/users/sellers/seller/:id', component: SellerViewComponent },
+
+    // dashboard
+    { path: 'admin/dashboard', component: DashboardComponent },
 ];
 
 @NgModule({
