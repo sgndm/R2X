@@ -349,6 +349,12 @@ export class ApiServicesService {
         return this.http.post(url, set_data)
     }
 
+    // get Seller details 
+    getSellerDetailsById(data) {
+        const url = SERVER_URL + 'admin/sellers/details';
+        return this.http.get(url, { params: { username: data } });
+    }
+
 
 
 }
