@@ -148,7 +148,7 @@ export class SellerListComponent implements OnInit {
 
     onBlockingSeller(seller_id) {
         swal({
-            title:'Are you sure?',
+            title: 'Are you sure?',
             text: "You are trying to block a seller",
             type: 'warning',
             showCancelButton: true,
@@ -164,7 +164,7 @@ export class SellerListComponent implements OnInit {
 
     addComment(seller_id) {
         swal({
-            title: 'Please Leave a comment',
+            title: 'Reason for Blocking',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -172,7 +172,14 @@ export class SellerListComponent implements OnInit {
             showCancelButton: true,
             confirmButtonText: 'Submit',
             showLoaderOnConfirm: true,
-            allowOutsideClick: false
+            allowOutsideClick: false,
+            preConfirm: function (value) {
+                if (value.length == 0) {
+                    swal.showValidationError(
+                        `Reason is required`
+                    )
+                }
+            }
         }).then((result) => {
             if (result.value) {
                 this.blockSeller(seller_id, result.value);
@@ -182,13 +189,13 @@ export class SellerListComponent implements OnInit {
 
     blockSeller(seller_id, comment) {
 
-        const data = { username: seller_id, comment: comment}
+        const data = { username: seller_id, comment: comment }
 
         this.apiServices.blockSeller(data).subscribe(
             (res: any) => {
                 console.log(res);
 
-                if(res.status == "success" && res.data == "blocked") {
+                if (res.status == "success" && res.data == "blocked") {
                     this.apiServices.altScc('Seller blocked', this.getSellers());
                 }
                 else {
@@ -203,12 +210,12 @@ export class SellerListComponent implements OnInit {
 
     }
 
-    acceptSeller(seller_id) { 
+    acceptSeller(seller_id) {
         this.apiServices.acceptSeller(seller_id).subscribe(
-            (res:any ) => {
+            (res: any) => {
                 console.log(res);
 
-                if(res.status == "success" && res.data == "approved") {
+                if (res.status == "success" && res.data == "approved") {
                     this.apiServices.altScc('Seller accepted', this.getSellers());
                 }
                 else {
