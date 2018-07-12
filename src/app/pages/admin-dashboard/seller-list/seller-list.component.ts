@@ -102,6 +102,8 @@ export class SellerListComponent implements OnInit {
                     let temp_sellers = [];
 
                     for (let data of res.data) {
+                        x += 1;
+                        
                         let t_seller = {
                             index: x,
                             name: data.seller.sellerName,
