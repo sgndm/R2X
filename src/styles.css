@@ -72,3 +72,16 @@ body{
     text-align: center;
 
 }
+
+
+/* | overide label | */
+label {
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  .cus-lbl {
+    width: 100%;
+    text-align: center;
+    color: white;
+  }

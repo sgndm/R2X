@@ -24,21 +24,21 @@ export class ApiServicesService {
     }
 
     altScc(content, callback) {
-		swal({
-			type: 'success',
+        swal({
+            type: 'success',
             title: '<span class="text-success">Success</span>',
             text: content,
             showConfirmButton: false,
             timer: 2000,
             width: 500,
             padding: 20
-		}).then(
+        }).then(
             callback
         )
-	}
+    }
 
-	altErr(content, callback) {
-		swal({
+    altErr(content, callback) {
+        swal({
             type: 'error',
             title: '<span class="text-danger">Oops..</span>',
             text: content,
@@ -49,10 +49,10 @@ export class ApiServicesService {
         }).then(
             callback
         )
-	}
+    }
 
-	altDelConfirm(callback) {
-		swal({
+    altDelConfirm(callback) {
+        swal({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
             type: 'warning',
@@ -63,11 +63,49 @@ export class ApiServicesService {
                 callback
             }
         })
-	}
+    }
 
-	reload(){
-		window.setTimeout(function(){window.location.reload()}, 1500);
-	}
+    altConfirm(text, callback) {
+        swal({
+            title:'Are you sure?',
+            text: text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Yes, I'm Sure!"
+        }).then((result) => {
+            if (result.value) {
+                callback
+            }
+        })
+    }
+
+    altWithImput() {
+        swal({
+            title: 'Add a comment',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: false,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            preConfirm: (login) => {
+
+            },
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.value) {
+                swal({
+                    title: `${result.value.login}'s avatar`,
+                    imageUrl: result.value.avatar_url
+                })
+            }
+        })
+    }
+
+    reload() {
+        window.setTimeout(function () { window.location.reload() }, 1500);
+    }
 
     // login function
     login(data) {
@@ -111,10 +149,10 @@ export class ApiServicesService {
     // products & services 
 
     // get images from s3 bucket
-    getImageUrlS3(data){
+    getImageUrlS3(data) {
         const url = SERVER_URL + 'admin/image';
 
-        return this.http.get(url, { headers: { }, params: { image_name: data }, responseType: 'text'});
+        return this.http.get(url, { headers: {}, params: { image_name: data }, responseType: 'text' });
     }
 
     // categories 
@@ -127,11 +165,11 @@ export class ApiServicesService {
     // get details 
     getCategoryById(data) {
         const url = SERVER_URL + 'admin/category';
-        return this.http.get(url, { params: { id: data }});
+        return this.http.get(url, { params: { id: data } });
     }
 
     // create 
-    createCategory(data){
+    createCategory(data) {
         const formData: FormData = new FormData();
         formData.append('data', JSON.stringify(data.info));
         formData.append('image', data.imageUrl);
@@ -142,7 +180,7 @@ export class ApiServicesService {
 
     // edit 
     // name
-    updateCategoryName(data){
+    updateCategoryName(data) {
         let set_data = {
             "name": data.categoryName,
             "categoryId": data.categoryId
@@ -153,7 +191,7 @@ export class ApiServicesService {
     }
 
     // image 
-    updateCategoryImage(data){
+    updateCategoryImage(data) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.categoryId);
@@ -164,14 +202,14 @@ export class ApiServicesService {
 
     // delete category
     deleteCategory(data) {
-        let set_data = {"id" : data}
+        let set_data = { "id": data }
         const url = SERVER_URL + 'admin/category/delete';
         return this.http.post(url, set_data)
     }
 
     // enable category 
-    enableCategory(data){
-        let set_data = {"categoryId" : data.categoryId, "recordStatus": data.recordStatus}
+    enableCategory(data) {
+        let set_data = { "categoryId": data.categoryId, "recordStatus": data.recordStatus }
         const url = SERVER_URL + 'admin/category/enable';
         return this.http.post(url, set_data)
     }
@@ -194,24 +232,24 @@ export class ApiServicesService {
     }
 
     // update product
-    updateProductDetails(data){
+    updateProductDetails(data) {
 
         let set_data = {
-            "name": data.name, 
-            "description": data.description, 
-            "estimatedPrice": data.estimatedPrice, 
-            "categoryId": data.categoryId, 
-            "paymentUnit": data.paymentUnit, 
-            "isProduct": 1, 
+            "name": data.name,
+            "description": data.description,
+            "estimatedPrice": data.estimatedPrice,
+            "categoryId": data.categoryId,
+            "paymentUnit": data.paymentUnit,
+            "isProduct": 1,
             "productId": data.productId
         }
-        
+
         const url = SERVER_URL + 'admin/product/update';
         return this.http.post(url, set_data)
     }
 
     // update image 
-    updateProductImage(data){
+    updateProductImage(data) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.productId);
@@ -222,14 +260,14 @@ export class ApiServicesService {
 
     // delete product 
     deleteProduct(data) {
-        let set_data = {"id" : data}
+        let set_data = { "id": data }
         const url = SERVER_URL + 'admin/product/delete';
         return this.http.post(url, set_data)
     }
 
     // enable product 
-    enableProduct(data){
-        let set_data = {"productId" : data.productId, "recordStatus": data.recordStatus}
+    enableProduct(data) {
+        let set_data = { "productId": data.productId, "recordStatus": data.recordStatus }
         const url = SERVER_URL + 'admin/product/enable';
         return this.http.post(url, set_data)
     }
@@ -252,21 +290,21 @@ export class ApiServicesService {
     // update service 
     updateServiceDetails(data) {
         let set_data = {
-            "name": data.name, 
-            "description": data.description, 
-            "estimatedPrice": data.estimatedPrice, 
-            "categoryId": data.categoryId, 
-            "paymentUnit": data.paymentUnit, 
-            "isProduct": data.isProduct, 
+            "name": data.name,
+            "description": data.description,
+            "estimatedPrice": data.estimatedPrice,
+            "categoryId": data.categoryId,
+            "paymentUnit": data.paymentUnit,
+            "isProduct": data.isProduct,
             "productId": data.productId
         }
-        
+
         const url = SERVER_URL + 'admin/service/update';
         return this.http.post(url, set_data)
     }
 
     // update image 
-    updateServiceImage(data){
+    updateServiceImage(data) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.productId);
@@ -276,7 +314,7 @@ export class ApiServicesService {
     }
     // delete product 
     deleteService(data) {
-        let set_data = {"id" : data}
+        let set_data = { "id": data }
         const url = SERVER_URL + 'admin/service/delete';
         return this.http.post(url, set_data)
     }
@@ -285,7 +323,30 @@ export class ApiServicesService {
     // get product by id
     getProductById(data) {
         const url = SERVER_URL + 'product';
-        return this.http.get(url, { params: { productId: data }});
+        return this.http.get(url, { params: { productId: data } });
+    }
+
+
+    // users 
+    // get sellers 
+    getAllSellers() {
+        const url = SERVER_URL + 'admin/sellers';
+        return this.http.get(url);
+    }
+
+    // accept seller 
+    acceptSeller(data) {
+
+        let set_data = { "username": data }
+        const url = SERVER_URL + 'admin/sellers/approve';
+        return this.http.post(url, set_data)
+    }
+
+    // block seller 
+    blockSeller(data){
+        let set_data = { "username": data.username, "comment": data.comment }
+        const url = SERVER_URL + 'admin/sellers/block';
+        return this.http.post(url, set_data)
     }
 
 

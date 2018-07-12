@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import swal from 'sweetalert2';
+
+
 
 @Component({
     selector: 'app-seller-list',
@@ -41,6 +44,7 @@ export class SellerListComponent implements OnInit {
             this.apiServices.getUserDetails().subscribe(
                 (res: any) => {
                     console.log(res);
+                    this.getSellers();
                 },
                 err => {
                     console.log(err);
@@ -54,7 +58,6 @@ export class SellerListComponent implements OnInit {
 
 
     }
-
 
     // by product name
     updateFilter(event) {
@@ -88,8 +91,135 @@ export class SellerListComponent implements OnInit {
 
     }
 
-    blockSeller(seller_id) {}
-    
-    acceptSeller(seller_id) {}
+    // get sellers 
+    getSellers() {
+        this.apiServices.getAllSellers().subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let x = 0;
+                    let temp_sellers = [];
+
+                    for (let data of res.data) {
+                        let t_seller = {
+                            index: x,
+                            name: data.seller.sellerName,
+                            image: '',
+                            address: data.seller.address,
+                            phone: data.seller.mobileNumber,
+                            nic: data.seller.nic,
+                            isApproved: data.approved,
+                            ratings: data.seller.rating,
+                            isActive: data.isActive,
+                            seller_id: data.id,
+                            username: data.appUser.username
+                        }
+
+                        let imgName = data.seller.storeImageUrl;
+
+                        let imagePath = '';
+                        // get image url 
+                        this.apiServices.getImageUrlS3(imgName).subscribe(
+                            (res: any) => {
+                                t_seller.image = 'data:image/jpeg;base64,' + res;
+                            },
+                            err => {
+                                console.log('Error\n');
+                                console.log(err);
+                            }
+                        )
+
+                        temp_sellers.push(t_seller);
+                    }
+
+                    this.rows = temp_sellers;
+                    this.temp = this.rows;
+
+                }
+
+
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    onBlockingSeller(seller_id) {
+        swal({
+            title:'Are you sure?',
+            text: "You are trying to block a seller",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Yes, I'm Sure!",
+            cancelButtonText: "Cancel",
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.value) {
+                this.addComment(seller_id);
+            }
+        })
+    }
+
+    addComment(seller_id) {
+        swal({
+            title: 'Please Leave a comment',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: false,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.value) {
+                this.blockSeller(seller_id, result.value);
+            }
+        })
+    }
+
+    blockSeller(seller_id, comment) {
+
+        const data = { username: seller_id, comment: comment}
+
+        this.apiServices.blockSeller(data).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if(res.status == "success" && res.data == "blocked") {
+                    this.apiServices.altScc('Seller blocked', this.getSellers());
+                }
+                else {
+                    this.apiServices.altErr("Unable to block the seller", this.getSellers());
+                }
+            },
+            err => {
+                console.log(err);
+                this.apiServices.altErr("Unable to block the seller", this.getSellers());
+            }
+        )
+
+    }
+
+    acceptSeller(seller_id) { 
+        this.apiServices.acceptSeller(seller_id).subscribe(
+            (res:any ) => {
+                console.log(res);
+
+                if(res.status == "success" && res.data == "approved") {
+                    this.apiServices.altScc('Seller accepted', this.getSellers());
+                }
+                else {
+                    this.apiServices.altErr("Unable to accept the seller", this.getSellers());
+                }
+            },
+            err => {
+                console.log(err);
+                this.apiServices.altErr("Unable to accept the seller", this.getSellers());
+            }
+        )
+    }
 
 }

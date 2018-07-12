@@ -2,7 +2,7 @@
 
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8">
-            <h2 class=""> Sellers  </h2>
+            <h2 class=""> Sellers </h2>
         </div>
         <div class="col-sm-12 col-md-4">
             <!-- <a [routerLink]="['/pages/admin/services/create']" class="btn btn-submit pull-right">
@@ -55,13 +55,54 @@
             </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="ratings">
+            <ng-template ngx-datatable-header-template>
+                <span>Ratings</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.ratings }}
+
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="isActive">
+            <ng-template ngx-datatable-header-template>
+                <span>Status</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <label class="cus-lbl btn-sm bg-success" *ngIf="row.isActive == 1">Active</label>
+                <label class="cus-lbl btn-sm bg-danger" *ngIf="row.isActive == 0">Inactive</label>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column name="phone">
+            <ng-template ngx-datatable-header-template>
+                <span>Phone Number</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.phone }}
+
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="address">
+            <ng-template ngx-datatable-header-template>
+                <span>Address </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                {{ row.address }}
+
+            </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="delete">
             <ng-template ngx-datatable-header-template>
                 <span>Action</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="blockSeller(row.seller_id)" *ngIf="row.recordStatus == 1">Block</button>
-                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.seller_id)" *ngIf="row.recordStatus == 0">Accept</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.isApproved">Block</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="!row.isApproved">Accept</button>
             </ng-template>
         </ngx-datatable-column>
 
@@ -70,7 +111,7 @@
                 <span>view</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <a class="cus-btn-1 btn btn-sm btn-primary" [routerLink]="['/pages/admin/services/view/service',row.service_id]">
+                <a class="cus-btn-1 btn btn-sm btn-primary" [routerLink]="['/pages/admin/users/sellers/seller',row.username]">
                     View
                 </a>
             </ng-template>
