@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import routes
 import { Router } from '@angular/router';
 
+import swal from 'sweetalert2';
+
 const httpOptions = {}
 
 // const SERVER_URL = 'http://192.168.2.140:8090/api/';
@@ -20,6 +22,52 @@ export class ApiServicesService {
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
+
+    altScc(content, callback) {
+		swal({
+			type: 'success',
+            title: '<span class="text-success">Success</span>',
+            text: content,
+            showConfirmButton: false,
+            timer: 2000,
+            width: 500,
+            padding: 20
+		}).then(
+            callback
+        )
+	}
+
+	altErr(content, callback) {
+		swal({
+            type: 'error',
+            title: '<span class="text-danger">Oops..</span>',
+            text: content,
+            showConfirmButton: false,
+            timer: 2000,
+            width: 500,
+            padding: 20
+        }).then(
+            callback
+        )
+	}
+
+	altDelConfirm(callback) {
+		swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                callback
+            }
+        })
+	}
+
+	reload(){
+		window.setTimeout(function(){window.location.reload()}, 1500);
+	}
 
     // login function
     login(data) {

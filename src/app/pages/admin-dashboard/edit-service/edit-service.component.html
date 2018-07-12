@@ -89,6 +89,7 @@
             <form novalidate [formGroup]="myForm2" (ngSubmit)="onUpdateImage()">
                 <h5>Edit Service Image</h5>
                 <hr>
+                <h6>Current Image</h6><hr>
                 <div class="upload-preview-container" *ngIf="is_current_image">
                     <div class="row justify-content-center">
                         <img src="{{ currentImagePath }}" alt="" class="upload-preview">
@@ -100,7 +101,7 @@
                                 'has-danger': productImage.invalid && (productImage.dirty || productImage.touched),
                                 'has-success': productImage.valid && (productImage.dirty || productImage.touched)
                                 }">
-                    <label>Image</label>
+                    <label>New Image</label>
                     <div class="upload-preview-container " *ngIf="is_image_set">
                         <div class="row justify-content-center">
                             <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
@@ -109,7 +110,7 @@
                     </div>
                     <input type="file" class="form-control" formControlName="productImage" required (change)="setImage($event)">
                     <div class="form-control-feedback" *ngIf="productImage.errors && (productImage.dirty || productImage.touched)">
-                        <p *ngIf="productImage.errors.required">Last Name is required</p>
+                        <p *ngIf="productImage.errors.required">Service Image is required</p>
                     </div>
                 </div>
                 <div class="row justify-content-center">

@@ -107,18 +107,17 @@ export class CategoriesComponent implements OnInit {
             (res: any) => {
                 console.log(res);
                 if(res.status == "success" && res.data == "category_removed") {
-                    alert('Removed');
-                    location.reload();
+                    this.apiServices.altScc("Category deleted",  this.getCategories());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to delete category",  this.getCategories());
             }
         )
     }
 
     activateCategory(category_id){
-        alert(category_id);
         const data = {
             categoryId: category_id,
             recordStatus: 1
@@ -129,12 +128,12 @@ export class CategoriesComponent implements OnInit {
                 console.log(res);
 
                 if(res.status == "success" && res.data == "category_enabled"){
-                    alert("enabled");
-                    location.reload();
+                    this.apiServices.altScc("Category activated",  this.getCategories());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to activate category",  this.getCategories());
             }
         )
 

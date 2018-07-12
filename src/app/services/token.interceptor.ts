@@ -49,6 +49,9 @@ export class TokenInterceptor implements HttpInterceptor {
             console.log(err);
             if (err instanceof HttpErrorResponse) {
                 console.log(err);
+                if(err.type == 0) {
+                    alert("server");
+                }
             }
         });
     }

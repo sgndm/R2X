@@ -160,12 +160,12 @@ export class EditProductComponent implements OnInit {
                 (res: any) => {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
-                        alert('updated');
-                        location.reload();
+                        this.apiServices.altScc("Product details updated",  this.apiServices.reload());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("Unable to update product details",  this.apiServices.reload());
                 }
             )
 
@@ -186,12 +186,12 @@ export class EditProductComponent implements OnInit {
                 (res: any) => {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {
-                        alert("updated");
-                        location.reload();
+                        this.apiServices.altScc("Product image updated",  this.apiServices.reload());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("unable to update product image",  this.apiServices.reload());
                 }
             )
         }

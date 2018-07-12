@@ -114,12 +114,12 @@ export class CreateServiceComponent implements OnInit {
                     console.log(res);
 
                     if(res.status == "success" && res.data == "product_added"){
-                        alert('product added successfully');
-                        this.myForm.reset();
+                        this.apiServices.altScc("Service created",  this.resetForm());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("Unable to create service",  this.resetForm());
                 }
             )
         }

@@ -119,7 +119,8 @@ export class SignInComponent implements OnInit {
 					this.goToDashboard();
 				},
 				err => {
-					console.log(err);
+                    console.log(err);
+                    this.apiServices.altErr('Login Failed! Username or password is incorrect', '');
 				}
 			)
 

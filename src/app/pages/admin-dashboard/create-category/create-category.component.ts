@@ -101,12 +101,12 @@ export class CreateCategoryComponent implements OnInit {
                     console.log(res);
 
                     if(res.status == "success" && res.data == "category_added") {
-                        alert("added");
-                        this.myForm.reset();
+                        this.apiServices.altScc("Category created",  this.resetForm());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("Unable to create category",  this.resetForm());
                 }
             )
         }
@@ -130,6 +130,10 @@ export class CreateCategoryComponent implements OnInit {
 
     }
 
+    resetForm(){
+        this.myForm.reset();
+        this.is_image_set = false;
+    }
 
 
 }

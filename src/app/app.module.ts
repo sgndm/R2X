@@ -8,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+
 // http modules
 import { HttpModule, Http } from '@angular/http';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -67,7 +69,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgbModule.forRoot(),
     PerfectScrollbarModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SweetAlert2Module.forRoot({
+        buttonsStyling: false,
+        customClass: 'modal-content',
+        confirmButtonClass: 'btn btn-primary',
+        cancelButtonClass: 'btn'
+    }),
   ],
   providers: [
     {

@@ -185,12 +185,12 @@ export class ServiceListComponent implements OnInit {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "product_removed") {
-                    alert("deleted");
-                    location.reload();
+                    this.apiServices.altScc("Service deleted", this.getProducts());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to delete service", this.getProducts());
             }
         )
     }
@@ -206,12 +206,12 @@ export class ServiceListComponent implements OnInit {
             (res: any) => {
                 console.log(res);
                 if (res.status == "success" && res.data == "product_enabled") {
-                    alert("enabled");
-                    location.reload();
+                    this.apiServices.altScc("Service activated", this.getProducts());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to activate service", this.getProducts());
             }
         )
 

@@ -185,12 +185,13 @@ export class ProductListComponent implements OnInit {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "product_removed") {
-                    alert("deleted");
-                    location.reload();
+
+                    this.apiServices.altScc("Product deleted", this.getProducts());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to delete product", this.getProducts());
             }
         )
     }
@@ -206,12 +207,12 @@ export class ProductListComponent implements OnInit {
             (res: any) => {
                 console.log(res);
                 if (res.status == "success" && res.data == "product_enabled") {
-                    alert("enabled");
-                    location.reload();
+                    this.apiServices.altScc("Product activated", this.getProducts());
                 }
             },
             err => {
                 console.log(err);
+                this.apiServices.altErr("Unable to activate product", this.getProducts());
             }
         )
 

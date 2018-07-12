@@ -119,6 +119,8 @@ export class EditCategoryComponent implements OnInit {
             (res: any) => {
                 console.log(res);
                 if(res.status == "success") {
+
+                    this.category_name = res.data.categoryName;
                     this.myForm.setValue({
                         categoryName: res.data.categoryName
                     })
@@ -128,6 +130,7 @@ export class EditCategoryComponent implements OnInit {
                     this.apiServices.getImageUrlS3(imgName).subscribe(
                         (res: any) => {
                             // console.log(res);
+                            
                             this.is_current_image = true;
                             this.currentImagePath = 'data:image/jpeg;base64,' + res;
                         },
@@ -170,12 +173,12 @@ export class EditCategoryComponent implements OnInit {
                     console.log(res);
 
                     if(res.status == "success" && res.data == "category_image_updated") {
-                        alert("updated");
-                        location.reload();
+                        this.apiServices.altScc("Category image updated",  this.apiServices.reload());
                     }
                 },
                 err =>{
                     console.log(err);
+                    this.apiServices.altErr("Unable to update category image",  this.apiServices.reload());
                 }
             )
         }
@@ -196,12 +199,12 @@ export class EditCategoryComponent implements OnInit {
                     console.log(res)
 
                     if(res.status == "success" && res.data == "category_updated") {
-                        alert("updated");
-                        location.reload();
+                        this.apiServices.altScc("Category name updated",  this.apiServices.reload());
                     }
                 },
                 err => {
-                    console.log(err)
+                    console.log(err);
+                    this.apiServices.altErr("Unable to update category name",  this.apiServices.reload());
                 }
             )
         }

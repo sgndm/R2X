@@ -38,21 +38,21 @@ export class EditServiceComponent implements OnInit {
     service_id: any;
 
     constructor(
-		private activeRoute: ActivatedRoute,
-		public router: Router,
-		private apiServices: ApiServicesService,
-	) {
-		this.activeRoute.params.subscribe(
-			params => {
-				this.service_id = params.id;
-				console.log(params);
-			}
+        private activeRoute: ActivatedRoute,
+        public router: Router,
+        private apiServices: ApiServicesService,
+    ) {
+        this.activeRoute.params.subscribe(
+            params => {
+                this.service_id = params.id;
+                console.log(params);
+            }
 
-		);
+        );
 
-		this.access_token = localStorage.getItem('access_token')
+        this.access_token = localStorage.getItem('access_token')
 
-	}
+    }
 
     ngOnInit() {
 
@@ -104,12 +104,12 @@ export class EditServiceComponent implements OnInit {
     }
 
     // get product details 
-    getProductDetailsById(product_id){
+    getProductDetailsById(product_id) {
         this.apiServices.getProductById(product_id).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success") {
-                    
+
                     this.service_name = res.data.name;
                     this.myForm.setValue({
                         productName: res.data.name,
@@ -131,7 +131,7 @@ export class EditServiceComponent implements OnInit {
                             console.log('Error\n');
                             console.log(err);
                         }
-                    ) 
+                    )
                 }
             },
             err => {
@@ -198,15 +198,16 @@ export class EditServiceComponent implements OnInit {
             }
 
             this.apiServices.updateServiceDetails(data).subscribe(
-                (res:any) => {
+                (res: any) => {
                     console.log(res);
-                    if(res.status == "success" && res.data == "product_updated"){
-                        alert('updated');
-                        location.reload();
+                    if (res.status == "success" && res.data == "product_updated") {
+
+                        this.apiServices.altScc("Service details updated",  this.apiServices.reload());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("Unable to update service details", this.apiServices.reload());
                 }
             )
 
@@ -217,8 +218,8 @@ export class EditServiceComponent implements OnInit {
         }
     }
 
-     // get selected file 
-     setImage(event) {
+    // get selected file 
+    setImage(event) {
         this.is_image_set = true;
 
         this.selected_file = event.target.files[0];
@@ -240,15 +241,16 @@ export class EditServiceComponent implements OnInit {
             }
 
             this.apiServices.updateServiceImage(data).subscribe(
-                (res:any) => {
+                (res: any) => {
                     console.log(res);
-                    if(res.status == "success" && res.data == "product_image_updated") {
-                        alert("updated");
-                        location.reload();
+                    if (res.status == "success" && res.data == "product_image_updated") {
+                        
+                        this.apiServices.altScc("Service image updated", this.apiServices.reload());
                     }
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.altErr("Unable to update service image", this.apiServices.reload());
                 }
             )
         }
