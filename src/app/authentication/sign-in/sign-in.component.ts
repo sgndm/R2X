@@ -1,5 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
+
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import * as $ from 'jquery';
 
 // import routes
@@ -24,7 +27,8 @@ export class SignInComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -105,6 +109,7 @@ export class SignInComponent implements OnInit {
     onLogin() {
 
         if (this.myForm.valid) {
+            this.spinner.show();
             //this.goToDashboard();
             const data = {
                 u: this.myForm.value.username,
@@ -129,12 +134,14 @@ export class SignInComponent implements OnInit {
                         this.apiServices.getUserDetails(token).subscribe(
                             (res: any) => {
                                 console.log(res);
+                                this.spinner.hide();
                                 // if user logged in 
 
                                 // go to dashboard
                                 this.goToDashboard();
                             },
                             err => {
+                                this.spinner.hide();
                                 console.log(err);
                                 this.apiServices.altErr('Login Failed! Username or password is incorrect', this.apiServices.logout());
 
@@ -142,11 +149,13 @@ export class SignInComponent implements OnInit {
                         )
                     }
                     else {
+                        this.spinner.hide();
                         this.apiServices.logout();
                     }
 
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     if (err.status == 503 || err.status == 0) {
                         this.router.navigate(['/server-error']);
