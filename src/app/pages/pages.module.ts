@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { PagesRoutingModule } from './pages-routing.module';
+
+import { AgmCoreModule } from '@agm/core';
 
 // admin dashboard
 // products and services
@@ -34,29 +36,31 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PagesRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxDatatableModule
-  ],
-  declarations: [
-    ProductListComponent,
-    CreateProductComponent,
-    CreateServiceComponent,
-    ServiceListComponent,
-    EditProductComponent,
-    EditServiceComponent,
-    ViewProductComponent,
-    ViewServiceComponent,
-    CategoriesComponent,
-    CreateCategoryComponent,
-    EditCategoryComponent,
-    SellerListComponent,
-    SellerViewComponent,
-    ServerDownComponent,
-    DashboardComponent
-  ]
+    imports: [
+        CommonModule,
+        PagesRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxDatatableModule, AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyBQOQYd6y3PeucI2ajI2hXzcPTXVwlGfgs'
+        }),
+    ],
+    declarations: [
+        ProductListComponent,
+        CreateProductComponent,
+        CreateServiceComponent,
+        ServiceListComponent,
+        EditProductComponent,
+        EditServiceComponent,
+        ViewProductComponent,
+        ViewServiceComponent,
+        CategoriesComponent,
+        CreateCategoryComponent,
+        EditCategoryComponent,
+        SellerListComponent,
+        SellerViewComponent,
+        ServerDownComponent,
+        DashboardComponent
+    ]
 })
 export class PagesModule { }

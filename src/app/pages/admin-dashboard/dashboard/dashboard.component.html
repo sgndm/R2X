@@ -5,10 +5,33 @@
             <h2 class=""> Dashboard </h2>
         </div>
         <div class="col-sm-12 col-md-4">
-            
+
         </div>
     </div>
     <hr>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-7 col-lg-8">
+            <h5>Map</h5><hr>
+            <div class="" style="width:100%; height: 400px; display: block;">
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="8" [zoomControl]="true">
+                    <!-- marker -->
+                    <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng"
+                        [label]="m.label" [markerDraggable]="m.draggable" [iconUrl]="m.icon" (dragEnd)="markerDragEnd(m, $event)">
+    
+                        <!-- infowindow -->
+                        <agm-info-window>Börk</agm-info-window>
+    
+                    </agm-marker>
+    
+                </agm-map>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-5 col-lg-4">
+            <h5>Orders</h5><hr>
+        </div>
+    </div>
+
 
 
 </div>
