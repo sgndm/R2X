@@ -34,7 +34,7 @@ export class CategoriesComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
 
                     this.columns = [
@@ -45,10 +45,11 @@ export class CategoriesComponent implements OnInit {
                     ];
 
                     // get categories 
-                    this.getCategories();
+                    this.getCategories(this.access_token);
                 },
                 err => {
                     console.log(err);
+                    this.apiServices.logout();
                 }
             )
 
@@ -61,8 +62,8 @@ export class CategoriesComponent implements OnInit {
 
 
     // get categories 
-    getCategories() {
-        this.apiServices.getCategoriesAll().subscribe(
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -78,7 +79,7 @@ export class CategoriesComponent implements OnInit {
                         let imgName = categories[x].imageUrl;
 
                         // get image url 
-                        this.apiServices.getImageUrlS3(imgName).subscribe(
+                        this.apiServices.getImageUrlS3(imgName, token).subscribe(
                             (res: any) => {
                                 // console.log(res);
                                 t_cat.image = 'data:image/jpeg;base64,' + res;
@@ -103,16 +104,17 @@ export class CategoriesComponent implements OnInit {
     }
 
     deleteCategory(category_id){
-        this.apiServices.deleteCategory(category_id).subscribe(
+        this.apiServices.deleteCategory(category_id, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
                 if(res.status == "success" && res.data == "category_removed") {
-                    this.apiServices.altScc("Category deleted",  this.getCategories());
+                    this.apiServices.altScc("Category deleted",  this.getCategories(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to delete category",  this.getCategories());
+                this.apiServices.altErr("Unable to delete category",  this.getCategories(this.access_token
+                ));
             }
         )
     }
@@ -123,17 +125,17 @@ export class CategoriesComponent implements OnInit {
             recordStatus: 1
         }
 
-        this.apiServices.enableCategory(data).subscribe(
+        this.apiServices.enableCategory(data, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
 
                 if(res.status == "success" && res.data == "category_enabled"){
-                    this.apiServices.altScc("Category activated",  this.getCategories());
+                    this.apiServices.altScc("Category activated",  this.getCategories(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to activate category",  this.getCategories());
+                this.apiServices.altErr("Unable to activate category",  this.getCategories(this.access_token));
             }
         )
 

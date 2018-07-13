@@ -7,8 +7,8 @@ import swal from 'sweetalert2';
 
 const httpOptions = {}
 
-// const SERVER_URL = 'http://192.168.2.140:8090/api/';
-const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com/api/';
+const SERVER_URL = 'http://192.168.2.140:8090/api/';
+// const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com/api/';
 
 @Injectable()
 export class ApiServicesService {
@@ -23,6 +23,7 @@ export class ApiServicesService {
         this.access_token = localStorage.getItem('access_token')
     }
 
+    // success alert
     altScc(content, callback) {
         swal({
             type: 'success',
@@ -37,6 +38,7 @@ export class ApiServicesService {
         )
     }
 
+    // error allert
     altErr(content, callback) {
         swal({
             type: 'error',
@@ -51,6 +53,7 @@ export class ApiServicesService {
         )
     }
 
+    // delete confirmation 
     altDelConfirm(callback) {
         swal({
             title: 'Are you sure?',
@@ -65,44 +68,7 @@ export class ApiServicesService {
         })
     }
 
-    altConfirm(text, callback) {
-        swal({
-            title:'Are you sure?',
-            text: text,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: "Yes, I'm Sure!"
-        }).then((result) => {
-            if (result.value) {
-                callback
-            }
-        })
-    }
-
-    altWithImput() {
-        swal({
-            title: 'Add a comment',
-            input: 'text',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
-            showCancelButton: false,
-            confirmButtonText: 'Submit',
-            showLoaderOnConfirm: true,
-            preConfirm: (login) => {
-
-            },
-            allowOutsideClick: false,
-        }).then((result) => {
-            if (result.value) {
-                swal({
-                    title: `${result.value.login}'s avatar`,
-                    imageUrl: result.value.avatar_url
-                })
-            }
-        })
-    }
-
+    // reload location with time out 
     reload() {
         window.setTimeout(function () { window.location.reload() }, 1500);
     }
@@ -127,9 +93,9 @@ export class ApiServicesService {
     }
 
     // get user details 
-    getUserDetails() {
+    getUserDetails(token) {
         const url = SERVER_URL + 'admin/me';
-        return this.http.get(url);
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}});
     }
 
     // save access token in local storage
@@ -149,90 +115,90 @@ export class ApiServicesService {
     // products & services 
 
     // get images from s3 bucket
-    getImageUrlS3(data) {
+    getImageUrlS3(data, token) {
         const url = SERVER_URL + 'admin/image';
 
-        return this.http.get(url, { headers: {}, params: { image_name: data }, responseType: 'text' });
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { image_name: data }, responseType: 'text' });
     }
 
     // categories 
     // get 
-    getCategoriesAll() {
+    getCategoriesAll(token) {
         const url = SERVER_URL + 'categories';
-        return this.http.get(url);
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}});
     }
 
     // get details 
-    getCategoryById(data) {
+    getCategoryById(data, token) {
         const url = SERVER_URL + 'admin/category';
-        return this.http.get(url, { params: { id: data } });
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}, params: { id: data } });
     }
 
     // create 
-    createCategory(data) {
+    createCategory(data, token) {
         const formData: FormData = new FormData();
         formData.append('data', JSON.stringify(data.info));
         formData.append('image', data.imageUrl);
 
         const url = SERVER_URL + 'admin/category';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // edit 
     // name
-    updateCategoryName(data) {
+    updateCategoryName(data, token) {
         let set_data = {
             "name": data.categoryName,
             "categoryId": data.categoryId
         }
 
         const url = SERVER_URL + 'admin/category/update';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
     // image 
-    updateCategoryImage(data) {
+    updateCategoryImage(data, token) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.categoryId);
 
         const url = SERVER_URL + 'admin/category/image';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData,{ headers: { Authorization: 'Bearer ' + token}})
     }
 
     // delete category
-    deleteCategory(data) {
+    deleteCategory(data, token) {
         let set_data = { "id": data }
         const url = SERVER_URL + 'admin/category/delete';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // enable category 
-    enableCategory(data) {
+    enableCategory(data, token) {
         let set_data = { "categoryId": data.categoryId, "recordStatus": data.recordStatus }
         const url = SERVER_URL + 'admin/category/enable';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
     // products 
     // get 
-    getAllProducts() {
+    getAllProducts(token) {
         const url = SERVER_URL + 'admin/products/all';
-        return this.http.get(url);
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}});
     }
 
     // create 
-    createProduct(data) {
+    createProduct(data, token) {
         const formData: FormData = new FormData();
         formData.append('data', JSON.stringify(data.info));
         formData.append('image', data.imageUrl);
 
         const url = SERVER_URL + 'admin/product';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // update product
-    updateProductDetails(data) {
+    updateProductDetails(data, token) {
 
         let set_data = {
             "name": data.name,
@@ -245,31 +211,31 @@ export class ApiServicesService {
         }
 
         const url = SERVER_URL + 'admin/product/update';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // update image 
-    updateProductImage(data) {
+    updateProductImage(data, token) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.productId);
 
         const url = SERVER_URL + 'admin/product/image';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // delete product 
-    deleteProduct(data) {
+    deleteProduct(data, token) {
         let set_data = { "id": data }
         const url = SERVER_URL + 'admin/product/delete';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // enable product 
-    enableProduct(data) {
+    enableProduct(data, token) {
         let set_data = { "productId": data.productId, "recordStatus": data.recordStatus }
         const url = SERVER_URL + 'admin/product/enable';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
 
@@ -278,17 +244,17 @@ export class ApiServicesService {
     // same as products
 
     // create 
-    createService(data) {
+    createService(data, token) {
         const formData: FormData = new FormData();
         formData.append('data', JSON.stringify(data.info));
         formData.append('image', data.imageUrl);
 
         const url = SERVER_URL + 'admin/service';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // update service 
-    updateServiceDetails(data) {
+    updateServiceDetails(data, token) {
         let set_data = {
             "name": data.name,
             "description": data.description,
@@ -300,59 +266,59 @@ export class ApiServicesService {
         }
 
         const url = SERVER_URL + 'admin/service/update';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
     // update image 
-    updateServiceImage(data) {
+    updateServiceImage(data, token) {
         const formData: FormData = new FormData();
         formData.append('image', data.imageUrl);
         formData.append('id', data.productId);
 
         const url = SERVER_URL + 'admin/service/image';
-        return this.http.post(url, formData)
+        return this.http.post(url, formData, {headers: { Authorization: 'Bearer ' + token}})
     }
     // delete product 
-    deleteService(data) {
+    deleteService(data, token) {
         let set_data = { "id": data }
         const url = SERVER_URL + 'admin/service/delete';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
 
     // get product by id
-    getProductById(data) {
+    getProductById(data, token) {
         const url = SERVER_URL + 'product';
-        return this.http.get(url, { params: { productId: data } });
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { productId: data } });
     }
 
 
     // users 
     // get sellers 
-    getAllSellers() {
+    getAllSellers(token) {
         const url = SERVER_URL + 'admin/sellers';
-        return this.http.get(url);
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}});
     }
 
     // accept seller 
-    acceptSeller(data) {
+    acceptSeller(data, token) {
 
         let set_data = { "username": data }
         const url = SERVER_URL + 'admin/sellers/approve';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
     }
 
     // block seller 
-    blockSeller(data){
+    blockSeller(data, token){
         let set_data = { "username": data.username, "comment": data.comment }
         const url = SERVER_URL + 'admin/sellers/block';
-        return this.http.post(url, set_data)
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
     // get Seller details 
-    getSellerDetailsById(data) {
+    getSellerDetailsById(data, token) {
         const url = SERVER_URL + 'admin/sellers/details';
-        return this.http.get(url, { params: { username: data } });
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { username: data } });
     }
 
 

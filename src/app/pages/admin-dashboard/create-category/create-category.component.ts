@@ -39,7 +39,7 @@ export class CreateCategoryComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
                 },
                 err => {
@@ -96,7 +96,7 @@ export class CreateCategoryComponent implements OnInit {
                 imageUrl: this.selected_file
             }
 
-            this.apiServices.createCategory(data).subscribe(
+            this.apiServices.createCategory(data, this.access_token).subscribe(
                 (res:any) => {
                     console.log(res);
 

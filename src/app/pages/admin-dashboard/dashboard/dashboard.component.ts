@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
 
                 },

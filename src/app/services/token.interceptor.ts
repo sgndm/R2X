@@ -30,29 +30,35 @@ export class TokenInterceptor implements HttpInterceptor {
         // console.log(request);
         console.log('access_token : ' + this.access_token);
 
-        if (this.access_token !== '') {
-            request = request.clone({
-                setHeaders: {
-                    Authorization: `Bearer ${this.access_token}`
-                }
-            })
-        }
-        else {
-            request = request.clone();
-        }
+        // if (this.access_token !== '') {
+        //     request = request.clone({
+        //         setHeaders: {
+        //             Authorization: `Bearer ${this.access_token}`
+        //         }
+        //     })
+        // }
+        // else {
+        //     request = request.clone();
+        // }
+
+        request = request.clone();
+        
+
         console.log("Http Request\n");
         console.log(request);
         console.log("\n");
 
-        return next.handle(request).do((err: any) => {
-            console.log("Interceptor\n");
-            console.log(err);
-            if (err instanceof HttpErrorResponse) {
-                console.log(err);
-                if(err.type == 0) {
-                    alert("server");
-                }
-            }
-        });
+        return next.handle(request);
+
+        // return next.handle(request).do((err: any) => {
+        //     console.log("Interceptor\n");
+        //     console.log(err);
+        //     if (err instanceof HttpErrorResponse) {
+        //         console.log(err);
+        //         if(err.type == 0) {
+        //             console.log("server");
+        //         }
+        //     }
+        // });
     }
 }

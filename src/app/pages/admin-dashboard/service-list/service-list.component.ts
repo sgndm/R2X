@@ -38,11 +38,11 @@ export class ServiceListComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
-                    this.getProducts();
-                    this.getCategories();
+                    this.getProducts(this.access_token);
+                    this.getCategories(this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -58,8 +58,8 @@ export class ServiceListComponent implements OnInit {
     }
 
     // get categories 
-    getCategories() {
-        this.apiServices.getCategoriesAll().subscribe(
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -75,8 +75,8 @@ export class ServiceListComponent implements OnInit {
 
 
     // get products
-    getProducts() {
-        this.apiServices.getAllProducts().subscribe(
+    getProducts(token) {
+        this.apiServices.getAllProducts(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -94,7 +94,7 @@ export class ServiceListComponent implements OnInit {
                             let imgName = product.imageUrl;
                             let imagePath = '';
                             // get image url 
-                            this.apiServices.getImageUrlS3(imgName).subscribe(
+                            this.apiServices.getImageUrlS3(imgName, token).subscribe(
                                 (res: any) => {
                                     t_prod.image = 'data:image/jpeg;base64,' + res;
                                 },
@@ -180,17 +180,17 @@ export class ServiceListComponent implements OnInit {
     }
 
     deleteProduct(product_id) {
-        this.apiServices.deleteProduct(product_id).subscribe(
+        this.apiServices.deleteProduct(product_id, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "product_removed") {
-                    this.apiServices.altScc("Service deleted", this.getProducts());
+                    this.apiServices.altScc("Service deleted", this.getProducts(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to delete service", this.getProducts());
+                this.apiServices.altErr("Unable to delete service", this.getProducts(this.access_token));
             }
         )
     }
@@ -202,16 +202,16 @@ export class ServiceListComponent implements OnInit {
             recordStatus: 1
         }
 
-        this.apiServices.enableProduct(data).subscribe(
+        this.apiServices.enableProduct(data, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success" && res.data == "product_enabled") {
-                    this.apiServices.altScc("Service activated", this.getProducts());
+                    this.apiServices.altScc("Service activated", this.getProducts(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to activate service", this.getProducts());
+                this.apiServices.altErr("Unable to activate service", this.getProducts(this.access_token));
             }
         )
 

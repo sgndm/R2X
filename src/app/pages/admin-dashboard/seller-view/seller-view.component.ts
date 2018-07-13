@@ -70,9 +70,9 @@ export class SellerViewComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
-                    this.getSellerDetails(this.seller_username);
+                    this.getSellerDetails(this.seller_username, this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -88,8 +88,8 @@ export class SellerViewComponent implements OnInit {
 
 
     // get user deatails 
-    getSellerDetails(seller_id) {
-        this.apiServices.getSellerDetailsById(seller_id).subscribe(
+    getSellerDetails(seller_id, token) {
+        this.apiServices.getSellerDetailsById(seller_id, token).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success") {
@@ -104,7 +104,7 @@ export class SellerViewComponent implements OnInit {
 
                     let sellImg = res.data.sellerProfile.storeImageUrl;
 
-                    this.apiServices.getImageUrlS3(sellImg).subscribe(
+                    this.apiServices.getImageUrlS3(sellImg, token).subscribe(
                         (res: any) => {
                             // console.log(res);
                             this.is_seller_image = true;
@@ -118,7 +118,7 @@ export class SellerViewComponent implements OnInit {
 
                     let nicFront = res.data.sellerNicImage.backImageUrl;
 
-                    this.apiServices.getImageUrlS3(nicFront).subscribe(
+                    this.apiServices.getImageUrlS3(nicFront, token).subscribe(
                         (res: any) => {
                             // console.log(res);
                             this.is_nic_front_image = true;
@@ -132,7 +132,7 @@ export class SellerViewComponent implements OnInit {
 
                     let nicBack = res.data.sellerNicImage.frontImageUrl;
 
-                    this.apiServices.getImageUrlS3(nicBack).subscribe(
+                    this.apiServices.getImageUrlS3(nicBack, token).subscribe(
                         (res: any) => {
                             // console.log(res);
                             this.is_nic_back_image = true;

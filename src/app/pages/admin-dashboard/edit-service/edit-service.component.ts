@@ -63,14 +63,14 @@ export class EditServiceComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
 
                     // get categories 
-                    this.getCategories();
+                    this.getCategories(this.access_token);
 
                     // get details 
-                    this.getProductDetailsById(this.service_id);
+                    this.getProductDetailsById(this.service_id, this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -88,8 +88,8 @@ export class EditServiceComponent implements OnInit {
     }
 
     // get categories 
-    getCategories() {
-        this.apiServices.getCategoriesAll().subscribe(
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -104,8 +104,8 @@ export class EditServiceComponent implements OnInit {
     }
 
     // get product details 
-    getProductDetailsById(product_id) {
-        this.apiServices.getProductById(product_id).subscribe(
+    getProductDetailsById(product_id, token) {
+        this.apiServices.getProductById(product_id, token).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success") {
@@ -121,7 +121,7 @@ export class EditServiceComponent implements OnInit {
 
                     let imgName = res.data.imageUrl;
                     // get image url 
-                    this.apiServices.getImageUrlS3(imgName).subscribe(
+                    this.apiServices.getImageUrlS3(imgName, token).subscribe(
                         (res: any) => {
                             // console.log(res);
                             this.is_current_image = true;
@@ -197,7 +197,7 @@ export class EditServiceComponent implements OnInit {
                 productId: this.service_id
             }
 
-            this.apiServices.updateServiceDetails(data).subscribe(
+            this.apiServices.updateServiceDetails(data, this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
@@ -240,7 +240,7 @@ export class EditServiceComponent implements OnInit {
                 productId: this.service_id
             }
 
-            this.apiServices.updateServiceImage(data).subscribe(
+            this.apiServices.updateServiceImage(data, this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {

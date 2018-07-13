@@ -40,6 +40,7 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './authentication/sign-in/sign-in.component';
 import { PageNotFoundComponent } from './pages/error/page-not-found/page-not-found.component';
+import { ServerDownComponent } from './pages/error/server-down/server-down.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -57,7 +58,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BreadcrumbComponent,
     SidebarComponent,
     SignInComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ServerDownComponent
   ],
   imports: [
     CommonModule,

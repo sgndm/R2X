@@ -58,9 +58,9 @@ export class EditCategoryComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
-                    this.getCategoryDetails(this.category_id);
+                    this.getCategoryDetails(this.category_id,this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -114,8 +114,8 @@ export class EditCategoryComponent implements OnInit {
 
     }
 
-    getCategoryDetails(category_id){
-        this.apiServices.getCategoryById(category_id).subscribe(
+    getCategoryDetails(category_id, token){
+        this.apiServices.getCategoryById(category_id, token).subscribe(
             (res: any) => {
                 console.log(res);
                 if(res.status == "success") {
@@ -127,7 +127,7 @@ export class EditCategoryComponent implements OnInit {
 
                     let imgName = res.data.categoryImgUrl;
                     // get image url 
-                    this.apiServices.getImageUrlS3(imgName).subscribe(
+                    this.apiServices.getImageUrlS3(imgName, token).subscribe(
                         (res: any) => {
                             // console.log(res);
                             
@@ -168,7 +168,7 @@ export class EditCategoryComponent implements OnInit {
                 categoryId: this.category_id
             }
 
-            this.apiServices.updateCategoryImage(data).subscribe(
+            this.apiServices.updateCategoryImage(data, this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
 
@@ -194,7 +194,7 @@ export class EditCategoryComponent implements OnInit {
                 categoryName: this.myForm.value.categoryName
             }
 
-            this.apiServices.updateCategoryName(data).subscribe(
+            this.apiServices.updateCategoryName(data, this.access_token).subscribe(
                 (res: any) => {
                     console.log(res)
 

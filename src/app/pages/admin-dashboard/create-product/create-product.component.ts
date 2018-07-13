@@ -46,11 +46,11 @@ export class CreateProductComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
 
                     // get categories 
-                    this.getCategories();
+                    this.getCategories(this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -67,8 +67,8 @@ export class CreateProductComponent implements OnInit {
     }
 
     // get categories 
-    getCategories() {
-        this.apiServices.getCategoriesAll().subscribe(
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -102,7 +102,7 @@ export class CreateProductComponent implements OnInit {
 
             console.log(data);
 
-            this.apiServices.createProduct(data).subscribe(
+            this.apiServices.createProduct(data, this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
 

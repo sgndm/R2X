@@ -28,7 +28,6 @@ import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-cate
 // users
 import { SellerListComponent } from './admin-dashboard/seller-list/seller-list.component';
 import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.component';
-import { ServerDownComponent } from './error/server-down/server-down.component';
 
 // dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
@@ -59,7 +58,6 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
         EditCategoryComponent,
         SellerListComponent,
         SellerViewComponent,
-        ServerDownComponent,
         DashboardComponent
     ]
 })

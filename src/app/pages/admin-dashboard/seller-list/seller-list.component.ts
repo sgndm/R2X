@@ -41,10 +41,10 @@ export class SellerListComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
-                    this.getSellers();
+                    this.getSellers(this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -92,8 +92,8 @@ export class SellerListComponent implements OnInit {
     }
 
     // get sellers 
-    getSellers() {
-        this.apiServices.getAllSellers().subscribe(
+    getSellers(token) {
+        this.apiServices.getAllSellers(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -122,7 +122,7 @@ export class SellerListComponent implements OnInit {
 
                         let imagePath = '';
                         // get image url 
-                        this.apiServices.getImageUrlS3(imgName).subscribe(
+                        this.apiServices.getImageUrlS3(imgName, token).subscribe(
                             (res: any) => {
                                 t_seller.image = 'data:image/jpeg;base64,' + res;
                             },
@@ -193,40 +193,40 @@ export class SellerListComponent implements OnInit {
 
         const data = { username: seller_id, comment: comment }
 
-        this.apiServices.blockSeller(data).subscribe(
+        this.apiServices.blockSeller(data, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "blocked") {
-                    this.apiServices.altScc('Seller blocked', this.getSellers());
+                    this.apiServices.altScc('Seller blocked', this.getSellers(this.access_token));
                 }
                 else {
-                    this.apiServices.altErr("Unable to block the seller", this.getSellers());
+                    this.apiServices.altErr("Unable to block the seller", this.getSellers(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to block the seller", this.getSellers());
+                this.apiServices.altErr("Unable to block the seller", this.getSellers(this.access_token));
             }
         )
 
     }
 
     acceptSeller(seller_id) {
-        this.apiServices.acceptSeller(seller_id).subscribe(
+        this.apiServices.acceptSeller(seller_id, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "approved") {
-                    this.apiServices.altScc('Seller accepted', this.getSellers());
+                    this.apiServices.altScc('Seller accepted', this.getSellers(this.access_token));
                 }
                 else {
-                    this.apiServices.altErr("Unable to accept the seller", this.getSellers());
+                    this.apiServices.altErr("Unable to accept the seller", this.getSellers(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to accept the seller", this.getSellers());
+                this.apiServices.altErr("Unable to accept the seller", this.getSellers(this.access_token));
             }
         )
     }

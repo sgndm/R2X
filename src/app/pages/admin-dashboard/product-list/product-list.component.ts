@@ -36,11 +36,11 @@ export class ProductListComponent implements OnInit {
         if (this.access_token) {
 
             // user details 
-            this.apiServices.getUserDetails().subscribe(
+            this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
                     console.log(res);
-                    this.getProducts();
-                    this.getCategories();
+                    this.getProducts(this.access_token);
+                    this.getCategories(this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -56,8 +56,8 @@ export class ProductListComponent implements OnInit {
     }
 
     // get categories 
-    getCategories() {
-        this.apiServices.getCategoriesAll().subscribe(
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -72,8 +72,8 @@ export class ProductListComponent implements OnInit {
     }
 
     // get products
-    getProducts() {
-        this.apiServices.getAllProducts().subscribe(
+    getProducts(token) {
+        this.apiServices.getAllProducts(token).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -92,7 +92,7 @@ export class ProductListComponent implements OnInit {
                             let imgName = product.imageUrl;
                             let imagePath = '';
                             // get image url 
-                            this.apiServices.getImageUrlS3(imgName).subscribe(
+                            this.apiServices.getImageUrlS3(imgName, token).subscribe(
                                 (res: any) => {
                                     // console.log(res);
                                     imagePath = 'data:image/jpeg;base64,' + res;
@@ -180,18 +180,18 @@ export class ProductListComponent implements OnInit {
     }
 
     deleteProduct(product_id) {
-        this.apiServices.deleteProduct(product_id).subscribe(
+        this.apiServices.deleteProduct(product_id, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "product_removed") {
 
-                    this.apiServices.altScc("Product deleted", this.getProducts());
+                    this.apiServices.altScc("Product deleted", this.getProducts(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to delete product", this.getProducts());
+                this.apiServices.altErr("Unable to delete product", this.getProducts(this.access_token));
             }
         )
     }
@@ -203,16 +203,16 @@ export class ProductListComponent implements OnInit {
             recordStatus: 1
         }
 
-        this.apiServices.enableProduct(data).subscribe(
+        this.apiServices.enableProduct(data, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
                 if (res.status == "success" && res.data == "product_enabled") {
-                    this.apiServices.altScc("Product activated", this.getProducts());
+                    this.apiServices.altScc("Product activated", this.getProducts(this.access_token));
                 }
             },
             err => {
                 console.log(err);
-                this.apiServices.altErr("Unable to activate product", this.getProducts());
+                this.apiServices.altErr("Unable to activate product", this.getProducts(this.access_token));
             }
         )
 

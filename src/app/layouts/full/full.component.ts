@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+// import routes
+import { Router, ActivatedRoute } from '@angular/router';
+// import api services
+import { ApiServicesService } from '../../services/api-services/api-services.service';
 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar'; 
 
@@ -10,6 +13,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 })
 export class FullComponent implements OnInit {
 
+    public access_token = '';
+
     color = 'green';
     showSettings = false;
     showMinisidebar = false;   
@@ -17,11 +22,31 @@ export class FullComponent implements OnInit {
 
 	public config: PerfectScrollbarConfigInterface = {};
 
-    constructor(public router: Router) { }
+    constructor(
+        public router: Router,
+        private apiServices: ApiServicesService
+    ) {
+        this.access_token = localStorage.getItem('access_token')
+    }
 
     ngOnInit() {
-        if (this.router.url === '/') {
-            this.router.navigate(['/dashboard/dashboard1']);
+        // check if user is logged in
+        if (this.access_token) {
+
+            // user details 
+            this.apiServices.getUserDetails(this.access_token).subscribe(
+                (res: any) => {
+                    console.log("Logged In");
+                },
+                err => {
+                    console.log(err);
+                    this.apiServices.logout();
+                }
+            )
+
+        }
+        else {
+            this.apiServices.logout();
         }
     }
 
