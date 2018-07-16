@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { PagesRoutingModule } from './pages-routing.module';
+
+import { AgmCoreModule } from '@agm/core';
 
 // admin dashboard
 // products and services
@@ -23,28 +25,40 @@ import { CategoriesComponent } from './admin-dashboard/categories/categories.com
 import { CreateCategoryComponent } from './admin-dashboard/create-category/create-category.component';
 import { EditCategoryComponent } from './admin-dashboard/edit-category/edit-category.component';
 
+// users
+import { SellerListComponent } from './admin-dashboard/seller-list/seller-list.component';
+import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.component';
+
+// dashboard
+import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PagesRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxDatatableModule
-  ],
-  declarations: [
-    ProductListComponent,
-    CreateProductComponent,
-    CreateServiceComponent,
-    ServiceListComponent,
-    EditProductComponent,
-    EditServiceComponent,
-    ViewProductComponent,
-    ViewServiceComponent,
-    CategoriesComponent,
-    CreateCategoryComponent,
-    EditCategoryComponent
-  ]
+    imports: [
+        CommonModule,
+        PagesRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxDatatableModule, AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyBQOQYd6y3PeucI2ajI2hXzcPTXVwlGfgs'
+        }),
+    ],
+    declarations: [
+        ProductListComponent,
+        CreateProductComponent,
+        CreateServiceComponent,
+        ServiceListComponent,
+        EditProductComponent,
+        EditServiceComponent,
+        ViewProductComponent,
+        ViewServiceComponent,
+        CategoriesComponent,
+        CreateCategoryComponent,
+        EditCategoryComponent,
+        SellerListComponent,
+        SellerViewComponent,
+        DashboardComponent
+    ]
 })
 export class PagesModule { }

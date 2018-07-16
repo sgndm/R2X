@@ -1,0 +1,111 @@
+<div class="page-content">
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8">
+            <h2 class=""> View Seller </h2>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <h2 class="text-right"> {{ seller_name }} </h2>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+
+            <div class="form-group">
+                <label>Name</label>
+                <p class="bg-info custom-lable-1"> {{ sellerName }} </p>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <p class="bg-info custom-lable-1"> {{ sellerPhone }} </p>
+            </div>
+            <div class="form-group">
+                <label>NIC</label>
+                <p class="bg-info custom-lable-1"> {{ sellerNIC }} </p>
+            </div>
+            <div class="form-group">
+                <label>Ratings</label>
+                <p class="bg-info custom-lable-1"> {{ ratings }} </p>
+            </div>
+            <div class="form-group">
+                <label>Operational Radius </label>
+                <p class="bg-info custom-lable-1"> {{ opRadius }} </p>
+            </div>
+            <div class="form-group">
+                <label>Payment Methods</label>
+                <table class="table">
+
+                    <tbody>
+                        <tr>
+                            <td>Accept Cards</td>
+                            <td>
+                                <label for="" *ngIf="acceptCard" class="cus-lbl btn-sm bg-success">Yes</label>
+                                <label for="" *ngIf="!acceptCard" class="cus-lbl btn-sm bg-warning">No</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Card On Delivery</td>
+                            <td>
+                                <label for="" *ngIf="cardOnDelivery" class="cus-lbl btn-sm bg-success">Yes</label>
+                                <label for="" *ngIf="!cardOnDelivery" class="cus-lbl btn-sm bg-warning">No</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cash On Delivery</td>
+                            <td>
+                                <label for="" *ngIf="cashOnDelivery" class="cus-lbl btn-sm bg-success">Yes</label>
+                                <label for="" *ngIf="!cashOnDelivery" class="cus-lbl btn-sm bg-warning">No</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group">
+                <label>Seller Image</label>
+                <div class="upload-preview-container" *ngIf="is_seller_image">
+
+                    <div class="row justify-content-center">
+                        <img src="{{ sellerImage }}" alt="" class="upload-preview">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label>NIC Front Side</label>
+                <div class="upload-preview-container" *ngIf="is_nic_front_image">
+
+                    <div class="row justify-content-center">
+                        <img src="{{ nicFrontImage }}" alt="" class="upload-preview">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label>NIC Back Side</label>
+                <div class="upload-preview-container" *ngIf="is_nic_back_image">
+
+                    <div class="row justify-content-center">
+                        <img src="{{ nicBackImage }}" alt="" class="upload-preview">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row justify-content-center">
+        <!-- <a [routerLink]="['/pages/admin/products/edit/product', product_id]" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Edit</a> -->
+    </div>
+
+
+</div>

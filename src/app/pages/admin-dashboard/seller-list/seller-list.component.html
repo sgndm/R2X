@@ -2,31 +2,23 @@
 
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8">
-            <h2 class=""> Products </h2>
+            <h2 class=""> Sellers </h2>
         </div>
         <div class="col-sm-12 col-md-4">
-            <a [routerLink]="['/pages/admin/products/create']" class="btn btn-submit pull-right" >
+            <!-- <a [routerLink]="['/pages/admin/services/create']" class="btn btn-submit pull-right">
                 <i class="fa fa-plus-circle"></i>
-                Create Product
-            </a>
+                Create Service
+            </a> -->
         </div>
     </div>
     <hr>
 
-    <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-6 col-lg-6">
-            <div class="form-group row justify-content-center">
-                <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Categories</label>
-                <select name="" id="" (change)="onChangeCategory($event.target.value)" class="form-control custom-select col-sm-12 col-md-8 col-lg-8 " [(ngModel)]="select_category" >
-                    <option value="">Select a Category</option>
-                    <option value="{{ category.name }}" *ngFor="let category of category_list">{{ category.name }}</option>
-                </select>
-            </div>
-        </div>
+    <div class="row justify-content-end">
+
         <div class="col-sm-12 col-md-6 col-lg-6">
             <div class="form-group row justify-content-center">
                 <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
-                <input type='text' placeholder='Type product name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
+                <input type='text' placeholder='Type seller name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
             </div>
         </div>
     </div>
@@ -45,7 +37,7 @@
 
         <ngx-datatable-column name="name">
             <ng-template ngx-datatable-header-template>
-                <span>Product Name</span>
+                <span>Seller Name</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
                 {{ row.name }}
@@ -59,53 +51,57 @@
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
                 <img src="{{ row.image }}" alt="" class="image-thumbnail-cus">
+
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="category">
+        <ngx-datatable-column name="ratings">
             <ng-template ngx-datatable-header-template>
-                <span>Product Category</span>
+                <span>Ratings</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                {{ row.category }}
+                {{ row.ratings }}
+
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="price">
+        <ngx-datatable-column name="isActive">
             <ng-template ngx-datatable-header-template>
-                <span>Price</span>
+                <span>Status</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                {{ row.price }}
+                <label class="cus-lbl btn-sm bg-success" *ngIf="row.isActive == 1">Active</label>
+                <label class="cus-lbl btn-sm bg-danger" *ngIf="row.isActive == 0">Inactive</label>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="edit">
+
+
+        <ngx-datatable-column name="phone">
             <ng-template ngx-datatable-header-template>
-                <span>Edit</span>
+                <span>Phone Number</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <a class="cus-btn-1 btn btn-sm btn-warning" [routerLink]="['/pages/admin/products/edit/product',row.product_id]">
-                    Edit
-                </a>
+                {{ row.phone }}
+
             </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="delete">
-                <ng-template ngx-datatable-header-template>
-                    <span>Delete</span>
-                </ng-template>
-                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                    <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="deleteProduct(row.product_id)" *ngIf="row.recordStatus == 1" >Delete</button>
-                    <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="activateProduct(row.product_id)" *ngIf="row.recordStatus == 0" >Activate</button>
-                </ng-template>
-            </ngx-datatable-column>
+            <ng-template ngx-datatable-header-template>
+                <span>Action</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.isApproved">Block</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="!row.isApproved">Accept</button>
+            </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="">
             <ng-template ngx-datatable-header-template>
                 <span>view</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <a class="cus-btn-1 btn btn-sm btn-primary" [routerLink]="['/pages/admin/products/view/product',row.product_id]">
+                <a class="cus-btn-1 btn btn-sm btn-primary" [routerLink]="['/pages/admin/users/sellers/seller',row.username]">
                     View
                 </a>
             </ng-template>
@@ -115,13 +111,5 @@
 
     </ngx-datatable>
 
-
-    <!-- <ul class="custom-list-1 row">
-      <li *ngFor="let customer of customer_list" class="col-sm-12 col-md-4 col-lg-4">
-          <a class="btn btn-info waves-effect waves-light text-white col-sm-12" [routerLink]="['/pages/customers/current/customer', customer.id]" >
-              {{ customer.name }}
-          </a>
-      </li>
-  </ul> -->
 
 </div>

@@ -20,6 +20,7 @@ export class SidebarComponent implements OnInit {
   public sidebarnavItems: any[]; // array to store side nav menu items
   public tempSideNavItems: any[]; // array to store menu items temperary | these items will get from routes
 
+  username;
 
   //this.getsideNavItems = [ 'Pages','Users', 'Dashboard', 'DropDown' ];
   //this is for the open close
@@ -50,6 +51,7 @@ export class SidebarComponent implements OnInit {
   // End open close
 
   ngOnInit() {
+      this.username = "Admin";
 
   // get sidebar menu items from routers
   this.tempSideNavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
@@ -63,7 +65,7 @@ export class SidebarComponent implements OnInit {
   //       console.log(res);
   //       $('#user_name').html(res['data']['phoneNumber']);
   //       // get nav items from server
-        let getsideNavItems = [ 'Admin Dashboard', 'Categories', 'Products & Services'];
+        let getsideNavItems = [ 'Admin Dashboard', 'Dashboard','Users', 'Products & Services', 'Categories' ];
   //
   //       //console.log(typeof(tempArray));
         for (let x in this.tempSideNavItems) {

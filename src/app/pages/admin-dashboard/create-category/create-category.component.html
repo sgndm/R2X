@@ -9,7 +9,7 @@
     </div>
     <hr>
 
-    <form novalidate [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <form novalidate [formGroup]="myForm" (ngSubmit)="onCreateCategory()">
 
         <div class="row">
             
@@ -21,6 +21,9 @@
                 <input type="text" class="form-control" formControlName="categoryName" required>
                 <div class="form-control-feedback" *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)">
                     <p *ngIf="categoryName.errors.required">Category Name is required</p>
+                    <p *ngIf="categoryName.errors?.maxlength">
+                        Category Name is too long
+                    </p>
                 </div>
             </div>
 
@@ -29,7 +32,13 @@
                         'has-success': categoryImage.valid && (categoryImage.dirty || categoryImage.touched)
                         }">
                 <label>Image</label>
-                <input type="file" class="form-control" formControlName="categoryImage" required>
+                <div class="upload-preview-container " *ngIf="is_image_set" >
+                        <div class="row justify-content-center">
+                                <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
+                        </div>
+                        
+                    </div>
+                <input type="file" class="form-control" formControlName="categoryImage" required (change)="setImage($event)">
                 <div class="form-control-feedback" *ngIf="categoryImage.errors && (categoryImage.dirty || categoryImage.touched)">
                     <p *ngIf="categoryImage.errors.required">Category Image is required</p>
                 </div>
@@ -37,8 +46,8 @@
 
         </div>
         <div class="row justify-content-center">
-            <button type="submit" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
-            <button type="reset" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5">Cancel</button>
+            <button type="submit" [disabled]="!myForm.valid" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
+            <button type="reset" (click)="resetForm()" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5">Cancel</button>
         </div>
 
 

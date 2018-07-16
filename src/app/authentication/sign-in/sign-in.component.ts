@@ -1,145 +1,184 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
+
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import * as $ from 'jquery';
+
 // import routes
 import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../services/api-services/api-services.service';
 
 @Component({
-	selector: 'app-sign-in',
-	templateUrl: './sign-in.component.html',
-	styleUrls: ['./sign-in.component.css']
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styleUrls: ['./sign-in.component.css']
 })
+
 export class SignInComponent implements OnInit {
 
-	myForm: FormGroup;
+    public access_token = '';
 
-	username: FormControl;
-	password: FormControl;
+    myForm: FormGroup;
 
-	constructor(
-		public router: Router,
-		private apiServices: ApiServicesService
-	) { }
+    username: FormControl;
+    password: FormControl;
 
-	ngOnInit() {
+    constructor(
+        public router: Router,
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
+    ) {
+        this.access_token = localStorage.getItem('access_token')
+    }
 
-		this.createFormControls();
-		this.createForm();
+    ngOnInit() {
 
-		// check if user has already logged in
+        this.createFormControls();
+        this.createForm();
 
-		// if (this.apiServices.access_token != '') {
-		// 	// if access token is not empty
-		// 	// check user
-		// 	this.apiServices.checkLogin().subscribe(
-		// 		res => {
-		// 			// if access token is valid
-		// 			// go to dashboard
-		// 			console.log(res);
-		// 			this.goToDashboard();
-		// 		},
-		// 		err => {
-		// 			// if access token is not valid
-		// 			// clea local storage
-		// 			this.apiServices.clearLocalStorage();
-		// 			console.log(err);
+        // check if token is set 
+        if (this.access_token) {
 
-		// 		}
-		// 	)
-		// }
-	}
+            // get user details
+            this.apiServices.getUserDetails(this.access_token).subscribe(
+                (res: any) => {
+                    console.log(res);
+                    // if user logged in 
 
-	ngAfterViewInit() {
-		$(function () {
-			$(".preloader").fadeOut();
-		});
-		// $(function() {
-		//     (<any>$('[data-toggle="tooltip"]')).tooltip()
-		// });
-		// $('#to-recover').on("click", function() {
-		//     $("#loginform").slideUp();
-		//     $("#recoverform").fadeIn();
-		// });
-	}
+                    // go to dashboard
+                    this.goToDashboard();
+                },
+                err => {
+                    console.log(err);
+                    if (err.status == 503 || err.status == 0) {
+                        this.router.navigate(['/server-error']);
+                    }
+                    else {
+                        this.apiServices.logout();
+                    }
+                }
+            )
+        }
+        else {
+            this.apiServices.logout();
+        }
+    }
 
-	createFormControls() {
-		this.username = new FormControl('', [Validators.required, Validators.minLength(1)]);
-		this.password = new FormControl('', [Validators.required, Validators.minLength(1)]);
-	}
 
-	createForm() {
-		this.myForm = new FormGroup({
-			username: this.username,
-			password: this.password
-		});
-	}
+    ngAfterViewInit() {
+        $(function () {
+            $(".preloader").fadeOut();
+        });
+    }
 
-	validateAllFormFields(formGroup: FormGroup) {
+    //create form controls 
+    createFormControls() {
+        this.username = new FormControl('', [Validators.required, Validators.minLength(1)]);
+        this.password = new FormControl('', [Validators.required, Validators.minLength(1)]);
+    }
 
-		Object.keys(formGroup.controls).forEach(field => {
+    // create form 
+    createForm() {
+        this.myForm = new FormGroup({
+            username: this.username,
+            password: this.password
+        });
+    }
 
-			const control = formGroup.get(field);
+    // validate login form
+    validateAllFormFields(formGroup: FormGroup) {
 
-			if (control instanceof FormControl) {
-				control.markAsTouched({ onlySelf: true });
-			}
-			else if (control instanceof FormGroup) {
-				this.validateAllFormFields(control);
-			}
+        Object.keys(formGroup.controls).forEach(field => {
 
-		});
+            const control = formGroup.get(field);
 
-	}
+            if (control instanceof FormControl) {
+                control.markAsTouched({ onlySelf: true });
+            }
+            else if (control instanceof FormGroup) {
+                this.validateAllFormFields(control);
+            }
 
-	onLogin() {
+        });
 
-		if (this.myForm.valid) {
-			//this.goToDashboard();
-			const data = {
-				u: this.myForm.value.username,
-				p: this.myForm.value.password
-			};
+    }
 
-			// // call the login end point
-			// this.apiServices.login(data).subscribe(
-			// 	(res: Response) => {
-			// 		// if login success
-			// 		console.log(res);
-			// 		let get_access_token = res.headers.get('X-AUTH-TOKEN');
+    // login 
+    onLogin() {
 
-			// 		// store token in local storage 
-			// 		this.apiServices.saveToLocalStorage(get_access_token);
+        if (this.myForm.valid) {
+            this.spinner.show();
+            //this.goToDashboard();
+            const data = {
+                u: this.myForm.value.username,
+                p: this.myForm.value.password
+            };
 
-			// 		// get user details 
-			// 		this.getDetails(get_access_token);
+            // call login api
+            this.apiServices.login(data).subscribe(
+                (res: any) => {
+                    console.log(res);
 
-			// 	},
+                    // get token
+                    let token = res.access_token;
 
-			// 	err => {
-			// 		// if login has failed
-			// 		console.log(err);
-			// 		if (err.status == 403) {
-			// 			this.apiServices.altErr('Username or password is incorrect', '');
-			// 		}
-			// 		else if (err.status == 500) {
-			// 			this.apiServices.altErr('Server Error', this.apiServices.reload());
-			// 		}
+                    // save to local storage
+                    this.apiServices.saveToLocalStorage(token);
 
-			// 	}
-			// )
+                    // check if token is set 
+                    if (token) {
 
-			this.goToDashboard();
-		}
-		else {
-			this.validateAllFormFields(this.myForm);
-		}
-	}
+                        // get user details
+                        this.apiServices.getUserDetails(token).subscribe(
+                            (res: any) => {
+                                console.log(res);
+                                this.spinner.hide();
+                                // if user logged in 
 
-	// redirect to dashboard
-	goToDashboard() {
-		this.router.navigate(['/pages']);
-	}
+                                // go to dashboard
+                                this.goToDashboard();
+                            },
+                            err => {
+                                this.spinner.hide();
+                                console.log(err);
+                                this.apiServices.altErr('Login Failed! Username or password is incorrect', this.apiServices.logout());
+
+                            }
+                        )
+                    }
+                    else {
+                        this.spinner.hide();
+                        this.apiServices.logout();
+                    }
+
+                },
+                err => {
+                    this.spinner.hide();
+                    console.log(err);
+                    if (err.status == 503 || err.status == 0) {
+                        this.router.navigate(['/server-error']);
+                    } 
+                    else {
+                        this.apiServices.altErr('Login Failed! Username or password is incorrect', '');
+                    }   
+                    
+                }
+            )
+
+
+
+            // this.goToDashboard();
+        }
+        else {
+            this.validateAllFormFields(this.myForm);
+        }
+    }
+
+    // redirect to dashboard
+    goToDashboard() {
+        this.router.navigate(['/pages']);
+    }
 
 }

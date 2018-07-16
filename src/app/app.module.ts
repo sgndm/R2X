@@ -8,6 +8,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 // http modules
 import { HttpModule, Http } from '@angular/http';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -38,6 +42,7 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './authentication/sign-in/sign-in.component';
 import { PageNotFoundComponent } from './pages/error/page-not-found/page-not-found.component';
+import { ServerDownComponent } from './pages/error/server-down/server-down.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -55,7 +60,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BreadcrumbComponent,
     SidebarComponent,
     SignInComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ServerDownComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +73,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgbModule.forRoot(),
     PerfectScrollbarModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SweetAlert2Module.forRoot({
+        buttonsStyling: false,
+        customClass: 'modal-content',
+        confirmButtonClass: 'btn btn-primary',
+        cancelButtonClass: 'btn'
+    }),
+    NgxSpinnerModule,
   ],
   providers: [
     {

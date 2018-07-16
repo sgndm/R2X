@@ -8,6 +8,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { SignInComponent } from './authentication/sign-in/sign-in.component';
 import { PageNotFoundComponent } from './pages/error/page-not-found/page-not-found.component';
+import { ServerDownComponent } from './pages/error/server-down/server-down.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'sign-in', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
     loadChildren: './pages/pages.module#PagesModule',
     // canActivate: [AuthGuardService]
   },
+  { path: 'server-error', component: ServerDownComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

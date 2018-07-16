@@ -9,71 +9,120 @@
     </div>
     <hr>
 
-    <form novalidate [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="row">
 
-        <div class="row">
-            <div class="form-group col-sm-12 col-md-6 col-lg-6" [ngClass]="{
-					'has-danger': productCategory.invalid && (productCategory.dirty || productCategory.touched),
-					'has-success': productCategory.valid && (productCategory.dirty || productCategory.touched)
-					}">
-                <label>Category</label>
-                <select class="form-control custom-select" formControlName="productCategory">
-                    <option value="">Please select a category</option>
-                    <option *ngFor="let category of category_list" [value]="category">{{category}}
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group col-sm-12 col-md-6 col-lg-6" [ngClass]="{
-					'has-danger': productName.invalid && (productName.dirty || productName.touched),
-					'has-success': productName.valid && (productName.dirty || productName.touched)
-					}">
-                <label>Name</label>
-                <input type="text" class="form-control" formControlName="productName" required>
-                <div class="form-control-feedback" *ngIf="productName.errors && (productName.dirty || productName.touched)">
-                    <p *ngIf="productName.errors.required">Product Name is required</p>
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <form novalidate [formGroup]="myForm" (ngSubmit)="onUpdateProduct()">
+                <h5>Edit Product Details</h5>
+                <hr>
+                <div class="form-group" [ngClass]="{
+                        'has-danger': productCategory.invalid && (productCategory.dirty || productCategory.touched),
+                        'has-success': productCategory.valid && (productCategory.dirty || productCategory.touched)
+                        }">
+                    <label>Category</label>
+                    <select class="form-control custom-select" formControlName="productCategory">
+                        <option value="0">Please select a category</option>
+                        <option *ngFor="let category of category_list" [value]="category.id">{{category.name}}
+                        </option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="form-group col-sm-12 col-md-6 col-lg-6" [ngClass]="{
-					'has-danger': productDescription.invalid && (productDescription.dirty || productDescription.touched),
-					'has-success': productDescription.valid && (productDescription.dirty || productDescription.touched)
-					}">
-                <label>Description</label>
-                <textarea class="form-control" formControlName="productDescription" required></textarea>
-                <div class="form-control-feedback" *ngIf="productDescription.errors && (productDescription.dirty || productDescription.touched)">
-                    <p *ngIf="productDescription.errors.required">Product Description is required</p>
+                <div class="form-group" [ngClass]="{
+                        'has-danger': productName.invalid && (productName.dirty || productName.touched),
+                        'has-success': productName.valid && (productName.dirty || productName.touched)
+                        }">
+                    <label>Name</label>
+                    <input type="text" class="form-control" formControlName="productName" required>
+                    <div class="form-control-feedback" *ngIf="productName.errors && (productName.dirty || productName.touched)">
+                        <p *ngIf="productName.errors.required">Product Name is required</p>
+                        <p *ngIf="productName.errors?.maxlength">
+                            Product Name is too long
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group col-sm-12 col-md-6 col-lg-6" [ngClass]="{
-					'has-danger': productPrice.invalid && (productPrice.dirty || productPrice.touched),
-					'has-success': productPrice.valid && (productPrice.dirty || productPrice.touched)
-					}">
-                <label>Estimated Price</label>
-                <input type="number" class="form-control" formControlName="productPrice" min="0" step="0.1" required>
-                <div class="form-control-feedback" *ngIf="productPrice.errors && (productPrice.dirty || productPrice.touched)">
-                    <p *ngIf="productPrice.errors.required">Estimated Price is required</p>
+                <div class="form-group" [ngClass]="{
+                        'has-danger': productDescription.invalid && (productDescription.dirty || productDescription.touched),
+                        'has-success': productDescription.valid && (productDescription.dirty || productDescription.touched)
+                        }">
+                    <label>Description</label>
+                    <textarea class="form-control" formControlName="productDescription" required></textarea>
+                    <div class="form-control-feedback" *ngIf="productDescription.errors && (productDescription.dirty || productDescription.touched)">
+                        <p *ngIf="productDescription.errors.required">Product Description is required</p>
+                        <p *ngIf="productDescription.errors?.maxlength">
+                            Product Description is too long
+                        </p>
+                    </div>
                 </div>
-            </div>
+                <div class="form-group" [ngClass]="{
+                    'has-danger': paymentMethod.invalid && (paymentMethod.dirty || paymentMethod.touched),
+                    'has-success': paymentMethod.valid && (paymentMethod.dirty || paymentMethod.touched)
+                    }">
+                    <label>Payment Method</label>
+                    <select class="form-control custom-select" formControlName="paymentMethod">
+                        <option value="0">Please select a payment method</option>
+                        <option value="1">per unit</option>
+                        <option value="4">per kilogram (kg)</option>
+                        <option value="5">per litre (l) </option>
+                    </select>
+                </div>
+                <div class="form-group" [ngClass]="{
+                    'has-danger': productPrice.invalid && (productPrice.dirty || productPrice.touched),
+                    'has-success': productPrice.valid && (productPrice.dirty || productPrice.touched)
+                    }">
+                    <label>Estimated Price</label>
+                    <input type="number" class="form-control" formControlName="productPrice" min="0" step="0.1" required>
+                    <div class="form-control-feedback" *ngIf="productPrice.errors && (productPrice.dirty || productPrice.touched)">
+                        <p *ngIf="productPrice.errors.required">Estimated Price is required</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button type="submit" [disabled]="!myForm.valid" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
+                    <button (click)="onCancelEdit()" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
 
-            <div class="form-group col-sm-12 col-md-6 col-lg-6" [ngClass]="{
-					'has-danger': productImage.invalid && (productImage.dirty || productImage.touched),
-					'has-success': productImage.valid && (productImage.dirty || productImage.touched)
-					}">
-                <label>Image</label>
-                <input type="file" class="form-control" formControlName="productImage" required>
-                <div class="form-control-feedback" *ngIf="productImage.errors && (productImage.dirty || productImage.touched)">
-                    <p *ngIf="productImage.errors.required">Product Image is required</p>
+            <form novalidate [formGroup]="myForm2" (ngSubmit)="onUpdateImage()">
+                <h5>Edit Product Image</h5>
+                <hr>
+                <h6>Current Image</h6>
+                <hr>
+                <div class="upload-preview-container" *ngIf="is_current_image">
+
+                    <div class="row justify-content-center">
+                        <img src="{{ currentImagePath }}" alt="" class="upload-preview">
+                    </div>
+
                 </div>
-            </div>
+                <div class="form-group" [ngClass]="{
+                                'has-danger': productImage.invalid && (productImage.dirty || productImage.touched),
+                                'has-success': productImage.valid && (productImage.dirty || productImage.touched)
+                                }">
+                    <label>New Image</label>
+                    <div class="upload-preview-container " *ngIf="is_image_set">
+                        <div class="row justify-content-center">
+                            <img src="{{ imagePreviewPath }}" alt="" class="upload-preview">
+                        </div>
+
+                    </div>
+                    <input type="file" class="form-control" formControlName="productImage" required (change)="setImage($event)">
+                    <div class="form-control-feedback" *ngIf="productImage.errors && (productImage.dirty || productImage.touched)">
+                        <p *ngIf="productImage.errors.required">Last Name is required</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button type="submit" [disabled]="!myForm2.valid" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Change Image</button>
+                    <button type="button" (click)="onCancelEdit2()" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5">Cancel</button>
+                </div>
+            </form>
 
         </div>
-        <div class="row justify-content-center">
-            <button type="submit" class="btn btn-submit col-sm-12 col-md-5 col-lg-5" >Submit</button>
-            <button (click)="onCancelEdit()" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5">Cancel</button>
-        </div>
+
+    </div>
 
 
-    </form>
+
+
 </div>
