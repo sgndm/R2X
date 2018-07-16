@@ -84,7 +84,7 @@ export class ViewOrderComponent implements OnInit {
                         let productQuantity = product.qty;
 
                         if(paymentUnit == 1) {
-                            if(product.qty < 1) {
+                            if(product.qty <= 1) {
                                 t_product.quantity = productQuantity + " Unit"
                             }
                             else {
