@@ -1,0 +1,58 @@
+<div class="page-content">
+
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8">
+            <h2 class=""> Order </h2>
+        </div>
+        <div class="col-sm-12 col-md-4">
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <table class="table">
+                <tbody>
+                    <tr class="bg-success text-white">
+                        <td colspan="4">
+                            Order Details
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Order Date</td>
+                        <td colspan="3">{{ order_date | date: "EEE, dd-MM-yyyy HH:mm" }}</td>
+                    </tr>
+                    <tr>
+                        <td>Order Status</td>
+                        <td colspan="3">
+                            <label class="cus-lbl btn-sm bg-secondary" *ngIf="order_status == 5">Waiting For Estimations</label>
+                            <label class="cus-lbl btn-sm bg-info" *ngIf="order_status == 4">Estimations Received </label>
+                            <label class="cus-lbl btn-sm bg-primary" *ngIf="order_status == 3">Estimation Accepted</label>
+                            <label class="cus-lbl btn-sm bg-primary" *ngIf="order_status == 2">Order Delivery Started </label>
+                            <label class="cus-lbl btn-sm bg-success" *ngIf="order_status == 6">Order Delivered</label>
+                            <label class="cus-lbl btn-sm bg-danger" *ngIf="order_status == 7">Order Canceled</label>
+                            <label class="cus-lbl btn-sm bg-warning" *ngIf="order_status == 8">Order On Hold</label>
+                            <label class="cus-lbl btn-sm bg-danger" *ngIf="order_status == 9">Order Rejected</label>
+                        </td>
+                    </tr>
+
+                    <tr class="bg-success text-white">
+                        <td colspan="4">Product List</td>
+                    </tr>
+                    <tr class="bg-secondary text-white">
+                        <td>Name</td>
+                        <td>Quantity</td>
+                        <td>Accepted Estimation's price</td>
+                        <td></td>
+                    </tr>
+                    <tr *ngFor="let product of product_list">
+                        <td> {{ product.name }} </td>
+                        <td> {{ product.quantity }} </td>
+                        <td> Rs. {{ product.price }} </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

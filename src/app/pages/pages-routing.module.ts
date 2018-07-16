@@ -22,6 +22,7 @@ import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.c
 
 // dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.component';
 
 const routes: Routes = [
     // admin 
@@ -47,6 +48,7 @@ const routes: Routes = [
 
     // dashboard
     { path: 'admin/dashboard', component: DashboardComponent },
+    { path: 'admin/dashboard/orders/order/:id', component: ViewOrderComponent },
 ];
 
 @NgModule({

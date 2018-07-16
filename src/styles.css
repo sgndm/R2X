@@ -47,7 +47,8 @@ body{
 /* images */
 
 .image-thumbnail-cus{
-    width: 100px;
+    max-width: 100px;
+    max-height: 100px;
 }
 
 .upload-preview {

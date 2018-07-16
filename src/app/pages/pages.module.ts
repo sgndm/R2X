@@ -31,6 +31,7 @@ import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.c
 
 // dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.component';
 
 
 
@@ -58,7 +59,8 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
         EditCategoryComponent,
         SellerListComponent,
         SellerViewComponent,
-        DashboardComponent
+        DashboardComponent,
+        ViewOrderComponent
     ]
 })
 export class PagesModule { }
