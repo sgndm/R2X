@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-edit-product',
@@ -42,6 +43,7 @@ export class EditProductComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         public router: Router,
         private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.activeRoute.params.subscribe(
             params => {
@@ -145,7 +147,8 @@ export class EditProductComponent implements OnInit {
 
     onUpdateProduct() {
         if (this.myForm.valid) {
-
+            
+            this.spinner.show();
             const data = {
                 name: this.myForm.value.productName,
                 description: this.myForm.value.productDescription,
@@ -158,12 +161,14 @@ export class EditProductComponent implements OnInit {
 
             this.apiServices.updateProductDetails(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
                         this.apiServices.altScc("Product details updated",  this.apiServices.reload());
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("Unable to update product details",  this.apiServices.reload());
                 }
@@ -177,6 +182,7 @@ export class EditProductComponent implements OnInit {
 
     onUpdateImage() {
         if (this.myForm2.valid) {
+            this.spinner.show();
             const data = {
                 imageUrl: this.selected_file,
                 productId: this.product_id
@@ -184,12 +190,14 @@ export class EditProductComponent implements OnInit {
 
             this.apiServices.updateProductImage(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {
                         this.apiServices.altScc("Product image updated",  this.apiServices.reload());
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("unable to update product image",  this.apiServices.reload());
                 }

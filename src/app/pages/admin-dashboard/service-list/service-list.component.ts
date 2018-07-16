@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
+
 
 @Component({
     selector: 'app-service-list',
@@ -24,7 +27,8 @@ export class ServiceListComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -72,7 +76,6 @@ export class ServiceListComponent implements OnInit {
             }
         )
     }
-
 
     // get products
     getProducts(token) {
@@ -180,8 +183,10 @@ export class ServiceListComponent implements OnInit {
     }
 
     deleteProduct(product_id) {
+        this.spinner.show();
         this.apiServices.deleteProduct(product_id, this.access_token).subscribe(
             (res: any) => {
+                this.spinner.hide();
                 console.log(res);
 
                 if (res.status == "success" && res.data == "product_removed") {
@@ -189,6 +194,7 @@ export class ServiceListComponent implements OnInit {
                 }
             },
             err => {
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to delete service", this.getProducts(this.access_token));
             }
@@ -196,6 +202,7 @@ export class ServiceListComponent implements OnInit {
     }
 
     activateProduct(product_id) {
+        this.spinner.show();
 
         const data = {
             productId: product_id,
@@ -204,12 +211,14 @@ export class ServiceListComponent implements OnInit {
 
         this.apiServices.enableProduct(data, this.access_token).subscribe(
             (res: any) => {
+                this.spinner.hide();
                 console.log(res);
                 if (res.status == "success" && res.data == "product_enabled") {
                     this.apiServices.altScc("Service activated", this.getProducts(this.access_token));
                 }
             },
             err => {
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to activate service", this.getProducts(this.access_token));
             }

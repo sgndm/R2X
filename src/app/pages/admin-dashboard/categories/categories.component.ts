@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
     selector: 'app-categories',
@@ -22,7 +24,8 @@ export class CategoriesComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -104,14 +107,19 @@ export class CategoriesComponent implements OnInit {
     }
 
     deleteCategory(category_id){
+        this.spinner.show();
         this.apiServices.deleteCategory(category_id, this.access_token).subscribe(
             (res: any) => {
+                
+                this.spinner.hide();
                 console.log(res);
                 if(res.status == "success" && res.data == "category_removed") {
                     this.apiServices.altScc("Category deleted",  this.getCategories(this.access_token));
                 }
             },
             err => {
+                
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to delete category",  this.getCategories(this.access_token
                 ));
@@ -120,6 +128,8 @@ export class CategoriesComponent implements OnInit {
     }
 
     activateCategory(category_id){
+        
+        this.spinner.show();
         const data = {
             categoryId: category_id,
             recordStatus: 1
@@ -128,12 +138,14 @@ export class CategoriesComponent implements OnInit {
         this.apiServices.enableCategory(data, this.access_token).subscribe(
             (res: any) => {
                 console.log(res);
-
+                
+                this.spinner.hide();
                 if(res.status == "success" && res.data == "category_enabled"){
                     this.apiServices.altScc("Category activated",  this.getCategories(this.access_token));
                 }
             },
             err => {
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to activate category",  this.getCategories(this.access_token));
             }

@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
     selector: 'app-edit-service',
     templateUrl: './edit-service.component.html',
@@ -41,6 +43,7 @@ export class EditServiceComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         public router: Router,
         private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.activeRoute.params.subscribe(
             params => {
@@ -186,6 +189,7 @@ export class EditServiceComponent implements OnInit {
 
     onUpdateDetails() {
         if (this.myForm.valid) {
+            this.spinner.show();
 
             const data = {
                 name: this.myForm.value.productName,
@@ -199,6 +203,7 @@ export class EditServiceComponent implements OnInit {
 
             this.apiServices.updateServiceDetails(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
 
@@ -206,6 +211,7 @@ export class EditServiceComponent implements OnInit {
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("Unable to update service details", this.apiServices.reload());
                 }
@@ -235,6 +241,7 @@ export class EditServiceComponent implements OnInit {
 
     onUpdateImage() {
         if (this.myForm2.valid) {
+            this.spinner.show();
             const data = {
                 imageUrl: this.selected_file,
                 productId: this.service_id
@@ -242,6 +249,7 @@ export class EditServiceComponent implements OnInit {
 
             this.apiServices.updateServiceImage(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {
                         
@@ -249,6 +257,7 @@ export class EditServiceComponent implements OnInit {
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("Unable to update service image", this.apiServices.reload());
                 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class CreateProductComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -85,6 +87,7 @@ export class CreateProductComponent implements OnInit {
     onCreateProduct() {
 
         if (this.myForm.valid) {
+            this.spinner.show();
 
             let info = {
                 name: this.myForm.value.productName,
@@ -104,6 +107,7 @@ export class CreateProductComponent implements OnInit {
 
             this.apiServices.createProduct(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res);
 
                     if (res.status == "success" && res.data == "product_added") {
@@ -112,6 +116,7 @@ export class CreateProductComponent implements OnInit {
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("Unable to create product",  this.resetForm());
                 }

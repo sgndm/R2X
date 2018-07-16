@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-edit-category',
@@ -33,21 +34,22 @@ export class EditCategoryComponent implements OnInit {
 
 
     constructor(
-		private activeRoute: ActivatedRoute,
-		public router: Router,
-		private apiServices: ApiServicesService,
-	) {
-		this.activeRoute.params.subscribe(
-			params => {
-				this.category_id = params.id;
-				console.log(params);
-			}
+        private activeRoute: ActivatedRoute,
+        public router: Router,
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
+    ) {
+        this.activeRoute.params.subscribe(
+            params => {
+                this.category_id = params.id;
+                console.log(params);
+            }
 
-		);
+        );
 
-		this.access_token = localStorage.getItem('access_token')
+        this.access_token = localStorage.getItem('access_token')
 
-	}
+    }
 
     ngOnInit() {
 
@@ -60,7 +62,7 @@ export class EditCategoryComponent implements OnInit {
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
-                    this.getCategoryDetails(this.category_id,this.access_token);
+                    this.getCategoryDetails(this.category_id, this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -114,11 +116,11 @@ export class EditCategoryComponent implements OnInit {
 
     }
 
-    getCategoryDetails(category_id, token){
+    getCategoryDetails(category_id, token) {
         this.apiServices.getCategoryById(category_id, token).subscribe(
             (res: any) => {
                 console.log(res);
-                if(res.status == "success") {
+                if (res.status == "success") {
 
                     this.category_name = res.data.categoryName;
                     this.myForm.setValue({
@@ -130,7 +132,7 @@ export class EditCategoryComponent implements OnInit {
                     this.apiServices.getImageUrlS3(imgName, token).subscribe(
                         (res: any) => {
                             // console.log(res);
-                            
+
                             this.is_current_image = true;
                             this.currentImagePath = 'data:image/jpeg;base64,' + res;
                         },
@@ -141,7 +143,7 @@ export class EditCategoryComponent implements OnInit {
                     )
                 }
             },
-            err => {console.log(err)}
+            err => { console.log(err) }
         )
     }
 
@@ -163,6 +165,8 @@ export class EditCategoryComponent implements OnInit {
 
     onUpdateImage() {
         if (this.myForm2.valid) {
+
+            this.spinner.show();
             const data = {
                 imageUrl: this.selected_file,
                 categoryId: this.category_id
@@ -170,15 +174,18 @@ export class EditCategoryComponent implements OnInit {
 
             this.apiServices.updateCategoryImage(data, this.access_token).subscribe(
                 (res: any) => {
+
+                    this.spinner.hide();
                     console.log(res);
 
-                    if(res.status == "success" && res.data == "category_image_updated") {
-                        this.apiServices.altScc("Category image updated",  this.apiServices.reload());
+                    if (res.status == "success" && res.data == "category_image_updated") {
+                        this.apiServices.altScc("Category image updated", this.apiServices.reload());
                     }
                 },
-                err =>{
+                err => {
+                    this.spinner.hide();
                     console.log(err);
-                    this.apiServices.altErr("Unable to update category image",  this.apiServices.reload());
+                    this.apiServices.altErr("Unable to update category image", this.apiServices.reload());
                 }
             )
         }
@@ -189,6 +196,7 @@ export class EditCategoryComponent implements OnInit {
 
     onUpdateName() {
         if (this.myForm.valid) {
+            this.spinner.show();
             const data = {
                 categoryId: this.category_id,
                 categoryName: this.myForm.value.categoryName
@@ -196,15 +204,17 @@ export class EditCategoryComponent implements OnInit {
 
             this.apiServices.updateCategoryName(data, this.access_token).subscribe(
                 (res: any) => {
+                    this.spinner.hide();
                     console.log(res)
 
-                    if(res.status == "success" && res.data == "category_updated") {
-                        this.apiServices.altScc("Category name updated",  this.apiServices.reload());
+                    if (res.status == "success" && res.data == "category_updated") {
+                        this.apiServices.altScc("Category name updated", this.apiServices.reload());
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
-                    this.apiServices.altErr("Unable to update category name",  this.apiServices.reload());
+                    this.apiServices.altErr("Unable to update category name", this.apiServices.reload());
                 }
             )
         }

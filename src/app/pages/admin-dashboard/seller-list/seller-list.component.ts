@@ -6,6 +6,7 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 
 import swal from 'sweetalert2';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class SellerListComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -190,11 +192,13 @@ export class SellerListComponent implements OnInit {
     }
 
     blockSeller(seller_id, comment) {
+        this.spinner.show();
 
         const data = { username: seller_id, comment: comment }
 
         this.apiServices.blockSeller(data, this.access_token).subscribe(
             (res: any) => {
+                this.spinner.hide();
                 console.log(res);
 
                 if (res.status == "success" && res.data == "blocked") {
@@ -205,6 +209,7 @@ export class SellerListComponent implements OnInit {
                 }
             },
             err => {
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to block the seller", this.getSellers(this.access_token));
             }
@@ -213,8 +218,10 @@ export class SellerListComponent implements OnInit {
     }
 
     acceptSeller(seller_id) {
+        this.spinner.show();
         this.apiServices.acceptSeller(seller_id, this.access_token).subscribe(
             (res: any) => {
+                this.spinner.hide();
                 console.log(res);
 
                 if (res.status == "success" && res.data == "approved") {
@@ -225,6 +232,7 @@ export class SellerListComponent implements OnInit {
                 }
             },
             err => {
+                this.spinner.hide();
                 console.log(err);
                 this.apiServices.altErr("Unable to accept the seller", this.getSellers(this.access_token));
             }

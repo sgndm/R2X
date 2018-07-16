@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-create-category',
@@ -27,7 +28,8 @@ export class CreateCategoryComponent implements OnInit {
 
     constructor(
         public router: Router,
-        private apiServices: ApiServicesService
+        private apiServices: ApiServicesService,
+        private spinner: NgxSpinnerService
     ) {
         this.access_token = localStorage.getItem('access_token')
     }
@@ -88,6 +90,7 @@ export class CreateCategoryComponent implements OnInit {
 
     onCreateCategory() {
         if (this.myForm.valid) {
+            this.spinner.show();
             let info = {
                 name: this.myForm.value.categoryName,
             }
@@ -99,12 +102,14 @@ export class CreateCategoryComponent implements OnInit {
             this.apiServices.createCategory(data, this.access_token).subscribe(
                 (res:any) => {
                     console.log(res);
+                    this.spinner.hide();
 
                     if(res.status == "success" && res.data == "category_added") {
                         this.apiServices.altScc("Category created",  this.resetForm());
                     }
                 },
                 err => {
+                    this.spinner.hide();
                     console.log(err);
                     this.apiServices.altErr("Unable to create category",  this.resetForm());
                 }
