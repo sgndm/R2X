@@ -11,6 +11,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
+import {RatingModule} from "ngx-rating";
+import { BarRatingModule } from "ngx-bar-rating";
 
 // http modules
 import { HttpModule, Http } from '@angular/http';
@@ -81,6 +83,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         cancelButtonClass: 'btn'
     }),
     NgxSpinnerModule,
+    RatingModule,
+    BarRatingModule,
   ],
   providers: [
     {

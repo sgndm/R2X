@@ -26,8 +26,15 @@
                 <p class="bg-info custom-lable-1"> {{ sellerNIC }} </p>
             </div>
             <div class="form-group">
-                <label>Ratings</label>
-                <p class="bg-info custom-lable-1"> {{ ratings }} </p>
+                <label>Ratings</label><br>
+                <!-- <p class="bg-info custom-lable-1"> {{ ratings }} </p> -->
+                <rating 
+                [(ngModel)]="ratings" 
+                [max]="5"
+                [readonly]="true"
+                [float]="true"
+                >
+                </rating>
             </div>
             <div class="form-group">
                 <label>Operational Radius </label>

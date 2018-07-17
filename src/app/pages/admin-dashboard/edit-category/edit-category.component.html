@@ -11,27 +11,45 @@
 
 
     <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="col-sm-12 col-md-8 col-lg-8">
             <h5>Edit Category Name</h5>
             <hr>
 
             <form novalidate [formGroup]="myForm" (ngSubmit)="onUpdateName()">
-
-                <div class="form-group" [ngClass]="{
+                <div class="row">
+                        <div class="form-group col-sm-12 col-md-6 col-g-6" [ngClass]="{
                             'has-danger': categoryName.invalid && (categoryName.dirty || categoryName.touched),
                             'has-success': categoryName.valid && (categoryName.dirty || categoryName.touched)
                             }">
-
-                    <input type="text" class="form-control" formControlName="categoryName" required>
-
-                    <div class="form-control-feedback" *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)">
-                        <p *ngIf="categoryName.errors.required">Category Name is required</p>
-                        <p *ngIf="categoryName.errors?.maxlength">
-                            Category Name is too long
-                        </p>
+    
+                            <label>Name</label>
+                        <input type="text" class="form-control" formControlName="categoryName" required>
+    
+                        <div class="form-control-feedback" *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)">
+                            <p *ngIf="categoryName.errors.required">Category Name is required</p>
+                            <p *ngIf="categoryName.errors?.maxlength">
+                                Category Name is too long
+                            </p>
+                        </div>
+    
                     </div>
-
+                    <div class="form-group col-sm-12 col-md-6 col-g-6" [ngClass]="{
+                        'has-danger': categoryType.invalid && (categoryType.dirty || categoryType.touched),
+                        'has-success': categoryType.valid && (categoryType.dirty || categoryType.touched)
+                        }">
+                        <label>Type</label>
+                        <select type="text" class="form-control custom-select" formControlName="categoryType" required>
+                            <option value="1">Products</option>
+                            <option value="2">Services</option>
+                        </select>
+                        <div class="form-control-feedback" *ngIf="categoryType.errors && (categoryType.dirty || categoryType.touched)">
+                            <p *ngIf="categoryType.errors.required">Category type is required</p>
+    
+                        </div>
+                    </div>
                 </div>
+                
+
 
                 <div class="form-group">
                     <div class="row justify-content-center ">
@@ -44,7 +62,7 @@
             </form>
 
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="col-sm-12 col-md-4 col-lg-4">
             <h5>Edit Category Image</h5>
             <hr>
             <h6>Current Image</h6>

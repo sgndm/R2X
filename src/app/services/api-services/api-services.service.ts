@@ -128,6 +128,13 @@ export class ApiServicesService {
         return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}});
     }
 
+    // get category by type
+    getCategoryByType(token, data) {
+        const url = SERVER_URL + 'admin/categories';
+
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { type: data } });
+    }
+
     // get details 
     getCategoryById(data, token) {
         const url = SERVER_URL + 'admin/category';
@@ -149,7 +156,8 @@ export class ApiServicesService {
     updateCategoryName(data, token) {
         let set_data = {
             "name": data.categoryName,
-            "categoryId": data.categoryId
+            "categoryId": data.categoryId,
+            "type": data.type
         }
 
         const url = SERVER_URL + 'admin/category/update';
@@ -312,6 +320,13 @@ export class ApiServicesService {
     blockSeller(data, token){
         let set_data = { "username": data.username, "comment": data.comment }
         const url = SERVER_URL + 'admin/sellers/block';
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
+    }
+
+    // unblock seller 
+    unblockSeller(data, token){
+        let set_data = { "username": data.username, "comment": data.comment }
+        const url = SERVER_URL + 'admin/sellers/unblock';
         return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 

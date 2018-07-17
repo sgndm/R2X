@@ -60,8 +60,15 @@
                 <span>Ratings</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                {{ row.ratings }}
-
+                <!-- {{ row.ratings }} -->
+                <rating 
+                [(ngModel)]="row.ratings" 
+                [max]="5"
+                [readonly]="true"
+                [float]="true"
+                >
+                </rating>
+                <!-- <bar-rating [(rate)]="row.ratings" [max]="5"  ></bar-rating> -->
             </ng-template>
         </ngx-datatable-column>
 
@@ -91,8 +98,9 @@
                 <span>Action</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.isApproved">Block</button>
-                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="!row.isApproved">Accept</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="row.sellerStatus == 1">Approve</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.sellerStatus == 2">Block</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-warning" (click)="onUnblockingSeller(row.username)" *ngIf="row.sellerStatus == 3">Unblock</button>
             </ng-template>
         </ngx-datatable-column>
 

@@ -20,11 +20,18 @@ export class CreateCategoryComponent implements OnInit {
 
     categoryName: FormControl;
     categoryImage: FormControl;
+    categoryType: FormControl;
 
     selected_file: File = null;
 
     is_image_set: boolean;
     imagePreviewPath: any;
+
+    rows = [];
+    columns = [];
+    temp = [];
+
+    public category_list: any;
 
     constructor(
         public router: Router,
@@ -43,6 +50,7 @@ export class CreateCategoryComponent implements OnInit {
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
+                    this.getCategories(this.access_token);
                 },
                 err => {
                     console.log(err);
@@ -57,17 +65,64 @@ export class CreateCategoryComponent implements OnInit {
         this.createFormControls();
         this.createForm();
     }
+
+    
+    // get categories 
+    getCategories(token) {
+        this.apiServices.getCategoriesAll(token).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                let temp_cat = [];
+
+                if (res.status == "success") {
+                    let categories = res.data;
+
+                    for (let x = 0; x < categories.length; x++) {
+
+                        let t_cat = { index: x + 1, category_id: categories[x].id, name: categories[x].name, image: '', recordStatus: categories[x].recordStatus }
+
+                        let imgName = categories[x].imageUrl;
+
+                        // get image url 
+                        this.apiServices.getImageUrlS3(imgName, token).subscribe(
+                            (res: any) => {
+                                // console.log(res);
+                                t_cat.image = 'data:image/jpeg;base64,' + res;
+                            },
+                            err => {
+                                console.log('Error\n');
+                                console.log(err);
+                            }
+                        )
+
+                        temp_cat.push(t_cat);
+                    }
+
+                    this.rows = temp_cat;
+                    this.temp = this.rows;
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
     createFormControls() {
 
         this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
         this.categoryImage = new FormControl('', [Validators.required]);
+        this.categoryType = new FormControl(1, [Validators.required]);
+
 
     }
 
     createForm() {
         this.myForm = new FormGroup({
             categoryName: this.categoryName,
-            categoryImage: this.categoryImage
+            categoryImage: this.categoryImage,
+            categoryType: this.categoryType
         });
     }
 
@@ -93,6 +148,7 @@ export class CreateCategoryComponent implements OnInit {
             this.spinner.show();
             let info = {
                 name: this.myForm.value.categoryName,
+                type: this.myForm.value.categoryType
             }
             const data = {
                 info: info,
@@ -138,6 +194,69 @@ export class CreateCategoryComponent implements OnInit {
     resetForm(){
         this.myForm.reset();
         this.is_image_set = false;
+        this.getCategories(this.access_token);
+    }
+
+    deleteCategory(category_id){
+        this.spinner.show();
+        this.apiServices.deleteCategory(category_id, this.access_token).subscribe(
+            (res: any) => {
+                
+                this.spinner.hide();
+                console.log(res);
+                if(res.status == "success" && res.data == "category_removed") {
+                    this.apiServices.altScc("Category deleted",  this.getCategories(this.access_token));
+                }
+            },
+            err => {
+                
+                this.spinner.hide();
+                console.log(err);
+                this.apiServices.altErr("Unable to delete category",  this.getCategories(this.access_token
+                ));
+            }
+        )
+    }
+
+    activateCategory(category_id){
+        
+        this.spinner.show();
+        const data = {
+            categoryId: category_id,
+            recordStatus: 1
+        }
+
+        this.apiServices.enableCategory(data, this.access_token).subscribe(
+            (res: any) => {
+                console.log(res);
+                
+                this.spinner.hide();
+                if(res.status == "success" && res.data == "category_enabled"){
+                    this.apiServices.altScc("Category activated",  this.getCategories(this.access_token));
+                }
+            },
+            err => {
+                this.spinner.hide();
+                console.log(err);
+                this.apiServices.altErr("Unable to activate category",  this.getCategories(this.access_token));
+            }
+        )
+
+    }
+
+
+    // filter 
+    // by product name
+    updateFilter(event) {
+        const val = event.target.value.toLowerCase();
+
+        // filter our data
+        const temp_data = this.temp.filter(function (d) {
+            return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+        });
+
+        // update the rows
+        this.rows = temp_data;
     }
 
 

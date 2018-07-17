@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {RatingModule} from "ngx-rating";
+import { BarRatingModule } from "ngx-bar-rating";
 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -41,9 +43,12 @@ import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.comp
         PagesRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxDatatableModule, AgmCoreModule.forRoot({
+        NgxDatatableModule, 
+        AgmCoreModule.forRoot({
             apiKey: 'AIzaSyBQOQYd6y3PeucI2ajI2hXzcPTXVwlGfgs'
         }),
+        RatingModule,
+        BarRatingModule,
     ],
     declarations: [
         ProductListComponent,
