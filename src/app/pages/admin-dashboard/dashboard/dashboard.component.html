@@ -14,8 +14,8 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <h5>Map</h5>
             <hr>
-            <div class="" style="width:100%; height: 400px; display: block;">
-                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="8" [zoomControl]="true" [fullscreenControl]="true" [mapTypeControl]="true"
+            <div class="" style="width:100%; height: 500px; display: block;">
+                <agm-map [latitude]="lat" [longitude]="lng" [zoom]="9" [zoomControl]="true" [fullscreenControl]="true" [mapTypeControl]="true"
                     [mapTypeId]="'terrain'" [streetViewControl]="false">
                     <!-- marker -->
                     <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng"

@@ -16,8 +16,8 @@ export class DashboardComponent implements OnInit {
 
     public access_token = '';
 
-    public lat: number = 7.291418;
-    public lng: number = 80.636696;
+    public lat: number = 6.8916; //6.908739; //6.821840; //6.97078; //6.927079; // 7.291418;
+    public lng: number = 80.5955; //80.14458; //80.361511; //80.78286; //79.861244; //80.636696;
 
     public buyer_marker = './assets/images/icon/buyer_marker.png';
     public seller_marker = './assets/images/icon/seller_marker.png';
@@ -166,10 +166,12 @@ export class DashboardComponent implements OnInit {
                             };
                             temp_markers.push(t_marker);
 
+                            x += 1;
+
                         }
 
 
-                        x += 1;
+                        
 
 
                     }
