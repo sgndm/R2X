@@ -14,7 +14,15 @@
     <hr>
 
     <div class="row justify-content-end">
-
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="form-group row justify-content-center">
+                <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Categories</label>
+                <select name="" id="" (change)="onChangeCategory($event.target.value)" class="form-control custom-select col-sm-12 col-md-8 col-lg-8 " [(ngModel)]="select_category" >
+                    <option value="">Select a Category</option>
+                    <option value="{{ category.name }}" *ngFor="let category of category_list">{{ category.name }}</option>
+                </select>
+            </div>
+        </div>
         <div class="col-sm-12 col-md-6 col-lg-6">
             <div class="form-group row justify-content-center">
                 <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
