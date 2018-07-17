@@ -69,7 +69,7 @@
                 <span>Price</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                {{ row.price }}
+                {{ row.price | currency : 'Rs. ' : 0  }}
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="edit">

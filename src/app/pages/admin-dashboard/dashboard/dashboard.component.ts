@@ -119,7 +119,7 @@ export class DashboardComponent implements OnInit {
                     let temp_markers = this.markers;
 
                     for (let data of res.data) {
-                        if (data.orderId > 1) {
+                        if (data.recordStatus > 1) {
 
                             let t_order = {
                                 index: (x + 1),
@@ -161,6 +161,7 @@ export class DashboardComponent implements OnInit {
                                 icon: this.buyer_marker
                             };
                             temp_markers.push(t_marker);
+
                         }
 
 

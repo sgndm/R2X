@@ -20,6 +20,7 @@ export class ViewOrderComponent implements OnInit {
 
     public order_date: any;
     public order_status: any;
+    public delivery_charges: any;
 
     constructor(
         private activeRoute: ActivatedRoute,
@@ -77,7 +78,11 @@ export class ViewOrderComponent implements OnInit {
                         let t_product = {
                             name: product.productName,
                             quantity: '',
-                            price: product.estimatedPrice
+                            price: 0
+                        }
+
+                        if(res.data.acceptedOrderEstimationId !== null){
+                            t_product.price = (product.estimatedPrice * product.qty );
                         }
 
                         let paymentUnit = product.paymentUnit;
@@ -114,6 +119,9 @@ export class ViewOrderComponent implements OnInit {
                                 t_product.quantity = productQuantity + " per hour"
                         }
 
+                        if(res.data.acceptedEstimation !== null) {
+                            this.delivery_charges = res.data.acceptedEstimation.deliveryCharges;
+                        }
                         
 
                         temp_product_list.push(t_product);

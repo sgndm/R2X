@@ -14,17 +14,17 @@
             <table class="table">
                 <tbody>
                     <tr class="bg-success text-white">
-                        <td colspan="4">
+                        <td colspan="3">
                             Order Details
                         </td>
                     </tr>
                     <tr>
                         <td>Order Date</td>
-                        <td colspan="3">{{ order_date | date: "EEE, dd-MM-yyyy HH:mm" }}</td>
+                        <td colspan="2">{{ order_date | date: "EEE, dd-MM-yyyy HH:mm" }}</td>
                     </tr>
                     <tr>
                         <td>Order Status</td>
-                        <td colspan="3">
+                        <td colspan="2">
                             <label class="cus-lbl btn-sm bg-secondary" *ngIf="order_status == 5">Waiting For Estimations</label>
                             <label class="cus-lbl btn-sm bg-info" *ngIf="order_status == 4">Estimations Received </label>
                             <label class="cus-lbl btn-sm bg-primary" *ngIf="order_status == 3">Estimation Accepted</label>
@@ -37,19 +37,22 @@
                     </tr>
 
                     <tr class="bg-success text-white">
-                        <td colspan="4">Product List</td>
+                        <td colspan="3">Product List</td>
                     </tr>
                     <tr class="bg-secondary text-white">
                         <td>Name</td>
                         <td>Quantity</td>
                         <td>Accepted Estimation's price</td>
-                        <td></td>
                     </tr>
                     <tr *ngFor="let product of product_list">
                         <td> {{ product.name }} </td>
                         <td> {{ product.quantity }} </td>
-                        <td> Rs. {{ product.price }} </td>
+                        <td> {{ product.price | currency : 'Rs. ' : 0  }} </td>
+                    </tr>
+                    <tr class="bg-secondary text-white">
+                        <td>Delivery Charges</td>
                         <td></td>
+                        <td>{{ delivery_charges | currency : 'Rs. ' : 0 }}</td>
                     </tr>
                 </tbody>
             </table>
