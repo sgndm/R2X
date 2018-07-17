@@ -17,21 +17,22 @@
 
             <form novalidate [formGroup]="myForm" (ngSubmit)="onUpdateName()">
                 <div class="row">
-                        <div class="form-group col-sm-12 col-md-6 col-g-6" [ngClass]="{
+                    <div class="form-group col-sm-12 col-md-6 col-g-6" [ngClass]="{
                             'has-danger': categoryName.invalid && (categoryName.dirty || categoryName.touched),
                             'has-success': categoryName.valid && (categoryName.dirty || categoryName.touched)
                             }">
-    
-                            <label>Name</label>
-                        <input type="text" class="form-control" formControlName="categoryName" required>
-    
+
+                        <label>Name</label>
+                        <input type="text" class="form-control" formControlName="categoryName" maxlength="20" required>
+
+                        <small class="pull-right text-success">{{ categoryName.value.length }} / 20</small>
                         <div class="form-control-feedback" *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)">
                             <p *ngIf="categoryName.errors.required">Category Name is required</p>
                             <p *ngIf="categoryName.errors?.maxlength">
                                 Category Name is too long
                             </p>
                         </div>
-    
+
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-g-6" [ngClass]="{
                         'has-danger': categoryType.invalid && (categoryType.dirty || categoryType.touched),
@@ -44,11 +45,11 @@
                         </select>
                         <div class="form-control-feedback" *ngIf="categoryType.errors && (categoryType.dirty || categoryType.touched)">
                             <p *ngIf="categoryType.errors.required">Category type is required</p>
-    
+
                         </div>
                     </div>
                 </div>
-                
+
 
 
                 <div class="form-group">

@@ -31,7 +31,8 @@
                         'has-success': productName.valid && (productName.dirty || productName.touched)
                         }">
                     <label>Name</label>
-                    <input type="text" class="form-control" formControlName="productName" required>
+                    <input type="text" class="form-control" formControlName="productName" maxlength="20" required>
+                    <small class="pull-right text-success">{{ productName.value.length }} / 20</small>
                     <div class="form-control-feedback" *ngIf="productName.errors && (productName.dirty || productName.touched)">
                         <p *ngIf="productName.errors.required">Service Name is required</p>
                         <p *ngIf="productName.errors?.maxlength">
@@ -45,7 +46,8 @@
                         'has-success': productDescription.valid && (productDescription.dirty || productDescription.touched)
                         }">
                     <label>Description</label>
-                    <textarea class="form-control" formControlName="productDescription" required></textarea>
+                    <textarea class="form-control" formControlName="productDescription" maxlength="255" required></textarea>
+                    <small class="pull-right text-success">{{ productDescription.value.length }} / 255</small>
                     <div class="form-control-feedback" *ngIf="productDescription.errors && (productDescription.dirty || productDescription.touched)">
                         <p *ngIf="productDescription.errors.required">Service Description is required</p>
                         <p *ngIf="productDescription.errors?.maxlength">

@@ -18,7 +18,8 @@
                                     'has-success': categoryName.valid && (categoryName.dirty || categoryName.touched)
                                     }">
                     <label>Name</label>
-                    <input type="text" class="form-control" formControlName="categoryName" required>
+                    <input type="text" class="form-control" formControlName="categoryName" maxlength="20" required>
+                    <small class="pull-right text-success">{{ categoryName.value.length }} / 20</small>
                     <div class="form-control-feedback" *ngIf="categoryName.errors && (categoryName.dirty || categoryName.touched)">
                         <p *ngIf="categoryName.errors.required">Category Name is required</p>
                         <p *ngIf="categoryName.errors?.maxlength">
@@ -31,7 +32,7 @@
                             'has-danger': categoryType.invalid && (categoryType.dirty || categoryType.touched),
                             'has-success': categoryType.valid && (categoryType.dirty || categoryType.touched)
                             }">
-                    <label>Name</label>
+                    <label>Type</label>
                     <select type="text" class="form-control custom-select" formControlName="categoryType" required>
                         <option value="1">Products</option>
                         <option value="2">Services</option>
@@ -67,18 +68,21 @@
 
 
         </form>
-        <br><br><br>
+        <br>
+        <br>
+        <br>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12">
-        <h5>Category List</h5><hr>
+        <h5>Category List</h5>
+        <hr>
         <div class="row justify-content-end">
-                <div class="col-sm-12 col-md-6 col-lg-6">
-                    <div class="form-group row justify-content-center">
-                        <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
-                        <input type='text' placeholder='Type category name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
-                    </div>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="form-group row justify-content-center">
+                    <label for="" class="col-sm-12 col-md-4 col-lg-4 text-right">Search</label>
+                    <input type='text' placeholder='Type category name..' class="form-control col-sm-12 col-md-8 col-lg-8" (keyup)='updateFilter($event)'>
                 </div>
             </div>
+        </div>
         <ngx-datatable class="material" [headerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'" [footerHeight]="50" [count]="true"
             [limit]="10" [rows]="rows">
 
