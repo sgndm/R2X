@@ -27,7 +27,7 @@ import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.comp
 const routes: Routes = [
     // admin 
     // products & services
-    { path: '', redirectTo: 'admin/products' },
+    { path: '', redirectTo: 'admin/dashboard' },
     { path: 'admin/products', component: ProductListComponent },
     { path: 'admin/services', component: ServiceListComponent },
     { path: 'admin/products/create', component: CreateProductComponent },
