@@ -43,6 +43,9 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
 
+        Observable.interval(5000)
+            .takeWhile(() => true)
+            .subscribe(() => this.getAllOrders(this.access_token));
 
         // check if user is logged in
         if (this.access_token) {
@@ -106,6 +109,7 @@ export class DashboardComponent implements OnInit {
             }
         )
     }
+
 
     // get Orders 
     getAllOrders(token) {
@@ -183,11 +187,12 @@ export class DashboardComponent implements OnInit {
     }
 
 
-    getOrdersRefresh() {
-        Observable.interval(5000)
-            .takeWhile(() => true)
-            .subscribe(() => this.getAllOrders(this.access_token));
-    }
+    // getOrdersRefresh() {
+    //     alert("x");
+    //     Observable.interval(5000)
+    //         .takeWhile(() => true)
+    //         .subscribe(() => this.getAllOrders(this.access_token));
+    // }
 
     clickedMarker(label: string, index: number) {
         console.log(`clicked the marker: ${label || index}`)
