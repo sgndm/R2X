@@ -171,7 +171,7 @@ export class SellerListComponent implements OnInit {
 
     addComment(seller_id) {
         swal({
-            title: 'Reason for Blocking',
+            title: 'Reason For Blocking',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -260,7 +260,7 @@ export class SellerListComponent implements OnInit {
 
     addCommentUnblock(seller_id) {
         swal({
-            title: 'Reason for Unblocking',
+            title: 'Reason For Unblocking',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
