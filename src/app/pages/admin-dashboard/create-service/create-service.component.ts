@@ -203,4 +203,8 @@ export class CreateServiceComponent implements OnInit {
         });
     }
 
+    refreshPage(){
+        location.reload();
+    }
+
 }

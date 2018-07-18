@@ -136,4 +136,8 @@ export class ViewOrderComponent implements OnInit {
         )
     }
 
+    refreshPage(){
+        location.reload();
+    }
+    
 }

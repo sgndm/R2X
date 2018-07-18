@@ -131,5 +131,8 @@ export class ViewProductComponent implements OnInit {
         )
     }
 
+    refreshPage(){
+        location.reload();
+    }
 
 }

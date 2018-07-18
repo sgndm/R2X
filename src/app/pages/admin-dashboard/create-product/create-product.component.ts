@@ -197,4 +197,8 @@ export class CreateProductComponent implements OnInit {
         });
     }
 
+    refreshPage(){
+        location.reload();
+    }
+    
 }

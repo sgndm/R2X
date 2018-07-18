@@ -1,3 +1,35 @@
+<div class="row page-titles">
+
+    <div class="col-sm-12 col-md-9 col-lg-9 pl-5">
+        <div class="row justify-content-start">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/dashboard']">
+                    <b>Admin Dashboard </b>
+                </li>
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/products']">
+                    <b>Products & Services</b>
+                </li>
+                <li class="breadcrumb-item active"> Products </li>
+                <li class="breadcrumb-item active"> Create Product </li>
+
+            </ol>
+        </div>
+
+    </div>
+
+    <div class="col-sm-12 col-md-3 col-lg-3 pr-5">
+        <div class="row justify-content-end">
+            <div class="back-btn" [routerLink]="['/pages/admin/products']">
+                <i class="mdi mdi-arrow-left-bold-circle-outline"></i>
+            </div>
+            <div class="back-btn" (click)="refreshPage()">
+                <i class="mdi mdi-refresh"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 <div class="page-content">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8">
@@ -30,13 +62,13 @@
 					}">
                     <label>Name</label>
                     <input type="text" class="form-control" formControlName="productName" maxlength="20" required>
-                    
+
                     <small class="pull-right text-success">{{ productName.value.length }} / 20</small>
                     <div class="form-control-feedback" *ngIf="productName.errors && (productName.dirty || productName.touched)">
                         <p *ngIf="productName.errors.required">Product Name is required</p>
                         <p *ngIf="productName.errors?.maxlength">
-                                Product Name is too long
-                            </p>
+                            Product Name is too long
+                        </p>
                     </div>
                 </div>
 
@@ -50,8 +82,8 @@
                     <div class="form-control-feedback" *ngIf="productDescription.errors && (productDescription.dirty || productDescription.touched)">
                         <p *ngIf="productDescription.errors.required">Product description is required</p>
                         <p *ngIf="productDescription.errors?.maxlength">
-                                Product Description is too long
-                            </p>
+                            Product Description is too long
+                        </p>
                     </div>
                 </div>
             </div>

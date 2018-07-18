@@ -309,5 +309,8 @@ export class SellerListComponent implements OnInit {
 
     }
 
+    refreshPage(){
+        location.reload();
+    }
 
 }

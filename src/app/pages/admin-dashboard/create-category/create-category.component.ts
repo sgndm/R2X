@@ -259,5 +259,9 @@ export class CreateCategoryComponent implements OnInit {
         this.rows = temp_data;
     }
 
+    refreshPage(){
+        location.reload();
+    }
+
 
 }

@@ -168,4 +168,8 @@ export class CategoriesComponent implements OnInit {
         this.rows = temp_data;
     }
 
+    refreshPage(){
+        location.reload();
+    }
+
 }

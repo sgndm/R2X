@@ -96,3 +96,22 @@ label {
     color: white;
     border-radius: 4px;
   }
+
+.back-btn{
+    width: 40px;
+    height: 40px;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    font-size: 28px;
+    padding: 0 5px;
+    background-color: #38a623;
+    border-radius: 8px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.breadcrumb-link{
+    color: #38a623;
+    cursor: pointer;
+}

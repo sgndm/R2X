@@ -189,13 +189,6 @@ export class DashboardComponent implements OnInit {
     }
 
 
-    // getOrdersRefresh() {
-    //     alert("x");
-    //     Observable.interval(5000)
-    //         .takeWhile(() => true)
-    //         .subscribe(() => this.getAllOrders(this.access_token));
-    // }
-
     clickedMarker(label: string, index: number) {
         console.log(`clicked the marker: ${label || index}`)
     }
@@ -221,6 +214,10 @@ export class DashboardComponent implements OnInit {
             this.rows = this.temp;
         }
 
+    }
+
+    refreshPage(){
+        location.reload();
     }
 
 

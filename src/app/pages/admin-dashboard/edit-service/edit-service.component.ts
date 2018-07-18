@@ -281,4 +281,8 @@ export class EditServiceComponent implements OnInit {
         this.router.navigate(['/pages/admin/services']);
     }
 
+    refreshPage(){
+        location.reload();
+    }
+    
 }

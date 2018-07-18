@@ -227,4 +227,8 @@ export class ProductListComponent implements OnInit {
 
     }
 
+    refreshPage(){
+        location.reload();
+    }
+
 }

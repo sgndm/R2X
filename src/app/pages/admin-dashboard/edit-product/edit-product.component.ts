@@ -279,4 +279,8 @@ export class EditProductComponent implements OnInit {
     goToProductList(){
         this.router.navigate(['/pages/admin/products']);
     }
+
+    refreshPage(){
+        location.reload();
+    }
 }

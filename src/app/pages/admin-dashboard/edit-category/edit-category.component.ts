@@ -242,4 +242,8 @@ export class EditCategoryComponent implements OnInit {
     goToCategoryList(){
         this.router.navigate(['/pages/admin/categories']);
     }
+
+    refreshPage(){
+        location.reload();
+    }
 }
