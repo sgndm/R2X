@@ -94,7 +94,7 @@ export class EditProductComponent implements OnInit {
 
     // get categories 
     getCategories(token) {
-        this.apiServices.getCategoriesAll(token).subscribe(
+        this.apiServices.getCategoryByType(token, 1).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -164,7 +164,7 @@ export class EditProductComponent implements OnInit {
                     this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
-                        this.apiServices.altScc("Product details updated",  this.apiServices.reload());
+                        this.apiServices.altScc("Product details updated",  this.goToProductList());
                     }
                 },
                 err => {
@@ -193,7 +193,7 @@ export class EditProductComponent implements OnInit {
                     this.spinner.hide();
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {
-                        this.apiServices.altScc("Product image updated",  this.apiServices.reload());
+                        this.apiServices.altScc("Product image updated",  this.goToProductList());
                     }
                 },
                 err => {
@@ -274,5 +274,13 @@ export class EditProductComponent implements OnInit {
     onCancelEdit2() {
         this.myForm2.reset();
         this.is_image_set = false;
+    }
+
+    goToProductList(){
+        this.router.navigate(['/pages/admin/products']);
+    }
+
+    refreshPage(){
+        location.reload();
     }
 }

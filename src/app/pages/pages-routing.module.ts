@@ -22,11 +22,12 @@ import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.c
 
 // dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.component';
 
 const routes: Routes = [
     // admin 
     // products & services
-    { path: '', redirectTo: 'admin/products' },
+    { path: '', redirectTo: 'admin/dashboard' },
     { path: 'admin/products', component: ProductListComponent },
     { path: 'admin/services', component: ServiceListComponent },
     { path: 'admin/products/create', component: CreateProductComponent },
@@ -47,6 +48,7 @@ const routes: Routes = [
 
     // dashboard
     { path: 'admin/dashboard', component: DashboardComponent },
+    { path: 'admin/dashboard/orders/order/:id', component: ViewOrderComponent },
 ];
 
 @NgModule({

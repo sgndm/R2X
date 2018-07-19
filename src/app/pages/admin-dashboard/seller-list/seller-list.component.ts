@@ -25,6 +25,7 @@ export class SellerListComponent implements OnInit {
 
     select_category: any;
     category_list: any;
+    starsCount: any;
 
     constructor(
         public router: Router,
@@ -113,12 +114,14 @@ export class SellerListComponent implements OnInit {
                             address: data.seller.address,
                             phone: data.seller.mobileNumber,
                             nic: data.seller.nic,
-                            isApproved: data.approved,
+                            sellerStatus: data.approvalStatus,
                             ratings: data.seller.rating,
                             isActive: data.isActive,
                             seller_id: data.id,
                             username: data.appUser.username
                         }
+
+                        // this.starsCount = data.seller.rating;
 
                         let imgName = data.seller.storeImageUrl;
 
@@ -168,7 +171,7 @@ export class SellerListComponent implements OnInit {
 
     addComment(seller_id) {
         swal({
-            title: 'Reason for Blocking',
+            title: 'Reason For Blocking',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -225,18 +228,89 @@ export class SellerListComponent implements OnInit {
                 console.log(res);
 
                 if (res.status == "success" && res.data == "approved") {
-                    this.apiServices.altScc('Seller accepted', this.getSellers(this.access_token));
+                    this.apiServices.altScc('Seller approved', this.getSellers(this.access_token));
                 }
                 else {
-                    this.apiServices.altErr("Unable to accept the seller", this.getSellers(this.access_token));
+                    this.apiServices.altErr("Unable to approve the seller", this.getSellers(this.access_token));
                 }
             },
             err => {
                 this.spinner.hide();
                 console.log(err);
-                this.apiServices.altErr("Unable to accept the seller", this.getSellers(this.access_token));
+                this.apiServices.altErr("Unable to approve the seller", this.getSellers(this.access_token));
             }
         )
+    }
+
+    onUnblockingSeller(seller_id) {
+        swal({
+            title: 'Are you sure?',
+            text: "You are trying to unblock a seller",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Yes, I'm Sure!",
+            cancelButtonText: "Cancel",
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.value) {
+                this.addCommentUnblock(seller_id);
+            }
+        })
+    }
+
+    addCommentUnblock(seller_id) {
+        swal({
+            title: 'Reason For Unblocking',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false,
+            preConfirm: function (value) {
+                if (value.length == 0) {
+                    swal.showValidationError(
+                        `Reason is required`
+                    )
+                }
+            }
+        }).then((result) => {
+            if (result.value) {
+                this.unblockSeller(seller_id, result.value);
+            }
+        })
+    }
+
+    unblockSeller(seller_id, comment) {
+        this.spinner.show();
+
+        const data = { username: seller_id, comment: comment }
+
+        this.apiServices.unblockSeller(data, this.access_token).subscribe(
+            (res: any) => {
+                this.spinner.hide();
+                console.log(res);
+
+                if (res.status == "success" && res.data == "blocked") {
+                    this.apiServices.altScc('Seller unblocked', this.getSellers(this.access_token));
+                }
+                else {
+                    this.apiServices.altErr("Unable to unblock the seller", this.getSellers(this.access_token));
+                }
+            },
+            err => {
+                this.spinner.hide();
+                console.log(err);
+                this.apiServices.altErr("Unable to unblock the seller", this.getSellers(this.access_token));
+            }
+        )
+
+    }
+
+    refreshPage(){
+        location.reload();
     }
 
 }

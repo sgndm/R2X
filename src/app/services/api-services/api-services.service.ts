@@ -7,8 +7,8 @@ import swal from 'sweetalert2';
 
 const httpOptions = {}
 
-// const SERVER_URL = 'http://192.168.2.140:8090/api/';
-const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com/api/';
+// const SERVER_URL = 'http://192.168.1.5:8060/api/';
+const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com:8090/api/';
 
 @Injectable()
 export class ApiServicesService {
@@ -128,6 +128,13 @@ export class ApiServicesService {
         return this.http.get(url, { headers: { Authorization: 'Bearer ' + token}});
     }
 
+    // get category by type
+    getCategoryByType(token, data) {
+        const url = SERVER_URL + 'admin/categories';
+
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { type: data } });
+    }
+
     // get details 
     getCategoryById(data, token) {
         const url = SERVER_URL + 'admin/category';
@@ -149,7 +156,8 @@ export class ApiServicesService {
     updateCategoryName(data, token) {
         let set_data = {
             "name": data.categoryName,
-            "categoryId": data.categoryId
+            "categoryId": data.categoryId,
+            "type": data.type
         }
 
         const url = SERVER_URL + 'admin/category/update';
@@ -315,12 +323,36 @@ export class ApiServicesService {
         return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
     }
 
+    // unblock seller 
+    unblockSeller(data, token){
+        let set_data = { "username": data.username, "comment": data.comment }
+        const url = SERVER_URL + 'admin/sellers/unblock';
+        return this.http.post(url, set_data, {headers: { Authorization: 'Bearer ' + token}})
+    }
+
     // get Seller details 
     getSellerDetailsById(data, token) {
         const url = SERVER_URL + 'admin/sellers/details';
         return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { username: data } });
     }
 
+    // dashboard 
+    // get all sellers 
+    getAllSellersLocations(token) {
+        const url = SERVER_URL + 'admin/sellers/all';
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}});
+    }
 
+    // get orders 
+    getAllOrders(token, data) {
+        const url = SERVER_URL + 'admin/orders';
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { status: data } });
+    }
+
+    // get order by id 
+    getOrderById(token, data) {
+        const url = SERVER_URL + 'admin/order/details';
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { order_id: data } });
+    }
 
 }

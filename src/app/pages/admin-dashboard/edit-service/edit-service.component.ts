@@ -92,7 +92,7 @@ export class EditServiceComponent implements OnInit {
 
     // get categories 
     getCategories(token) {
-        this.apiServices.getCategoriesAll(token).subscribe(
+        this.apiServices.getCategoryByType(token, 2).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -207,7 +207,7 @@ export class EditServiceComponent implements OnInit {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_updated") {
 
-                        this.apiServices.altScc("Service details updated",  this.apiServices.reload());
+                        this.apiServices.altScc("Service details updated",  this.goToServicesList());
                     }
                 },
                 err => {
@@ -253,7 +253,7 @@ export class EditServiceComponent implements OnInit {
                     console.log(res);
                     if (res.status == "success" && res.data == "product_image_updated") {
                         
-                        this.apiServices.altScc("Service image updated", this.apiServices.reload());
+                        this.apiServices.altScc("Service image updated", this.goToServicesList());
                     }
                 },
                 err => {
@@ -277,4 +277,12 @@ export class EditServiceComponent implements OnInit {
         this.is_image_set = false;
     }
 
+    goToServicesList(){
+        this.router.navigate(['/pages/admin/services']);
+    }
+
+    refreshPage(){
+        location.reload();
+    }
+    
 }

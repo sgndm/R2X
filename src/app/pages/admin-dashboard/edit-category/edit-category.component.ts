@@ -21,6 +21,7 @@ export class EditCategoryComponent implements OnInit {
 
     categoryName: FormControl;
     categoryImage: FormControl;
+    categoryType: FormControl;
 
     selected_file: File = null;
 
@@ -83,12 +84,14 @@ export class EditCategoryComponent implements OnInit {
 
         this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
         this.categoryImage = new FormControl('', [Validators.required]);
+        this.categoryType = new FormControl(1, [Validators.required]);
 
     }
 
     createForm() {
         this.myForm = new FormGroup({
-            categoryName: this.categoryName
+            categoryName: this.categoryName,
+            categoryType: this.categoryType
         });
     }
 
@@ -124,7 +127,8 @@ export class EditCategoryComponent implements OnInit {
 
                     this.category_name = res.data.categoryName;
                     this.myForm.setValue({
-                        categoryName: res.data.categoryName
+                        categoryName: res.data.categoryName,
+                        categoryType: res.data.type
                     })
 
                     let imgName = res.data.categoryImgUrl;
@@ -135,6 +139,7 @@ export class EditCategoryComponent implements OnInit {
 
                             this.is_current_image = true;
                             this.currentImagePath = 'data:image/jpeg;base64,' + res;
+                        
                         },
                         err => {
                             console.log('Error\n');
@@ -179,7 +184,7 @@ export class EditCategoryComponent implements OnInit {
                     console.log(res);
 
                     if (res.status == "success" && res.data == "category_image_updated") {
-                        this.apiServices.altScc("Category image updated", this.apiServices.reload());
+                        this.apiServices.altScc("Category image updated", this.goToCategoryList());
                     }
                 },
                 err => {
@@ -199,22 +204,24 @@ export class EditCategoryComponent implements OnInit {
             this.spinner.show();
             const data = {
                 categoryId: this.category_id,
-                categoryName: this.myForm.value.categoryName
+                categoryName: this.myForm.value.categoryName,
+                type: this.myForm.value.categoryType
             }
-
+            console.log("Data .......... ");
+            console.log(data);
             this.apiServices.updateCategoryName(data, this.access_token).subscribe(
                 (res: any) => {
                     this.spinner.hide();
                     console.log(res)
 
                     if (res.status == "success" && res.data == "category_updated") {
-                        this.apiServices.altScc("Category name updated", this.apiServices.reload());
+                        this.apiServices.altScc("Category details updated", this.goToCategoryList());
                     }
                 },
                 err => {
                     this.spinner.hide();
                     console.log(err);
-                    this.apiServices.altErr("Unable to update category name", this.apiServices.reload());
+                    this.apiServices.altErr("Unable to update category details", this.apiServices.reload());
                 }
             )
         }
@@ -230,5 +237,13 @@ export class EditCategoryComponent implements OnInit {
     onCancelEdit2() {
         this.myForm2.reset();
         this.is_image_set = false;
+    }
+
+    goToCategoryList(){
+        this.router.navigate(['/pages/admin/categories']);
+    }
+
+    refreshPage(){
+        location.reload();
     }
 }

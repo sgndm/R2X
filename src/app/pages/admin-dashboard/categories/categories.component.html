@@ -1,3 +1,32 @@
+<div class="row page-titles">
+
+    <div class="col-sm-12 col-md-9 col-lg-9 pl-5">
+        <div class="row justify-content-start">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/dashboard']"> <b> Admin Dashboard </b> </li>
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/categories']">
+                    <b>Categories</b>
+                </li>
+
+
+            </ol>
+        </div>
+
+    </div>
+
+    <div class="col-sm-12 col-md-3 col-lg-3 pr-5">
+        <div class="row justify-content-end">
+            <!-- <div class="back-btn" [routerLink]="['/pages/admin']">
+                <i class="mdi mdi-arrow-left-bold-circle-outline"></i>
+            </div> -->
+            <div class="back-btn" (click)="refreshPage()">
+                <i class="mdi mdi-refresh"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 <div class="page-content">
 
     <div class="row justify-content-center">
@@ -49,7 +78,7 @@
                 <span>Image</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <img src="{{row.image}}" alt="" class="image-thumbnail-cus" >
+                <img src="{{row.image}}" alt="" class="image-thumbnail-cus">
             </ng-template>
         </ngx-datatable-column>
 
@@ -65,14 +94,14 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="action">
-                <ng-template ngx-datatable-header-template>
-                    <span>Delete</span>
-                </ng-template>
-                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                        <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="deleteCategory(row.category_id)" *ngIf="row.recordStatus == 1" >Delete</button>
-                        <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="activateCategory(row.category_id)" *ngIf="row.recordStatus == 0" >Activate</button>
-                </ng-template>
-            </ngx-datatable-column>
+            <ng-template ngx-datatable-header-template>
+                <span>Delete</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="deleteCategory(row.category_id)" *ngIf="row.recordStatus == 1">Delete</button>
+                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="activateCategory(row.category_id)" *ngIf="row.recordStatus == 0">Activate</button>
+            </ng-template>
+        </ngx-datatable-column>
 
     </ngx-datatable>
 

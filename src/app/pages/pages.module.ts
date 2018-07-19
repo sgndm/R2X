@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {RatingModule} from "ngx-rating";
+import { BarRatingModule } from "ngx-bar-rating";
 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +33,7 @@ import { SellerViewComponent } from './admin-dashboard/seller-view/seller-view.c
 
 // dashboard
 import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.component';
+import { ViewOrderComponent } from './admin-dashboard/view-order/view-order.component';
 
 
 
@@ -40,9 +43,12 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
         PagesRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        NgxDatatableModule, AgmCoreModule.forRoot({
+        NgxDatatableModule, 
+        AgmCoreModule.forRoot({
             apiKey: 'AIzaSyBQOQYd6y3PeucI2ajI2hXzcPTXVwlGfgs'
         }),
+        RatingModule,
+        BarRatingModule,
     ],
     declarations: [
         ProductListComponent,
@@ -58,7 +64,8 @@ import { DashboardComponent } from './admin-dashboard/dashboard/dashboard.compon
         EditCategoryComponent,
         SellerListComponent,
         SellerViewComponent,
-        DashboardComponent
+        DashboardComponent,
+        ViewOrderComponent
     ]
 })
 export class PagesModule { }

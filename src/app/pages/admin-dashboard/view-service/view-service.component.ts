@@ -130,4 +130,10 @@ export class ViewServiceComponent implements OnInit {
             }
         )
     }
+
+    refreshPage(){
+        location.reload();
+    }
+
+    
 }

@@ -1,15 +1,63 @@
+<div class="row page-titles">
+
+    <div class="col-sm-12 col-md-9 col-lg-9 pl-5">
+        <div class="row justify-content-start">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/dashboard']">
+                    <b>Admin Dashboard</b>
+                </li>
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/users/sellers']">
+                    <b>Users</b>
+                </li>
+                <li class="breadcrumb-item active"> Sellers </li>
+                <li class="breadcrumb-item active"> Seller </li>
+                <li class="breadcrumb-item active"> {{ sellerName }} </li>
+
+
+            </ol>
+        </div>
+
+    </div>
+
+    <div class="col-sm-12 col-md-3 col-lg-3 pr-5">
+        <div class="row justify-content-end">
+            <div class="back-btn" [routerLink]="['/pages/admin/users/sellers']">
+                <i class="mdi mdi-arrow-left-bold-circle-outline"></i>
+            </div>
+            <div class="back-btn" (click)="refreshPage()">
+                <i class="mdi mdi-refresh"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 <div class="page-content">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-8">
             <h2 class=""> View Seller </h2>
         </div>
         <div class="col-sm-12 col-md-4">
-            <h2 class="text-right"> {{ seller_name }} </h2>
+            <h2 class="text-right"> {{ sellerName }} </h2>
         </div>
     </div>
     <hr>
 
     <div class="row">
+
+        <div class="col-sm-12 col-md-12 col-lg-12 row justify-content-end">
+            <button type="button" class="cus-btn-1 btn btn-submit" (click)="acceptSeller(seller_username)" *ngIf="sellerApproveStatus == 1">Approve</button>
+
+            <button type="button" class="cus-btn-1 btn btn-cancel" (click)="onBlockingSeller(seller_username)" *ngIf="sellerApproveStatus == 1">Reject</button>
+
+            <button type="button" class="cus-btn-1 btn btn-cancel" (click)="onBlockingSeller(seller_username)" *ngIf="sellerApproveStatus == 2">Block</button>
+
+            <button type="button" class="cus-btn-1 btn btn-warning" (click)="onUnblockingSeller(seller_username)" *ngIf="sellerApproveStatus == 3">Unblock</button>
+
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <hr>
+        </div>
 
         <div class="col-sm-12 col-md-6 col-lg-6">
 
@@ -27,7 +75,10 @@
             </div>
             <div class="form-group">
                 <label>Ratings</label>
-                <p class="bg-info custom-lable-1"> {{ ratings }} </p>
+                <br>
+                <!-- <p class="bg-info custom-lable-1"> {{ ratings }} </p> -->
+                <rating [(ngModel)]="ratings" [max]="5" [readonly]="true" [float]="true">
+                </rating>
             </div>
             <div class="form-group">
                 <label>Operational Radius </label>

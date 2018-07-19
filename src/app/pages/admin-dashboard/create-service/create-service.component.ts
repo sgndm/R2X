@@ -75,7 +75,7 @@ export class CreateServiceComponent implements OnInit {
 
     // get categories 
     getCategories(token){
-        this.apiServices.getCategoriesAll(token).subscribe(
+        this.apiServices.getCategoryByType(token, 2).subscribe(
             (res: any) => {
                 console.log(res);
 
@@ -201,6 +201,10 @@ export class CreateServiceComponent implements OnInit {
             productImage: '',
             paymentMethod: ''
         });
+    }
+
+    refreshPage(){
+        location.reload();
     }
 
 }

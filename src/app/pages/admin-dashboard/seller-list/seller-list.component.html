@@ -1,3 +1,35 @@
+<div class="row page-titles">
+
+    <div class="col-sm-12 col-md-9 col-lg-9 pl-5">
+        <div class="row justify-content-start">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/dashboard']">
+                    <b>Admin Dashboard</b>
+                </li>
+                <li class="breadcrumb-item breadcrumb-link" [routerLink]="['/pages/admin/users/sellers']">
+                    <b>Users</b>
+                </li>
+                <li class="breadcrumb-item active"> Sellers </li>
+
+
+            </ol>
+        </div>
+
+    </div>
+
+    <div class="col-sm-12 col-md-3 col-lg-3 pr-5">
+        <div class="row justify-content-end">
+            <!-- <div class="back-btn" [routerLink]="['/pages/admin/dashboard']">
+                <i class="mdi mdi-arrow-left-bold-circle-outline"></i>
+            </div> -->
+            <div class="back-btn" (click)="refreshPage()">
+                <i class="mdi mdi-refresh"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 <div class="page-content">
 
     <div class="row justify-content-center">
@@ -60,8 +92,10 @@
                 <span>Ratings</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                {{ row.ratings }}
-
+                <!-- {{ row.ratings }} -->
+                <rating [(ngModel)]="row.ratings" [max]="5" [readonly]="true" [float]="true">
+                </rating>
+                <!-- <bar-rating [(rate)]="row.ratings" [max]="5"  ></bar-rating> -->
             </ng-template>
         </ngx-datatable-column>
 
@@ -70,8 +104,11 @@
                 <span>Status</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <label class="cus-lbl btn-sm bg-success" *ngIf="row.isActive == 1">Active</label>
-                <label class="cus-lbl btn-sm bg-danger" *ngIf="row.isActive == 0">Inactive</label>
+
+                <label class="cus-lbl btn-sm bg-success" *ngIf="row.isActive == 1">Online</label>
+
+                <label class="cus-lbl btn-sm bg-danger" *ngIf="row.isActive == 0">Offline</label>
+
             </ng-template>
         </ngx-datatable-column>
 
@@ -91,8 +128,17 @@
                 <span>Action</span>
             </ng-template>
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.isApproved">Block</button>
-                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="!row.isApproved">Accept</button>
+
+                <button type="button" class="cus-btn-1 btn btn-sm btn-submit" (click)="acceptSeller(row.username)" *ngIf="row.sellerStatus == 1">Approve</button>
+
+                <br *ngIf="row.sellerStatus == 1">
+
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.sellerStatus == 1">Reject</button>
+
+                <button type="button" class="cus-btn-1 btn btn-sm btn-cancel" (click)="onBlockingSeller(row.username)" *ngIf="row.sellerStatus == 2">Block</button>
+
+                <button type="button" class="cus-btn-1 btn btn-sm btn-warning" (click)="onUnblockingSeller(row.username)" *ngIf="row.sellerStatus == 3">Unblock</button>
+
             </ng-template>
         </ngx-datatable-column>
 
