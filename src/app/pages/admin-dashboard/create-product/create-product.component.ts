@@ -28,6 +28,9 @@ export class CreateProductComponent implements OnInit {
     productCategory: FormControl;
     paymentMethod: FormControl;
 
+    priorityList = [];
+    priority: any;
+
     selected_file: File = null;
 
     is_image_set: boolean;
@@ -43,10 +46,12 @@ export class CreateProductComponent implements OnInit {
 
     ngOnInit() {
 
+        this.priority = 0;
         this.is_image_set = false;
         // check if user is logged in
         if (this.access_token) {
 
+            this.getMasterProductCount(this.access_token);
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
@@ -59,6 +64,8 @@ export class CreateProductComponent implements OnInit {
                 }
             )
 
+
+
         }
         else {
             this.apiServices.logout();
@@ -66,6 +73,7 @@ export class CreateProductComponent implements OnInit {
 
         this.createFormControls();
         this.createForm();
+       
     }
 
     // get categories 
@@ -84,43 +92,74 @@ export class CreateProductComponent implements OnInit {
         )
     }
 
+     // get categories 
+     getMasterProductCount(token) {
+        this.apiServices.getMasterProductCount(token, 1).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let productsCount = res.data;
+                   
+                    for (let x = 1; x < productsCount + 2; x++) {
+                        this.priorityList.push(x);
+                    }
+
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+
     onCreateProduct() {
 
         if (this.myForm.valid) {
-            this.spinner.show();
 
-            let info = {
-                name: this.myForm.value.productName,
-                description: this.myForm.value.productDescription,
-                estimatedPrice: this.myForm.value.productPrice,
-                categoryId: this.myForm.value.productCategory,
-                paymentUnit: this.myForm.value.paymentMethod,
-                isProduct: true
-            }
+            if(this.priority > 0){
 
-            const data = {
-                info: info,
-                imageUrl: this.selected_file,
-            }
+                this.spinner.show();
 
-            console.log(data);
-
-            this.apiServices.createProduct(data, this.access_token).subscribe(
-                (res: any) => {
-                    this.spinner.hide();
-                    console.log(res);
-
-                    if (res.status == "success" && res.data == "product_added") {
-                        
-                        this.apiServices.altScc("Product created",  this.resetForm());
-                    }
-                },
-                err => {
-                    this.spinner.hide();
-                    console.log(err);
-                    this.apiServices.altErr("Unable to create product",  this.resetForm());
+                let info = {
+                    name: this.myForm.value.productName,
+                    description: this.myForm.value.productDescription,
+                    estimatedPrice: this.myForm.value.productPrice,
+                    categoryId: this.myForm.value.productCategory,
+                    paymentUnit: this.myForm.value.paymentMethod,
+                    priority: this.priority,
+                    isProduct: true
                 }
-            )
+    
+                const data = {
+                    info: info,
+                    imageUrl: this.selected_file,
+                }
+    
+                console.log(data);
+    
+                this.apiServices.createProduct(data, this.access_token).subscribe(
+                    (res: any) => {
+                        this.spinner.hide();
+                        console.log(res);
+    
+                        if (res.status == "success" && res.data == "product_added") {
+                            
+                            this.apiServices.altScc("Product created",  this.resetForm());
+                        }
+                    },
+                    err => {
+                        this.spinner.hide();
+                        console.log(err);
+                        this.apiServices.altErr("Unable to create product",  this.resetForm());
+                    }
+                )
+
+            }else{
+                this.apiServices.altErr("Please select a priority level for the Product",  null);
+            }
+           
         }
         else {
             this.validateAllFormFields(this.myForm);
@@ -200,5 +239,10 @@ export class CreateProductComponent implements OnInit {
     refreshPage(){
         location.reload();
     }
+
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+	}
     
 }

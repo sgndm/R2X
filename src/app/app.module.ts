@@ -84,7 +84,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     NgxSpinnerModule,
     RatingModule,
-    BarRatingModule,
+    BarRatingModule
   ],
   providers: [
     {
@@ -103,6 +103,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       multi: true
     }
   ],
+  
     bootstrap: [AppComponent]
 })
 export class AppModule { }

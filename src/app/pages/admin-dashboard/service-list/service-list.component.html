@@ -43,6 +43,21 @@
     </div>
     <hr>
 
+    <form novalidate [formGroup]="myForm">
+
+            <div class="form-group justify-content-center">
+                <input type="password" class="form-control col-sm-2 col-md-2 col-lg-2" formControlName="password" placeholder='Password'>
+
+                <div class="btn btn-cancel col-sm-2 col-md-2 col-lg-2 text" (click)="deleteAll()">
+                        <i class="fa fa-minus-circle"></i>
+                        Delete All
+                 </div>
+                        
+            </div>
+    </form>
+
+    <hr>
+
     <div class="row justify-content-end">
         <div class="col-sm-12 col-md-6 col-lg-6">
             <div class="form-group row justify-content-center">

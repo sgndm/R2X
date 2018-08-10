@@ -6,6 +6,9 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
+
+
 
 
 @Component({
@@ -16,6 +19,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class ServiceListComponent implements OnInit {
 
     public access_token = '';
+
+    myForm: FormGroup;
+    password: FormControl;
 
     rows = [];
     columns = [];
@@ -59,7 +65,12 @@ export class ServiceListComponent implements OnInit {
         }
 
 
+        this.createFormControls();
+        this.createForm();;
+
     }
+
+    
 
     // get categories 
     getCategories(token) {
@@ -224,5 +235,50 @@ export class ServiceListComponent implements OnInit {
             }
         )
 
+    }
+
+
+    createFormControls() {
+        this.password = new FormControl();
+    }
+
+    createForm() {
+        this.myForm = new FormGroup({
+            password: this.password
+        });
+    }
+    
+    deleteAll() {
+        console.log("deleteAll pressed 1 ");
+
+        let passwordText = this.password.value;
+    
+        if(passwordText != null){
+            console.log("deleteAll pressed:  " + passwordText);
+
+            this.apiServices.deleteAllServices(this.access_token, passwordText).subscribe(
+                (res: any) => {
+    
+                    if(res.status == "success"){
+                        this.getProducts(this.access_token);
+                     }else{
+
+                        if(res.data != null && res.data == "invalid_security_code"){
+                            this.apiServices.altErr("Master password is invalid!", null);
+                        }
+
+                    }
+                    // get categories 
+                   
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }else{
+                this.apiServices.altErr("Please enter the master password to remove all services.", null);
+        }
+
+       
     }
 }

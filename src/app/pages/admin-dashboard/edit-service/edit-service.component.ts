@@ -27,6 +27,8 @@ export class EditServiceComponent implements OnInit {
     productImage: FormControl;
     productCategory: FormControl;
     paymentMethod: FormControl;
+    priorityLevel: FormControl;
+    currentPriorityLevel: any;
 
     service_name: any;
 
@@ -36,6 +38,10 @@ export class EditServiceComponent implements OnInit {
     is_current_image: boolean;
     imagePreviewPath: any;
     currentImagePath: any;
+
+
+    priorityList = [];
+    priority: any;
 
     service_id: any;
 
@@ -59,12 +65,16 @@ export class EditServiceComponent implements OnInit {
 
     ngOnInit() {
 
+        this.priority = 0;
+        this.currentPriorityLevel = 0;
         this.is_image_set = false;
         this.is_current_image = false;
 
         // check if user is logged in
         if (this.access_token) {
 
+
+            this.getMasterProductCount(this.access_token);
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
@@ -113,13 +123,17 @@ export class EditServiceComponent implements OnInit {
                 console.log(res);
                 if (res.status == "success") {
 
+                    this.currentPriorityLevel = res.data.priority;
+  
                     this.service_name = res.data.name;
                     this.myForm.setValue({
                         productName: res.data.name,
                         productCategory: res.data.categoryId,
                         productDescription: res.data.description,
                         productPrice: res.data.estimatedPrice,
-                        paymentMethod: res.data.paymentUnit
+                        paymentMethod: res.data.paymentUnit,
+                        priorityLevel:res.data.priority
+
                     });
 
                     let imgName = res.data.imageUrl;
@@ -151,6 +165,8 @@ export class EditServiceComponent implements OnInit {
         this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
         this.productImage = new FormControl('', [Validators.required]);
+        this.priorityLevel = new FormControl();
+
 
     }
 
@@ -160,7 +176,8 @@ export class EditServiceComponent implements OnInit {
             productName: this.productName,
             productDescription: this.productDescription,
             productPrice: this.productPrice,
-            paymentMethod: this.paymentMethod
+            paymentMethod: this.paymentMethod,
+            priorityLevel: this.priorityLevel
         });
     }
 
@@ -285,4 +302,65 @@ export class EditServiceComponent implements OnInit {
         location.reload();
     }
     
+
+    updateProductPriority(token, data) {
+        //this.spinner.show();
+        console.log("updateProductPriority: " + data);
+
+        this.apiServices.updateProductPriority(token, data).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                this.spinner.hide();
+                
+                if (res.status == "success") {
+                    this.apiServices.altScc("Service priority updated", this.goToServicesList());
+                }else{
+                    this.apiServices.altErr("Update failed. Please try again", null); 
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+
+        if(this.priority > 0 && this.priority != this.currentPriorityLevel){
+
+            const data = {
+                productId: this.service_id,
+                priority: this.priority,
+            }
+
+             this.updateProductPriority(this.access_token, data)
+            //  this.apiServices.altConfirmAction("Are you sure you want to update the priority?", "Update", this.updateProductPriority(this.access_token, data));
+
+        }else{
+            this.apiServices.altErr("Please select a priority", null);   
+        }
+    }
+    
+    getMasterProductCount(token) {
+        this.apiServices.getMasterProductCount(token, 1).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let productsCount = res.data;
+                   
+                    for (let x = 1; x < productsCount + 2; x++) {
+                        this.priorityList.push(x);
+                    }
+
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
 }

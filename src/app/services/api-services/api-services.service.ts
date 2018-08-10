@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 
 const httpOptions = {}
 
-const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com:8060/api/';
+const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com/api/';
 
 @Injectable()
 export class ApiServicesService {
@@ -60,6 +60,20 @@ export class ApiServicesService {
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                callback
+            }
+        })
+    }
+
+    altConfirmAction(message, confirmMsg, callback) {
+        swal({
+            title: 'Confirm!',
+            text: message,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: confirmMsg
         }).then((result) => {
             if (result.value) {
                 callback
@@ -134,6 +148,72 @@ export class ApiServicesService {
         return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { type: data } });
     }
 
+
+    getMasterProductCount(token, data) {
+        const url = SERVER_URL + 'admin/products/count';
+
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { type: data } });
+    }
+
+    getMasterCategoryCount(token, data) {
+        const url = SERVER_URL + 'admin/categories/count';
+
+        return this.http.get(url, { headers: { Authorization: 'Bearer ' + token }, params: { type: data } });
+    }
+
+    updateCategoryPriority(token, data) {
+
+        let set_data = {
+            "categoryId": data.categoryId,
+            "priority": data.priority
+        }
+
+        const url = SERVER_URL + 'admin/category/priority/update';
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+    }
+
+    updateProductPriority(token, data) {
+        const url = SERVER_URL + 'admin/product/priority/update';
+
+        let set_data = {
+            "productId": data.productId,
+            "priority": data.priority
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+
+
+    deleteAllProducts(token, data) {
+        const url = SERVER_URL + 'admin/products/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+
+    deleteAllServices(token, data) {
+        const url = SERVER_URL + 'admin/service/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+
+    deleteAllCategories(token, data) {
+        const url = SERVER_URL + 'admin/category/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+    
     // get details 
     getCategoryById(data, token) {
         const url = SERVER_URL + 'admin/category';
