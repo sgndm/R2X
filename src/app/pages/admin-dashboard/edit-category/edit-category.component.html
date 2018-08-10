@@ -94,19 +94,18 @@
 
                 </div>
 
-                <div class="row">
+                <!-- <div class="row"> -->
 
                         <div class="col-sm-12 col-md-5 col-lg-5">
                                 <div class="form-group">
                                     
-                                    <label>Priority</label>
-                                    <select class="custom-select col-sm-12 col-md-5 col-lg-5" (change)="onChangePriority($event.target.value)">
-                                        <option value="0">Select priority</option>
+                                    <label>Priority (Highest 1 to Lowest)</label>
+                                    <select formControlName="priorityLevel" class="form-control custom-select col-sm-12 col-md-5 col-lg-5" (change)="onChangePriority($event.target.value)">
                                         <option *ngFor="let priority of priorityList" value="{{priority}}"> {{ priority}} </option>
                                     </select>
                                 </div>
                             </div>
-                </div>
+                <!-- </div> -->
 
 
             </form>

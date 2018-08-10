@@ -22,6 +22,8 @@ export class EditCategoryComponent implements OnInit {
     categoryName: FormControl;
     categoryImage: FormControl;
     categoryType: FormControl;
+    priorityLevel: FormControl;
+
 
     selected_file: File = null;
 
@@ -35,6 +37,8 @@ export class EditCategoryComponent implements OnInit {
 
     priorityList = [];
     priority: any;
+
+    currentPriorityLevel: any;
 
 
 
@@ -59,6 +63,7 @@ export class EditCategoryComponent implements OnInit {
     ngOnInit() {
 
         this.priority = 0;
+        this.currentPriorityLevel = 0;
         this.category_name = "service name";
         this.is_image_set = false;
 
@@ -92,13 +97,15 @@ export class EditCategoryComponent implements OnInit {
         this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
         this.categoryImage = new FormControl('', [Validators.required]);
         this.categoryType = new FormControl(1, [Validators.required]);
+        this.priorityLevel = new FormControl();
 
     }
 
     createForm() {
         this.myForm = new FormGroup({
             categoryName: this.categoryName,
-            categoryType: this.categoryType
+            categoryType: this.categoryType,
+            priorityLevel: this.priorityLevel
         });
     }
 
@@ -132,11 +139,16 @@ export class EditCategoryComponent implements OnInit {
                 console.log(res);
                 if (res.status == "success") {
 
+                    console.log("getCategoryDetails: priority:" + res.data.priority);
+                    this.currentPriorityLevel = res.data.priority;
                     this.category_name = res.data.categoryName;
                     this.myForm.setValue({
                         categoryName: res.data.categoryName,
-                        categoryType: res.data.type
+                        categoryType: res.data.type,
+                        priorityLevel:res.data.priority
                     })
+
+                
 
                     let imgName = res.data.categoryImgUrl;
                     // get image url 
@@ -301,7 +313,7 @@ export class EditCategoryComponent implements OnInit {
         this.priority = priority;
         console.log("onChangePriority priority : " + this.priority);
 
-        if(this.priority > 0){
+        if(this.priority > 0 && this.priority != this.currentPriorityLevel){
 
           
             const data = {

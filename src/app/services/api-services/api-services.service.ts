@@ -184,6 +184,35 @@ export class ApiServicesService {
     }
 
 
+    deleteAllProducts(token, data) {
+        const url = SERVER_URL + 'admin/products/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+
+    deleteAllServices(token, data) {
+        const url = SERVER_URL + 'admin/service/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
+
+    deleteAllCategories(token, data) {
+        const url = SERVER_URL + 'admin/category/delete/all';
+
+        let set_data = {
+            "password": data
+        }
+        return this.http.post(url, set_data, { headers: { Authorization: 'Bearer ' + token}})
+
+    }
     
     // get details 
     getCategoryById(data, token) {

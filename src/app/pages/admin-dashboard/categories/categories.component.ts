@@ -6,21 +6,26 @@ import { ApiServicesService } from '../../../services/api-services/api-services.
 
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
 
 @Component({
     selector: 'app-categories',
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.css']
 })
+
 export class CategoriesComponent implements OnInit {
 
     public access_token = '';
+    myForm: FormGroup;
 
     rows = [];
     columns = [];
     temp = [];
 
     public category_list: any;
+
+    password: FormControl;
 
     constructor(
         public router: Router,
@@ -56,11 +61,25 @@ export class CategoriesComponent implements OnInit {
                 }
             )
 
+
+            this.createFormControls();
+         this.createForm();
+
         }
         else {
             this.apiServices.logout();
         }
 
+    }
+
+    createFormControls() {
+        this.password = new FormControl();
+    }
+
+    createForm() {
+        this.myForm = new FormGroup({
+            password: this.password
+        });
     }
 
 
@@ -168,8 +187,46 @@ export class CategoriesComponent implements OnInit {
         this.rows = temp_data;
     }
 
+    passwordEntered(event) {
+       this.password = event.target.value;
+    }
+
     refreshPage(){
         location.reload();
+    }
+
+    deleteAll() {
+        console.log("deleteAll pressed 1 ");
+
+        let passwordText = this.password.value;
+    
+        if(passwordText != null){
+            console.log("deleteAll pressed:  " + passwordText);
+
+            this.apiServices.deleteAllCategories(this.access_token, passwordText).subscribe(
+                (res: any) => {
+    
+                    if(res.status == "success"){
+                        this.getCategories(this.access_token);
+                     }else{
+
+                        if(res.data != null && res.data == "invalid_security_code"){
+                            this.apiServices.altErr("Master password is invalid!", null);
+                        }
+
+                    }
+                    // get categories 
+                   
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }else{
+                this.apiServices.altErr("Please enter the master password to remove all categories.", null);
+        }
+
+       
     }
 
 }

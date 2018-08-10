@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 // import api services
 import { ApiServicesService } from '../../../services/api-services/api-services.service';
 
+import { FormGroup, FormControl, Validators, MinLengthValidator } from '@angular/forms';
+
+
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -14,6 +17,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class ProductListComponent implements OnInit {
 
     public access_token = '';
+    myForm: FormGroup;
+    password: FormControl;
+
 
     rows = [];
     columns = [];
@@ -55,7 +61,20 @@ export class ProductListComponent implements OnInit {
             this.apiServices.logout();
         }
 
+        this.createFormControls();
+        this.createForm();
 
+
+    }
+
+    createFormControls() {
+        this.password = new FormControl();
+    }
+
+    createForm() {
+        this.myForm = new FormGroup({
+            password: this.password
+        });
     }
 
     // get categories 
@@ -229,6 +248,40 @@ export class ProductListComponent implements OnInit {
 
     refreshPage(){
         location.reload();
+    }
+
+    deleteAll() {
+        console.log("deleteAll pressed 1 ");
+
+        let passwordText = this.password.value;
+    
+        if(passwordText != null){
+            console.log("deleteAll pressed:  " + passwordText);
+
+            this.apiServices.deleteAllProducts(this.access_token, passwordText).subscribe(
+                (res: any) => {
+    
+                    if(res.status == "success"){
+                        this.getProducts(this.access_token);
+                     }else{
+
+                        if(res.data != null && res.data == "invalid_security_code"){
+                            this.apiServices.altErr("Master password is invalid!", null);
+                        }
+
+                    }
+                    // get categories 
+                   
+                },
+                err => {
+                    console.log(err);
+                }
+            )
+        }else{
+                this.apiServices.altErr("Please enter the master password to remove all products.", null);
+        }
+
+       
     }
 
 }

@@ -101,13 +101,8 @@
                     <div class="col-sm-12 col-md-4 col-lg-4">
                             <div class="form-group">
                                 
-                                <label>Priority</label>
-                                <!-- <select class="form-control custom-select col-sm-12 col-md-5 col-lg-5" [(ngModel)]="priority" (change)="onChangeMaterial($event.target.value)">
-                                    <option value="0">Select priority</option>
-                                    <option *ngFor="let priority of priorityList" value="{{priority}}"> {{ priority}} </option>
-                                </select> -->
-
-                                <select class="custom-select col-sm-12 col-md-5 col-lg-5" (change)="onChangePriority($event.target.value)">
+                                <label>Priority (Highest 1 to Lowest)</label>
+                                <select class="custom-select" (change)="onChangePriority($event.target.value)">
                                     <option value="0">Select priority</option>
                                     <option *ngFor="let priority of priorityList" value="{{priority}}"> {{ priority}} </option>
                                 </select>
@@ -192,10 +187,4 @@
         </ngx-datatable>
     </div>
 
-
-
-    <!-- <div class="row justify-content-center">
-  
-        
-    </div> -->
 </div>

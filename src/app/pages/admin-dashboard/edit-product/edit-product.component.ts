@@ -27,6 +27,9 @@ export class EditProductComponent implements OnInit {
     productImage: FormControl;
     productCategory: FormControl;
     paymentMethod: FormControl;
+    priorityLevel: FormControl;
+    currentPriorityLevel: any;
+
 
     product_name: any;
 
@@ -66,6 +69,7 @@ export class EditProductComponent implements OnInit {
     ngOnInit() {
 
         this.priority = 0;
+        this.currentPriorityLevel = 0;
         this.product_name = "service name";
         this.is_image_set = false;
 
@@ -121,14 +125,16 @@ export class EditProductComponent implements OnInit {
                 console.log(res);
                 if (res.status == "success") {
 
+                    this.currentPriorityLevel = res.data.priority;
+
                     this.product_name = res.data.name;
                     this.myForm.setValue({
                         productName: res.data.name,
                         productCategory: res.data.categoryId,
                         productDescription: res.data.description,
                         productPrice: res.data.estimatedPrice,
-                        paymentMethod: res.data.paymentUnit
-                        //this.priority
+                        paymentMethod: res.data.paymentUnit,
+                        priorityLevel:res.data.priority
                     });
 
                     let imgName = res.data.imageUrl;
@@ -238,6 +244,8 @@ export class EditProductComponent implements OnInit {
         this.productDescription = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]);
         this.productPrice = new FormControl(0, [Validators.required, Validators.minLength(1)]);
         this.productImage = new FormControl('', [Validators.required]);
+        this.priorityLevel = new FormControl();
+
 
     }
 
@@ -247,7 +255,9 @@ export class EditProductComponent implements OnInit {
             productName: this.productName,
             productDescription: this.productDescription,
             productPrice: this.productPrice,
-            paymentMethod: this.paymentMethod
+            paymentMethod: this.paymentMethod,
+            priorityLevel: this.priorityLevel
+
         });
     }
 
@@ -318,7 +328,7 @@ export class EditProductComponent implements OnInit {
         this.priority = priority;
         console.log("onChangePriority priority : " + this.priority);
 
-        if(this.priority > 0){
+        if(this.priority > 0 && this.priority != this.currentPriorityLevel){
 
           
             const data = {
