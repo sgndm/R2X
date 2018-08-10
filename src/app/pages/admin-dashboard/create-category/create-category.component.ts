@@ -22,6 +22,7 @@ export class CreateCategoryComponent implements OnInit {
     categoryImage: FormControl;
     categoryType: FormControl;
 
+   
     selected_file: File = null;
 
     is_image_set: boolean;
@@ -31,6 +32,9 @@ export class CreateCategoryComponent implements OnInit {
     columns = [];
     temp = [];
 
+    priorityList = [];
+    priority: any;
+    
     public category_list: any;
 
     constructor(
@@ -42,6 +46,8 @@ export class CreateCategoryComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.priority = 0;
 
         this.is_image_set = false;
         // check if user is logged in
@@ -78,8 +84,9 @@ export class CreateCategoryComponent implements OnInit {
                 if (res.status == "success") {
                     let categories = res.data;
 
+                   
                     for (let x = 0; x < categories.length; x++) {
-
+                        this.priorityList.push(x+1);
                         let t_cat = { index: x + 1, category_id: categories[x].id, name: categories[x].name, image: '', recordStatus: categories[x].recordStatus }
 
                         let imgName = categories[x].imageUrl;
@@ -95,9 +102,12 @@ export class CreateCategoryComponent implements OnInit {
                                 console.log(err);
                             }
                         )
+                        console.log("priorityList count: " +  this.priorityList.length);
 
                         temp_cat.push(t_cat);
                     }
+
+                    this.priorityList.push(temp_cat.length+1);
 
                     this.rows = temp_cat;
                     this.temp = this.rows;
@@ -109,13 +119,13 @@ export class CreateCategoryComponent implements OnInit {
         )
     }
 
+   
+
     createFormControls() {
 
         this.categoryName = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
         this.categoryImage = new FormControl('', [Validators.required]);
         this.categoryType = new FormControl(1, [Validators.required]);
-
-
     }
 
     createForm() {
@@ -145,31 +155,43 @@ export class CreateCategoryComponent implements OnInit {
 
     onCreateCategory() {
         if (this.myForm.valid) {
-            this.spinner.show();
-            let info = {
-                name: this.myForm.value.categoryName,
-                type: this.myForm.value.categoryType
-            }
-            const data = {
-                info: info,
-                imageUrl: this.selected_file
-            }
 
-            this.apiServices.createCategory(data, this.access_token).subscribe(
-                (res:any) => {
-                    console.log(res);
-                    this.spinner.hide();
+            if(this.priority > 0){
 
-                    if(res.status == "success" && res.data == "category_added") {
-                        this.apiServices.altScc("Category created",  this.resetForm());
-                    }
-                },
-                err => {
-                    this.spinner.hide();
-                    console.log(err);
-                    this.apiServices.altErr("Unable to create category",  this.resetForm());
+                this.spinner.show();
+                let info = {
+                    name: this.myForm.value.categoryName,
+                    type: this.myForm.value.categoryType,
+                    priority : this.priority
                 }
-            )
+                const data = {
+                    info: info,
+                    imageUrl: this.selected_file
+                }
+    
+                this.apiServices.createCategory(data, this.access_token).subscribe(
+                    (res:any) => {
+                        console.log(res);
+                        this.spinner.hide();
+    
+                        if(res.status == "success" && res.data == "category_added") {
+                            this.apiServices.altScc("Category created",  null);
+
+                           
+
+                        }
+                    },
+                    err => {
+                        this.spinner.hide();
+                        console.log(err);
+                        this.apiServices.altErr("Unable to create category",  null);
+                    })
+
+            }else{
+                this.apiServices.altErr("Please select a priority level for the Category",  null);
+
+            }
+           
         }
         else {
             this.validateAllFormFields(this.myForm);
@@ -263,5 +285,9 @@ export class CreateCategoryComponent implements OnInit {
         location.reload();
     }
 
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+	}
 
 }

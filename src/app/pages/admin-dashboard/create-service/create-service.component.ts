@@ -26,6 +26,10 @@ export class CreateServiceComponent implements OnInit {
     productCategory: FormControl;
 
 
+    priorityList = [];
+    priority: any;
+
+
     firstName: FormControl;
     lastName: FormControl;
     email: FormControl;
@@ -48,9 +52,13 @@ export class CreateServiceComponent implements OnInit {
 
 
     ngOnInit() {
+
+        this.priority = 0;
         this.is_image_set = false;
         // check if user is logged in
         if (this.access_token) {
+
+            this.getMasterProductCount(this.access_token);
 
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
@@ -73,6 +81,29 @@ export class CreateServiceComponent implements OnInit {
         this.createForm();
     }
 
+     // get categories 
+     getMasterProductCount(token) {
+        this.apiServices.getMasterProductCount(token, 1).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let productsCount = res.data;
+                   
+                    for (let x = 1; x < productsCount + 2; x++) {
+                        this.priorityList.push(x);
+                    }
+
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+
+
     // get categories 
     getCategories(token){
         this.apiServices.getCategoryByType(token, 2).subscribe(
@@ -94,39 +125,49 @@ export class CreateServiceComponent implements OnInit {
     onCreateService() {
 
         if (this.myForm.valid) {
-            this.spinner.show();
 
-            let info = {
-                name: this.myForm.value.productName,
-                description: this.myForm.value.productDescription,
-                estimatedPrice: this.myForm.value.productPrice,
-                categoryId: this.myForm.value.productCategory,
-                paymentUnit: this.myForm.value.paymentMethod,
-                isProduct: false
-            }
+            if(this.priority > 0){
 
-            const data = {
-                info: info,
-                imageUrl: this.selected_file,
-            }
 
-            console.log(data);
-    
-            this.apiServices.createService(data, this.access_token).subscribe(
-                (res:any) => {
-                    this.spinner.hide();
-                    console.log(res);
+                this.spinner.show();
 
-                    if(res.status == "success" && res.data == "product_added"){
-                        this.apiServices.altScc("Service created",  this.resetForm());
-                    }
-                },
-                err => {
-                    this.spinner.hide();
-                    console.log(err);
-                    this.apiServices.altErr("Unable to create service",  this.resetForm());
+                let info = {
+                    name: this.myForm.value.productName,
+                    description: this.myForm.value.productDescription,
+                    estimatedPrice: this.myForm.value.productPrice,
+                    categoryId: this.myForm.value.productCategory,
+                    paymentUnit: this.myForm.value.paymentMethod,
+                    priority: this.priority,
+                    isProduct: false
                 }
-            )
+    
+                const data = {
+                    info: info,
+                    imageUrl: this.selected_file,
+                }
+    
+                console.log(data);
+        
+                this.apiServices.createService(data, this.access_token).subscribe(
+                    (res:any) => {
+                        this.spinner.hide();
+                        console.log(res);
+    
+                        if(res.status == "success" && res.data == "product_added"){
+                            this.apiServices.altScc("Service created",  this.resetForm());
+                        }
+                    },
+                    err => {
+                        this.spinner.hide();
+                        console.log(err);
+                        this.apiServices.altErr("Unable to create service",  this.resetForm());
+                    }
+                )
+
+            }else{
+                this.apiServices.altErr("Please select a priority level for the Service",  null);
+            }
+           
         }
         else {
             this.validateAllFormFields(this.myForm);
@@ -206,5 +247,10 @@ export class CreateServiceComponent implements OnInit {
     refreshPage(){
         location.reload();
     }
+
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+	}
 
 }

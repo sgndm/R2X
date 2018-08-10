@@ -33,6 +33,10 @@ export class EditCategoryComponent implements OnInit {
     category_id;
     category_name;
 
+    priorityList = [];
+    priority: any;
+
+
 
     constructor(
         private activeRoute: ActivatedRoute,
@@ -54,12 +58,15 @@ export class EditCategoryComponent implements OnInit {
 
     ngOnInit() {
 
+        this.priority = 0;
         this.category_name = "service name";
         this.is_image_set = false;
 
         // check if user is logged in
         if (this.access_token) {
 
+
+            this.getMasterCategoryCount(this.access_token);
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
@@ -246,4 +253,67 @@ export class EditCategoryComponent implements OnInit {
     refreshPage(){
         location.reload();
     }
+
+     // get categories 
+     getMasterCategoryCount(token) {
+        this.apiServices.getMasterCategoryCount(token, 1).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let productsCount = res.data;
+                   
+                    for (let x = 1; x < productsCount + 2; x++) {
+                        this.priorityList.push(x);
+                    }
+
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    updateCategoryPriority(token, data) {
+        //this.spinner.show();
+        console.log("updateCategoryPriority: " + data);
+
+        this.apiServices.updateCategoryPriority(token, data).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                this.spinner.hide();
+                
+                if (res.status == "success") {
+                    this.apiServices.altScc("Category priority updated", this.goToCategoryList());
+                }else{
+                    this.apiServices.altErr("Update failed. Please try again", null); 
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+
+        if(this.priority > 0){
+
+          
+            const data = {
+                categoryId: this.category_id,
+                priority: this.priority,
+            }
+
+            this.updateCategoryPriority(this.access_token, data)
+            // this.apiServices.altConfirmAction("Are you sure you want to update the priority?", "Update", this.updateCategoryPriority(this.access_token, data));
+
+        }else{
+            this.apiServices.altErr("Please select a priority", null);   
+        }
+	}
 }

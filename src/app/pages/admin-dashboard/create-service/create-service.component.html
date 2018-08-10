@@ -133,6 +133,22 @@
 
 
         </div>
+
+        <div class="row">
+
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            
+                            <label>Priority</label>
+                            <select class="custom-select col-sm-12 col-md-5 col-lg-5" (change)="onChangePriority($event.target.value)">
+                                <option value="0">Select priority</option>
+                                <option *ngFor="let priority of priorityList" value="{{priority}}"> {{ priority}} </option>
+                            </select>
+                        </div>
+                    </div>
+        </div>
+
+        
         <div class="row justify-content-center">
             <button type="submit" [disabled]="!myForm.valid" class="btn btn-submit col-sm-12 col-md-5 col-lg-5">Submit</button>
             <button type="button" class="btn btn-cancel col-sm-12 col-md-5 col-lg-5" (click)="resetForm()">Cancel</button>

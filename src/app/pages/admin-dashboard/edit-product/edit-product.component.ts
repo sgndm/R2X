@@ -37,6 +37,10 @@ export class EditProductComponent implements OnInit {
     imagePreviewPath: any;
     currentImagePath: any;
 
+
+    priorityList = [];
+    priority: any;
+
     product_id: any;
 
     constructor(
@@ -61,12 +65,14 @@ export class EditProductComponent implements OnInit {
 
     ngOnInit() {
 
+        this.priority = 0;
         this.product_name = "service name";
         this.is_image_set = false;
 
         // check if user is logged in
         if (this.access_token) {
 
+            this.getMasterProductCount(this.access_token);
             // user details 
             this.apiServices.getUserDetails(this.access_token).subscribe(
                 (res: any) => {
@@ -122,6 +128,7 @@ export class EditProductComponent implements OnInit {
                         productDescription: res.data.description,
                         productPrice: res.data.estimatedPrice,
                         paymentMethod: res.data.paymentUnit
+                        //this.priority
                     });
 
                     let imgName = res.data.imageUrl;
@@ -282,5 +289,68 @@ export class EditProductComponent implements OnInit {
 
     refreshPage(){
         location.reload();
+    }
+
+
+    updateProductPriority(token, data) {
+        //this.spinner.show();
+        console.log("updateProductPriority: " + data);
+
+        this.apiServices.updateProductPriority(token, data).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                this.spinner.hide();
+                
+                if (res.status == "success") {
+                    this.apiServices.altScc("Product priority updated", this.goToProductList());
+                }else{
+                    this.apiServices.altErr("Update failed. Please try again", null); 
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
+    }
+
+    onChangePriority(priority) {
+        this.priority = priority;
+        console.log("onChangePriority priority : " + this.priority);
+
+        if(this.priority > 0){
+
+          
+            const data = {
+                productId: this.product_id,
+                priority: this.priority,
+            }
+
+            this.updateProductPriority(this.access_token, data)
+            // this.apiServices.altConfirmAction("Are you sure you want to update the priority?", "Update", this.updateCategoryPriority(this.access_token, data));
+
+        }else{
+            this.apiServices.altErr("Please select a priority", null);   
+        }
+    }
+    
+    getMasterProductCount(token) {
+        this.apiServices.getMasterProductCount(token, 1).subscribe(
+            (res: any) => {
+                console.log(res);
+
+                if (res.status == "success") {
+                    let productsCount = res.data;
+                   
+                    for (let x = 1; x < productsCount + 2; x++) {
+                        this.priorityList.push(x);
+                    }
+
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        )
     }
 }
