@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 
 const httpOptions = {}
 
-const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com:8060/api/';
+const SERVER_URL = 'http://dev-lb-891765181.ap-southeast-1.elb.amazonaws.com:8090/api/';
 
 @Injectable()
 export class ApiServicesService {
