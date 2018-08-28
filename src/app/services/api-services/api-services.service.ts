@@ -387,6 +387,11 @@ export class ApiServicesService {
         return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}});
     }
 
+    getChildSellers(token, data, status) {
+        const url = SERVER_URL + 'admin/seller/child_sellers';
+        return this.http.get(url, {headers: { Authorization: 'Bearer ' + token}, params: { username: data, status: status } });
+    }
+
     // accept seller 
     acceptSeller(data, token) {
 
