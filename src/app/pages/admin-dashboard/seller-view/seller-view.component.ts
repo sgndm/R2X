@@ -18,6 +18,8 @@ export class SellerViewComponent implements OnInit {
 
     public access_token = '';
 
+    rows = [];
+    temp = [];
     category_list: any[];
 
     sellerName;
@@ -81,6 +83,69 @@ export class SellerViewComponent implements OnInit {
                     this.getSellerDetails(this.seller_username, this.access_token);
                 },
                 err => {
+                    console.log(err);
+                }
+            )
+
+            console.log("getChildSellers server call");
+
+            this.apiServices.getChildSellers(this.access_token, this.seller_username, '1').subscribe(
+                (res: any) => {
+
+                    if (res.status == "success") {
+
+                        console.log("getChildSellers server call success");
+
+                        let x = 0;
+                        let temp_sellers = [];
+    
+                        for (let data of res.data) {
+                            x += 1;
+                            
+                            console.log("getChildSeller data: " + data);
+
+                            let t_seller = {
+                                index: x,
+                                name: data.name,
+                                seller_id: data.sellerId,
+                                sellerStatus: data.approvalStatus,
+                                isActive: data.activeStatus,
+                                phone: data.phone,
+                                image: '',
+                                nic: data.nic,
+                                username: data.username,
+                                connectionStatus: data.connectionActiveStatus
+                            }
+    
+                            // this.starsCount = data.seller.rating;
+    
+                            let imgName = data.storeImage;
+    
+                            let imagePath = '';
+                            // get image url 
+                            this.apiServices.getImageUrlS3(imgName, this.access_token).subscribe(
+                                (res: any) => {
+                                    t_seller.image = 'data:image/jpeg;base64,' + res;
+                                },
+                                err => {
+                                    console.log('Error\n');
+                                    console.log(err);
+                                }
+                            )
+    
+                            temp_sellers.push(t_seller);
+                        }
+    
+                        this.rows = temp_sellers;
+                        this.temp = this.rows;
+
+                        console.log("getChildSeller data length: " + this.rows.length);
+                    }
+    
+                },
+                err => {
+                    console.log("getChildSellers server call error");
+
                     console.log(err);
                 }
             )
