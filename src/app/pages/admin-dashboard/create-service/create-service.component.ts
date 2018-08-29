@@ -155,6 +155,7 @@ export class CreateServiceComponent implements OnInit {
     
                         if(res.status == "success" && res.data == "product_added"){
                             this.apiServices.altScc("Service created",  this.resetForm());
+                            this.getMasterProductCount(this.access_token);
                         }
                     },
                     err => {
