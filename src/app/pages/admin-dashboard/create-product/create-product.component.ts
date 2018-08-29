@@ -147,6 +147,7 @@ export class CreateProductComponent implements OnInit {
                         if (res.status == "success" && res.data == "product_added") {
                             
                             this.apiServices.altScc("Product created",  this.resetForm());
+                            this.getMasterProductCount(this.access_token);
                         }
                     },
                     err => {
@@ -234,6 +235,9 @@ export class CreateProductComponent implements OnInit {
             productImage: '',
             paymentMethod: 0
         });
+
+
+        
     }
 
     refreshPage(){
